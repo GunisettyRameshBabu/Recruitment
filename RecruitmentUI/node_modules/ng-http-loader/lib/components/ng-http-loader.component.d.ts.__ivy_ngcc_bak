@@ -1,0 +1,41 @@
+import { OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PendingRequestsInterceptor } from '../services/pending-requests-interceptor.service';
+import { SpinnerVisibilityService } from '../services/spinner-visibility.service';
+export declare class NgHttpLoaderComponent implements OnInit {
+    private pendingRequestsInterceptor;
+    private spinnerVisibility;
+    spinkit: {
+        skChasingDots: string;
+        skCubeGrid: string;
+        skDoubleBounce: string;
+        skRotatingPlane: string;
+        skSpinnerPulse: string;
+        skThreeBounce: string;
+        skWanderingCubes: string;
+        skWave: string;
+    };
+    isVisible$: Observable<boolean>;
+    private visibleUntil;
+    backdrop: boolean;
+    backgroundColor: string;
+    debounceDelay: number;
+    entryComponent: any;
+    extraDuration: number;
+    filteredHeaders: string[];
+    filteredMethods: string[];
+    filteredUrlPatterns: string[];
+    minDuration: number;
+    opacity: string;
+    spinner: string;
+    constructor(pendingRequestsInterceptor: PendingRequestsInterceptor, spinnerVisibility: SpinnerVisibilityService);
+    private initIsvisibleObservable;
+    ngOnInit(): void;
+    private nullifySpinnerIfEntryComponentIsDefined;
+    private initFilters;
+    private initFilteredUrlPatterns;
+    private initFilteredMethods;
+    private initFilteredHeaders;
+    private updateExpirationDelay;
+    private getVisibilityTimer$;
+}

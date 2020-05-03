@@ -1,0 +1,23 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { ExistingProvider } from '@angular/core';
+import { Observable } from 'rxjs';
+export declare class PendingRequestsInterceptor implements HttpInterceptor {
+    private _pendingRequests;
+    private _pendingRequestsStatus$;
+    private _filteredUrlPatterns;
+    private _filteredMethods;
+    private _filteredHeaders;
+    private _forceByPass;
+    get pendingRequestsStatus$(): Observable<boolean>;
+    get pendingRequests(): number;
+    get filteredUrlPatterns(): RegExp[];
+    set filteredMethods(httpMethods: string[]);
+    set filteredHeaders(value: string[]);
+    set forceByPass(value: boolean);
+    private shouldBypassUrl;
+    private shouldBypassMethod;
+    private shouldBypassHeader;
+    private shouldBypass;
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>;
+}
+export declare const PendingRequestsInterceptorProvider: ExistingProvider[];
