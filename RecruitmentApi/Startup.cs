@@ -18,6 +18,7 @@ namespace RecruitmentApi
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,6 +29,14 @@ namespace RecruitmentApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200");
+                                  });
+            });
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
 
@@ -46,7 +55,7 @@ namespace RecruitmentApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+         //   app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
@@ -61,6 +70,8 @@ namespace RecruitmentApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {

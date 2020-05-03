@@ -13,5 +13,9 @@ namespace RecruitmentApi.Data
         public DbSet<Users> Users { get; set; }
 
         public DbSet<Roles> Roles { get; set; }
+
+        public DbSet<JobOpenings> JobOpenings { get; set; }
+
+        public DbSet<JobAttachments> JobAttachments { get; set; }
     }
 }

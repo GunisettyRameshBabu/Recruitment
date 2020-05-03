@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
-    <a class="navbar-brand" href="#">Angular Bootstrap Demo</a>
+    <a class="navbar-brand" href="#">Recruitment Tool</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -10,14 +10,21 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/home">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/contact-list">Contacts</a>
+
+        <li class="nav-item" *ngIf="isUserLoggedIn()">
+          <a class="nav-link" routerLink="/jobopenings">Job Openings</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/contact-create">Create</a>
-        </li>
+
+        
+
+        
+       
   
       </ul>
+      <div class="float-right text-white" *ngIf="isUserLoggedIn()">
+        <b>Welcome {{ getFullName() }} <button class="btn btn-link text-white" (click)="logout()"> (signout)</button></b>  
+      </div>
     </div>
+    
   </nav>
   

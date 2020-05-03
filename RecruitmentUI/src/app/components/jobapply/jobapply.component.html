@@ -1,0 +1,12 @@
+<button class="close" mat-button (click)="onNoClick()">X</button>
+<h1 mat-dialog-title>{{ job.title }}</h1>
+<form [formGroup]="formGroup" (ngSubmit)="onApply()" *ngIf="job">
+   
+    <div class="form-group">
+        <label for="exampleInputEmail1">Enter Comments</label>
+        <textarea formControlName="comments" class="form-control"></textarea>
+        <small id="commentsHelp" class="form-text text-muted">Enter the comments incase if you want to add any comments to the recruiter</small>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+

@@ -1,0 +1,18 @@
+<div class="jumbotron" style="height: calc(95vh);">
+    <ng-container *ngFor="let item of openings;last as isLast">
+        <div class="card" >
+            <div class="card-body">
+              <h5 class="card-title"><a [routerLink]="" (click)="showDetails(item)">{{item.title}}</a></h5>
+              <h6 class="card-subtitle mb-2 text-muted">Company : <a [href]="item.company_url">{{item.company}}</a> </h6>
+              <!-- <accordion>
+                <accordion-group heading="View Details">
+                    <div [innerHTML]="item.description" class="card-text"></div>
+                </accordion-group>
+              </accordion> -->
+              <div [innerHTML]="item.short_description" class="card-text"></div>
+            </div>
+          </div>
+          <br *ngIf="!isLast" />
+    </ng-container>
+  
+</div>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
@@ -19,8 +20,9 @@ namespace RecruitmentApi.Models
 
         public string email { get; set; }
 
+        [JsonIgnore]
         public string password { get; set; }
 
-        public string roleId { get; set; }
+        public int roleId { get; set; }
     }
 }

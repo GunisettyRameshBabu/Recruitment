@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\A217168\\SourceCode\\Gopan\\RecruitmentApi\\RecruitmentApi.csproj": {}
+    "C:\\Users\\A217168\\SourceCode\\Gopan\\Recruitment\\RecruitmentApi\\RecruitmentApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\A217168\\SourceCode\\Gopan\\RecruitmentApi\\RecruitmentApi.csproj": {
+    "C:\\Users\\A217168\\SourceCode\\Gopan\\Recruitment\\RecruitmentApi\\RecruitmentApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\A217168\\SourceCode\\Gopan\\RecruitmentApi\\RecruitmentApi.csproj",
+        "projectUniqueName": "C:\\Users\\A217168\\SourceCode\\Gopan\\Recruitment\\RecruitmentApi\\RecruitmentApi.csproj",
         "projectName": "RecruitmentApi",
-        "projectPath": "C:\\Users\\A217168\\SourceCode\\Gopan\\RecruitmentApi\\RecruitmentApi.csproj",
+        "projectPath": "C:\\Users\\A217168\\SourceCode\\Gopan\\Recruitment\\RecruitmentApi\\RecruitmentApi.csproj",
         "packagesPath": "C:\\Users\\A217168\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\A217168\\SourceCode\\Gopan\\RecruitmentApi\\obj\\",
+        "outputPath": "C:\\Users\\A217168\\SourceCode\\Gopan\\Recruitment\\RecruitmentApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -64,7 +64,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[3.1.2, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

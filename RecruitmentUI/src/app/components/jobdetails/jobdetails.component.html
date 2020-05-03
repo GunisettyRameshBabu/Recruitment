@@ -1,0 +1,17 @@
+<div class="jumbotron" style="height: calc(95vh);">
+    <div class="card" style="padding-top: 10px;" *ngIf="job">
+        <div class="card-body">
+          <div >
+            <h5 class="card-title">{{job.title}}</h5> <button class="btn btn-primary float-right" (click)="Apply()" *ngIf="!job.applied">Apply</button> <span class="float-right" *ngIf="job.applied"> <b> Already applied </b></span>
+          </div>
+          
+          <h6 class="card-subtitle mb-2 text-muted">Company : <a [href]="job.company_url">{{job.company}}</a> </h6>
+          <!-- <accordion>
+            <accordion-group heading="View Details">
+                <div [innerHTML]="item.description" class="card-text"></div>
+            </accordion-group>
+          </accordion> -->
+          <div [innerHTML]="job.description" class="card-text"></div>
+        </div>
+      </div>
+</div>
