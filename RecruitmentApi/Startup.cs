@@ -34,9 +34,7 @@ namespace RecruitmentApi
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://recruitmenttool.azurewebsites.net/", "http://recruitmenttool.azurewebsites.net/").AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+                                      builder.WithOrigins("*").WithHeaders("*").WithMethods("*");
                                   });
             });
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -47,6 +45,8 @@ namespace RecruitmentApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Recruitment API", Version = "v1" });
             });
+
+            services.AddRouting(r => r.SuppressCheckForUnhandledSecurityMetadata = true);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,10 +57,12 @@ namespace RecruitmentApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors(builder => {
-                builder.AllowAnyOrigin();
-                builder.AllowAnyMethod();
-                builder.AllowAnyHeader();
+            app.UseCors(MyAllowSpecificOrigins);
+
+            app.Use((context, next) =>
+            {
+                context.Items["__CorsMiddlewareInvoked"] = true;
+                return next();
             });
 
             app.UseHttpsRedirection();
@@ -77,7 +79,7 @@ namespace RecruitmentApi
 
             app.UseRouting();
 
-          //  app.UseAuthorization();
+           app.UseAuthorization();
 
            
 

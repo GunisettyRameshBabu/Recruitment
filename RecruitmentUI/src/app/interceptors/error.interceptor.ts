@@ -10,6 +10,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { } from '@angular/common/http';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -17,7 +18,6 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor(private notificationService: ToastrService, private router: Router) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log(request.url);
     return next.handle(request).pipe(
       catchError(errorResponse => { 
         console.error(JSON.stringify(errorResponse));

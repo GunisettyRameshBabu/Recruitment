@@ -1,18 +1,22 @@
 <div class="jumbotron" style="height: calc(95vh);">
-    <ng-container *ngFor="let item of openings;last as isLast">
-        <div class="card" >
-            <div class="card-body">
-              <h5 class="card-title"><a [routerLink]="" (click)="showDetails(item)">{{item.title}}</a></h5>
-              <h6 class="card-subtitle mb-2 text-muted">Company : <a [href]="item.company_url">{{item.company}}</a> </h6>
-              <!-- <accordion>
-                <accordion-group heading="View Details">
-                    <div [innerHTML]="item.description" class="card-text"></div>
-                </accordion-group>
-              </accordion> -->
-              <div [innerHTML]="item.short_description" class="card-text"></div>
-            </div>
-          </div>
-          <br *ngIf="!isLast" />
-    </ng-container>
+ 
+<div class="card" >
+  <div class="card-body">
+    <h5 class="card-title">Openings</h5>
+    <ejs-grid [dataSource]='openings'>
+      <e-columns>
+          <e-column field='jobid' headerText='Job Opening ID' textAlign='Right' ></e-column>
+          <e-column field='jobtitle' headerText='Job Title' ></e-column>
+          <e-column field='assaignedTo' textAlign='Assaigned Recruiter(s)' ></e-column>
+          <e-column field='targetdate' headerText='Target Date'></e-column>
+          <e-column field='status' headerText='Job Opening Status'></e-column>
+          <e-column field='city' headerText='City'></e-column>
+          <e-column field='client' headerText='Client Name'></e-column>
+          <e-column field='contactName' headerText='Contact Name'></e-column>
+          <e-column field='accountManager' headerText='Account Manager'></e-column>
+      </e-columns>
+    </ejs-grid>
+  </div>
+</div>
   
 </div>

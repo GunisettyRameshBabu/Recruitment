@@ -14,7 +14,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
-    [EnableCors()]
+    [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -34,9 +34,24 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
+        public async Task<ActionResult> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var response = new ServiceResponse<IEnumerable<Users>>();
+            try
+            {
+                
+                response.Data = await _context.Users.ToListAsync();
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Success = false;
+            }
+
+           return Ok(response);
+            
         }
 
         // GET: api/Users/5

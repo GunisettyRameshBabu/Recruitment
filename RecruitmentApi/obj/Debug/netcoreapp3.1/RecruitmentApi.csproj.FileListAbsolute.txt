@@ -293,3 +293,13 @@ C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreap
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.csproj.CopyComplete
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.pdb
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.AspNet.WebApi.HelpPage.5.2.7\Content\Areas\HelpPage\Views\Web.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\Roslyn45\csc.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\Roslyn45\vbc.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\Roslyn45\VBCSCompiler.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\csc.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\csi.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\vbc.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\VBCSCompiler.exe.config
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\EntityFramework.6.4.0\tools\netcoreapp3.0\any\ef6.runtimeconfig.json
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.csprojAssemblyReference.cache

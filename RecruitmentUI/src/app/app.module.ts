@@ -22,6 +22,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JobapplyComponent } from './components/jobapply/jobapply.component';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { UsersComponent } from './components/users/users.component';
+import { GridModule } from '@syncfusion/ej2-angular-grids';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { UsersComponent } from './components/users/users.component';
     HttpClientModule,
     NgHttpLoaderModule.forRoot(),
     ToastrModule.forRoot(), // ToastrModule added
-    AccordionModule.forRoot()
+    AccordionModule.forRoot(),
+    GridModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

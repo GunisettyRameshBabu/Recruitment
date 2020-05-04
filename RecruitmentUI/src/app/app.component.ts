@@ -7,6 +7,6 @@ import { Spinkit } from 'ng-http-loader';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Recruitment Tool';
+  title = 'QubeSmart';
   public spinkit = Spinkit;
 }
