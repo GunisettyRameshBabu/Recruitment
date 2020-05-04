@@ -293,4 +293,3 @@ C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreap
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.csproj.CopyComplete
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.pdb
-C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.csprojAssemblyReference.cache

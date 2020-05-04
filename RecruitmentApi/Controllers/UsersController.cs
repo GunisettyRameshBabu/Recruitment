@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [EnableCors()]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -87,11 +89,23 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers(Users users)
+        public async Task<ActionResult<Users>> PostUsers(UserDto users)
         {
-            
+
             users.password = EncodePasswordToBase64(users.password);
-            _context.Users.Add(users);
+
+            _context.Users.Add(new Users 
+            {
+                id = users.id,
+                email = users.email,
+                firstName = users.firstName,
+                lastName = users.lastName,
+                middleName = users.middleName,
+                password = users.password,
+                roleId = users.roleId,
+                userid = users.userid
+        
+            });
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUsers", new { id = users.id }, users);
@@ -124,12 +138,8 @@ namespace RecruitmentApi.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserLoginDto userdto)
         {
-            var response = await validateUser(userdto);
 
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+            var response = await validateUser(userdto);
             return Ok(response);
         }
 
@@ -160,7 +170,7 @@ namespace RecruitmentApi.Controllers
                 response.Success = false;
                 response.Message = ex.Message;
             }
-            
+
 
             return response;
         }

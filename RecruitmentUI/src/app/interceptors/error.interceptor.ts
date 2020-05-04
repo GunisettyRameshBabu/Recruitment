@@ -17,8 +17,10 @@ export class ErrorInterceptor implements HttpInterceptor {
   constructor(private notificationService: ToastrService, private router: Router) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    console.log(request.url);
     return next.handle(request).pipe(
       catchError(errorResponse => { 
+        console.error(JSON.stringify(errorResponse));
         if (
           errorResponse instanceof HttpErrorResponse &&
           errorResponse.status === 401

@@ -21,6 +21,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JobapplyComponent } from './components/jobapply/jobapply.component';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
+import { UsersComponent } from './components/users/users.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.
     ErrorComponent,
     PageNotFoundComponent,
     JobapplyComponent,
-    UnAuthorizedComponent
+    UnAuthorizedComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
