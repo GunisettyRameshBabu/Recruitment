@@ -23,6 +23,16 @@ import { JobapplyComponent } from './components/jobapply/jobapply.component';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { UsersComponent } from './components/users/users.component';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { AddOpeningsComponent } from './components/add-openings/add-openings.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { UsereditComponent } from './components/users/useredit/useredit.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +47,9 @@ import { GridModule } from '@syncfusion/ej2-angular-grids';
     PageNotFoundComponent,
     JobapplyComponent,
     UnAuthorizedComponent,
-    UsersComponent
+    UsersComponent,
+    AddOpeningsComponent,
+    UsereditComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +62,15 @@ import { GridModule } from '@syncfusion/ej2-angular-grids';
     NgHttpLoaderModule.forRoot(),
     ToastrModule.forRoot(), // ToastrModule added
     AccordionModule.forRoot(),
-    GridModule
+    GridModule,
+    MatCardModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Jobapply } from '../components/jobapply/jobapply';
+import { Opening } from '../components/add-openings/opening';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,8 @@ export class JobService {
 
   constructor(private http: HttpClient) { }
 
-  getJobOpenings() {
-   return this.http.get(environment.apiUrl + 'Openings');
+  getJobOpenings(type) {
+   return this.http.get(environment.apiUrl + 'Openings/'+ type);
   }
 
   getJobDetails(id: string) {
@@ -20,5 +21,13 @@ export class JobService {
 
   applyJob(job: Jobapply) {
     return this.http.post(environment.apiUrl + 'JobAttachments', job);
+  }
+
+  addOpening(opening: Opening) {
+    return this.http.post(environment.apiUrl + 'Openings', opening);
+  }
+
+  getNewJobid(id: any) {
+    return this.http.get(environment.apiUrl + 'Countries/GetJobCode/'+id);
   }
 }

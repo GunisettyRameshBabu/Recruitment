@@ -5,6 +5,8 @@ import { JobopeningsComponent } from './components/jobopenings/jobopenings.compo
 import { JobdetailsComponent } from './components/jobdetails/jobdetails.component';
 import { AuthGuard } from './Guards/auth.guard';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
+import { AddOpeningsComponent } from './components/add-openings/add-openings.component';
+import { UsersComponent } from './components/users/users.component';
 
 
 const routes: Routes = [
@@ -18,7 +20,7 @@ const routes: Routes = [
     component : HomeComponent
   },
   {
-    path : 'jobopenings',
+    path : 'jobopenings/:type',
     component : JobopeningsComponent,
     canActivate : [AuthGuard]
   }
@@ -34,6 +36,16 @@ const routes: Routes = [
     canActivate : [AuthGuard]
   },
   {
+    path : 'addjob',
+    component : AddOpeningsComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'users',
+    component : UsersComponent,
+    canActivate : [AuthGuard]
+  },
+  {
     path : 'unauth',
     component : UnAuthorizedComponent
   },
@@ -41,7 +53,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{ useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

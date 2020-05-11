@@ -1,3 +1,10 @@
 .gutter-top {
     padding-top: 20px;
 }
+
+.bg {
+    background-image: url(../../../assets/two-woman-chatting-1311518.jpg) !important;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 30px;
+}

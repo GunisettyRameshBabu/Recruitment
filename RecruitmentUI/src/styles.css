@@ -26,6 +26,10 @@ body {
   min-width: auto;
 }
 
+.jumbotron {
+  background-color: #fff !important; 
+  padding-top: 100px !important;
+}
 
 /**  Copyright 2019 Google LLC. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that

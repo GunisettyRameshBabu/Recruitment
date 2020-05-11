@@ -36,11 +36,23 @@ namespace RecruitmentApi.Controllers
         [HttpGet]
         public async Task<ActionResult> GetUsers()
         {
-            var response = new ServiceResponse<IEnumerable<Users>>();
+            var response = new ServiceResponse<IEnumerable<UserView>>();
             try
             {
                 
-                response.Data = await _context.Users.ToListAsync();
+                response.Data = await (from x in _context.Users
+                                      join y in _context.Roles on x.roleId equals y.id
+                                      select new UserView()
+                                      {
+                                          id = x.id,
+                                          email = x.email,
+                                          firstName = x.firstName,
+                                          lastName = x.lastName,
+                                          middleName = x.middleName,
+                                          role = y.Name,
+                                          userid = x.userid,
+                                          roleId = x.roleId
+                                      }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }
@@ -78,8 +90,9 @@ namespace RecruitmentApi.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(users).State = EntityState.Modified;
+            var user = await _context.Users.FindAsync(id);
+            users.password = user.password;
+            _context.Entry(user).CurrentValues.SetValues(users);
 
             try
             {

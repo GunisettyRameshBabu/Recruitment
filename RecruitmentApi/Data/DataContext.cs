@@ -18,6 +18,21 @@ namespace RecruitmentApi.Data
 
         public DbSet<JobAttachments> JobAttachments { get; set; }
 
-        public DbSet<RecruitmentApi.Models.Openings> Openings { get; set; }
+        public DbSet<Openings> Openings { get; set; }
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<City> Citys { get; set; }
+
+        public DbSet<ClientCodes> ClientCodes { get; set; }
+
+        public DbSet<RecruitmentApi.Models.Experience> Experience { get; set; }
+
+        public DbSet<RecruitmentApi.Models.Industry> Industry { get; set; }
+
+        public DbSet<RecruitmentApi.Models.JobStatus> JobStatus { get; set; }
+
+        public DbSet<RecruitmentApi.Models.JobTypes> JobTypes { get; set; }
+
+        public DbSet<RecruitmentApi.Models.State> State { get; set; }
     }
 }

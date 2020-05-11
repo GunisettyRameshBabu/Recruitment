@@ -5,3 +5,12 @@
 .card-deck{
     bottom-margin: 10px;
 }
+
+.float-right {
+    float: right !important;
+}
+
+mat-card-title {
+    width: 100% !important;
+}
+
