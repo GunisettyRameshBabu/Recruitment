@@ -2,6 +2,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { JobService } from '../../services/job.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UsersessionService } from 'src/app/services/usersession.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-jobopenings',
@@ -14,25 +16,23 @@ export class JobopeningsComponent implements OnInit {
   openings = [];
   type;
   constructor(private jobService: JobService, private router: Router, private alertService: ToastrService,
-    private activeRoute: ActivatedRoute) { }
+    private sessionService: UsersessionService) { }
 
   ngOnInit(): void {
-    this.activeRoute.params.subscribe((res:any)=> {
-      this.type = res.type;
-      this.jobService.getJobOpenings(this.type).subscribe((res: any) => {
-        if (res.success) {
-          this.openings = res.data;
-        } else {
-          this.alertService.error(res.message);
-        }
-       
-      });
+    this.type = (this.sessionService.getLoggedInUser() as User).type;
+    this.jobService.getJobOpenings(this.type).subscribe((res: any) => {
+      if (res.success) {
+        this.openings = res.data;
+      } else {
+        this.alertService.error(res.message);
+      }
+     
     });
    
   }
 
   showDetails(item) {
-    this.router.navigate(['jobdetails', item.id] );
+    this.router.navigate(['jobdetails', item.jobid] );
   }
 
   add() {

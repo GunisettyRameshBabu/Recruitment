@@ -20,7 +20,7 @@ const routes: Routes = [
     component : HomeComponent
   },
   {
-    path : 'jobopenings/:type',
+    path : 'jobopenings',
     component : JobopeningsComponent,
     canActivate : [AuthGuard]
   }

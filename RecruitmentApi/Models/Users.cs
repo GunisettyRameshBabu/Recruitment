@@ -24,5 +24,9 @@ namespace RecruitmentApi.Models
         public string password { get; set; }
 
         public int roleId { get; set; }
+
+        public int? country { get; set; }
+
+        public string loginTypes { get; set; }
     }
 }

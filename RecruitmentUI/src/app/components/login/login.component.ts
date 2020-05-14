@@ -6,10 +6,10 @@ import { Login } from './login';
 import { ToastrService } from 'ngx-toastr';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { Router } from '@angular/router';
+import { LoginTypes } from 'src/app/models/user';
 
 export interface DialogData {
-  animal: string;
-  name: string;
+ type: any;
 }
 
 @Component({
@@ -21,13 +21,16 @@ export interface DialogData {
 export class LoginComponent implements OnInit {
 
   formGroup: FormGroup;
-  submitted: boolean = false;
+  submitted = false;
+  type: DialogData;
   constructor(
     public dialogRef: MatDialogRef<LoginComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData, private formBuilder: FormBuilder,
     private loginService: LoginService, private alertService: ToastrService,
     private sessionService: UsersessionService,
-    private router: Router) {}
+    private router: Router) {
+      this.type = this.data;
+    }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -45,12 +48,26 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     if (this.formGroup.valid) {
       this.loginService.validateuser(new Login(this.formGroup.controls.username.value, 
-        this.formGroup.controls.password.value)).subscribe((res: any) => {
+        this.formGroup.controls.password.value, this.type.type == 'in' ? LoginTypes.India : this.type.type == 'all' ?
+        LoginTypes.Admin : this.type.type == 'gl' ? LoginTypes.Global : LoginTypes.New)).subscribe((res: any) => {
           if (res.success) {
-            this.alertService.success('Logged Successfully', 'Login Success');
+            this.alertService.success('Logged Successfully');
+            res.data.type = this.type.type;
             this.sessionService.addUserSession(res.data);
             this.dialogRef.close();
-            this.router.navigate(['jobopenings']);
+
+            switch (this.type.type) {
+              case 'in':
+                case 'gl':
+                  case 'all':
+                this.router.navigate(['jobopenings']);
+                break;
+                case 'new':
+                  this.router.navigate(['addjob']);
+                  break;
+              default:
+                break;
+            }
           } else {
             this.alertService.error(res.message, 'Login Failed');
           }

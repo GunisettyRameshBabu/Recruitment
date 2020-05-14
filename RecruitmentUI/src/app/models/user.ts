@@ -7,4 +7,15 @@ export class User {
     email: string;
     roleId: Int16Array;
     password: string;
+    type: string;
+    countryName: any;
+    countryId: any;
 }
+
+export enum LoginTypes
+    {
+        Global,
+        India,
+        Admin, 
+        New
+    }

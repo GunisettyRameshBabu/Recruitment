@@ -10,5 +10,16 @@ namespace RecruitmentApi.Models
         public string UserId { get; set; }
 
         public string Password { get; set; }
+
+        public LoginTypes LoginType { get; set; }
+
+    }
+
+    public enum LoginTypes
+    {
+        Global,
+        India,
+        Admin, 
+        New
     }
 }

@@ -12,11 +12,11 @@ export class JobService {
   constructor(private http: HttpClient) { }
 
   getJobOpenings(type) {
-   return this.http.get(environment.apiUrl + 'Openings/'+ type);
+   return this.http.get(environment.apiUrl + 'Openings/GetOpeningsByCountry/'+ type);
   }
 
   getJobDetails(id: string) {
-    return this.http.get(environment.apiUrl + 'JobOpenings/' + id);
+    return this.http.get(environment.apiUrl + 'Openings/' + id);
   }
 
   applyJob(job: Jobapply) {

@@ -16,7 +16,11 @@
       <ejs-grid [dataSource]='openings'>
         <e-columns>
             <e-column field='jobid' headerText='Job Opening ID'  ></e-column>
-            <e-column field='jobtitle' headerText='Job Title' ></e-column>
+            <e-column field='jobtitle' headerText='Job Title' >
+              <ng-template #template  let-data>
+                <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
+            </ng-template>
+            </e-column>
             <e-column field='assaignedTo' textAlign='Assaigned Recruiter(s)' ></e-column>
             <e-column field='targetdate' headerText='Target Date'></e-column>
             <e-column field='status' headerText='Job Opening Status'></e-column>

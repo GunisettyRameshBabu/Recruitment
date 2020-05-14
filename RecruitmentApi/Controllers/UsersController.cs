@@ -42,6 +42,8 @@ namespace RecruitmentApi.Controllers
                 
                 response.Data = await (from x in _context.Users
                                       join y in _context.Roles on x.roleId equals y.id
+                                      join c in _context.Countries on x.country equals c.Id into countries
+                                      from c in countries.DefaultIfEmpty()
                                       select new UserView()
                                       {
                                           id = x.id,
@@ -51,7 +53,9 @@ namespace RecruitmentApi.Controllers
                                           middleName = x.middleName,
                                           role = y.Name,
                                           userid = x.userid,
-                                          roleId = x.roleId
+                                          roleId = x.roleId,
+                                          countryName = c.Name,
+                                          countryId = c.Id
                                       }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
@@ -186,6 +190,11 @@ namespace RecruitmentApi.Controllers
                 {
                     response.Success = false;
                     response.Message = "Wrong password.";
+                }
+                else if((string.IsNullOrEmpty(user.loginTypes) || !user.loginTypes.Split(',').Contains(userdto.LoginType.ToString())) && user.loginTypes != "Admin")
+                {
+                    response.Success = false;
+                    response.Message = "You are not authorized to view this content";
                 }
                 else
                 {

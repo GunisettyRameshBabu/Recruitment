@@ -15,9 +15,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  Login() {
+  Login(type:any) {
     const dialogRef = this.dialog.open(LoginComponent, {
-      data: {} ,
+      data: {type} ,
       position: {
         top : '75px'
       },

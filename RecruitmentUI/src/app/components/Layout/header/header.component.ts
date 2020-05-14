@@ -3,6 +3,8 @@ import { UsersessionService } from 'src/app/services/usersession.service';
 import { User } from 'src/app/models/user';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginComponent } from '../../login/login.component';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +14,8 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
 
   constructor(private sessionService: UsersessionService,
-    private alertService: ToastrService , private router: Router ) { }
+    private alertService: ToastrService ,
+     private router: Router, private dialog: MatDialog ) { }
 
   ngOnInit(): void {
   }
@@ -34,6 +37,22 @@ export class HeaderComponent implements OnInit {
     this.sessionService.signOutSession();
     this.alertService.success('User logged out successfully');
     this.router.navigate(['']);
+  }
+
+  login(type:any) {
+    const dialogRef = this.dialog.open(LoginComponent, {
+      data: {type} ,
+      position: {
+        top : '75px'
+      },
+      hasBackdrop : true,
+      disableClose : false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    
+    });
   }
 
 }

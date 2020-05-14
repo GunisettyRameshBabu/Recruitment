@@ -8,3 +8,17 @@
     background-size: contain;
     background-position: 30px;
 }
+
+#home{
+    background-image: url('../../../assets/two-woman-chatting-1311518.jpg');
+    background-size: cover;
+  }
+
+  .jumbotron-fluid {
+    
+    position: relative;
+    
+    display: flex;
+    align-items: center;
+}
+
