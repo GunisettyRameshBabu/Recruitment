@@ -127,7 +127,23 @@ namespace RecruitmentApi.Controllers
                     return response;
                 }
 
-                openings.Candidates = _context.JobCandidates.Where(x => x.jobid == id).ToList();
+                openings.Candidates = (from x in _context.JobCandidates
+                                       join s in _context.JobCandidateStatus on x.status equals s.id
+                                      where x.jobid == id
+                                      select new JobCandidatesDto()
+                                      {
+                                          jobid = x.jobid,
+                                          firstName = x.firstName,
+                                          id = x.id,
+                                          lastName = x.lastName,
+                                          middleName = x.middleName,
+                                          phone = x.phone,
+                                          resume = x.resume,
+                                          status = s.id,
+                                          statusName = s.name,
+                                          email = x.email,
+                                          fileName = x.fileName
+                                      }).ToList();
                 response.Data = openings;
                 response.Message = "Success";
                 response.Success = true;

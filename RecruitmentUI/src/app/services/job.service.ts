@@ -5,14 +5,19 @@ import { Jobapply } from '../components/jobapply/jobapply';
 import { Opening } from '../components/add-openings/opening';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JobService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  getJobOpenings(type,userId) {
-   return this.http.get(environment.apiUrl + 'Openings/GetOpeningsByCountry/'+ type+'/'+userId);
+  getJobOpenings(type, userId) {
+    return this.http.get(
+      environment.apiUrl +
+        'Openings/GetOpeningsByCountry/' +
+        type +
+        '/' +
+        userId
+    );
   }
 
   getJobDetails(id: string) {
@@ -28,6 +33,40 @@ export class JobService {
   }
 
   getNewJobid(id: any) {
-    return this.http.get(environment.apiUrl + 'Countries/GetJobCode/'+id);
+    return this.http.get(environment.apiUrl + 'Countries/GetJobCode/' + id);
   }
+
+  getCandidateStatus() {
+    return this.http.get(environment.apiUrl + 'JobCandidateStatus');
+  }
+
+  getJobCandidates(jobid) {
+    return this.http.get(environment.apiUrl + 'JobCandidates/GetByJobId/'+ jobid);
+  }
+
+  public addOrUpdateCandidate = (candidate) => {
+    if (candidate.id != 0) {
+      return this.http.put(
+        environment.apiUrl + 'JobCandidates/'+ candidate.id,
+        candidate
+      );
+    } else {
+      return this.http.post(
+        environment.apiUrl + 'JobCandidates',
+        candidate
+      );
+    }
+  };
+
+  public addCandidateResume = (id, files) => {
+    const formData = new FormData();
+    if (files != undefined && files.length > 0) {
+      let fileToUpload = files[0];
+      formData.append('file', fileToUpload, fileToUpload.name);
+    }
+    return this.http.put(
+      environment.apiUrl + 'JobCandidates/UploadAttachment/' + id,
+      formData , {reportProgress: true }
+    );
+  };
 }

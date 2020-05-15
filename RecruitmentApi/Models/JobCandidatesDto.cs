@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class JobCandidates : BaseEntity
+    public class JobCandidatesDto
     {
         public int id { get; set; }
 
@@ -22,6 +22,8 @@ namespace RecruitmentApi.Models
         public byte[] resume { get; set; }
 
         public int status { get; set; }
+
+        public string statusName { get; set; }
 
         public string fileName { get; set; }
 

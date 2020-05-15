@@ -1,0 +1,38 @@
+<mat-card>
+    <mat-card-title>
+      Candidates 
+      <button (click)="addCandidate()" class="btn btn-primary" style="float: right;">Add Candidate</button>
+    </mat-card-title>
+    <mat-card-content>
+<ejs-grid #grid [dataSource]='candidates'>
+    <e-columns>
+      <e-column  >
+        <ng-template #template  let-data>
+          <a [routerLink]="" (click)="Edit(data)">Edit</a>
+      </ng-template>
+      </e-column>
+        <e-column field='firstName' headerText='First Name'  ></e-column>
+        <e-column field='lastName' headerText="Last Name" >
+         
+        </e-column>
+        <e-column field='middleName' textAlign='middleName' ></e-column>
+        <e-column field='phone' headerText='Phone'>
+            
+         
+        </e-column>
+        <e-column field='statusName' headerText='Status'>
+
+        </e-column>
+        <e-column field='email' headerText='Email'>
+
+        </e-column>
+        <e-column field='resume' headerText='Resume'>
+          <ng-template #template  let-data>
+            <a [href]="data.resume" *ngIf="data.fileName != '' && data.fileName != undefined">{{ data.fileName }}</a>
+        </ng-template>
+          
+        </e-column>
+    </e-columns>
+  </ejs-grid>
+    </mat-card-content>
+</mat-card>

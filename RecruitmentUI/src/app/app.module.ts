@@ -35,6 +35,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { UsereditComponent } from './components/users/useredit/useredit.component';
+import { JobcandidatesComponent } from './components/jobcandidates/jobcandidates.component';
+import { AddcandidateComponent } from './components/jobcandidates/addcandidate/addcandidate.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { UsereditComponent } from './components/users/useredit/useredit.componen
     UnAuthorizedComponent,
     UsersComponent,
     AddOpeningsComponent,
-    UsereditComponent
+    UsereditComponent,
+    JobcandidatesComponent,
+    AddcandidateComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +76,7 @@ import { UsereditComponent } from './components/users/useredit/useredit.componen
     MatCheckboxModule,
     MatSlideToggleModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
     
   ],
   providers: [

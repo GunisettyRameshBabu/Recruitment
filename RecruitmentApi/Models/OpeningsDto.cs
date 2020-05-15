@@ -10,7 +10,7 @@ namespace RecruitmentApi.Models
 
         public OpeningsDto()
         {
-            Candidates = new List<JobCandidates>();
+            Candidates = new List<JobCandidatesDto>();
         }
         public string jobid { get; set; }
 
@@ -50,6 +50,6 @@ namespace RecruitmentApi.Models
 
         public string company_url { get; set; }
 
-        public IList<JobCandidates> Candidates { get; set; }
+        public IList<JobCandidatesDto> Candidates { get; set; }
     }
 }

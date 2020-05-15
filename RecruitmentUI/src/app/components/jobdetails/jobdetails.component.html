@@ -1,5 +1,6 @@
 <div class="jumbotron" style="height: calc(95vh);">
   <mat-card *ngIf="job">
+  
     <mat-card-title>
       {{job.jobtitle}} <span style="float:right;"> <b>Company : </b> <a [href]="job.company_url">{{job.client}}</a></span>
     </mat-card-title>
@@ -131,28 +132,8 @@
 <br>
       <div class="row" *ngIf="job">
         <div class="col-12">
-          
-          <mat-card>
-            <mat-card-title>
-              Candidates 
-              <button (click)="addCandidate()" class="btn btn-primary" style="float: right;">Add Candidate</button>
-            </mat-card-title>
-            <mat-card-content>
-              <ejs-grid #grid [dataSource]='job.candidates'>
-                <e-columns>
-                    <e-column field='firstName' headerText='First Name'  ></e-column>
-                    <e-column field='lastName' headerText="Last Name" >
-                     
-                    </e-column>
-                    <e-column field='middleName' textAlign='middleName' ></e-column>
-                    <e-column field='phone' headerText='Phone'>
-                     
-                    </e-column>
-                    
-                </e-columns>
-              </ejs-grid>
-            </mat-card-content>
-          </mat-card>
+          <app-jobcandidates [candidates]='job.candidates' [jobid]="job.jobid"></app-jobcandidates>
+        
         </div>
       </div>
 </div>

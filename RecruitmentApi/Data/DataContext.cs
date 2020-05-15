@@ -36,5 +36,7 @@ namespace RecruitmentApi.Data
         public DbSet<RecruitmentApi.Models.State> State { get; set; }
 
         public DbSet<JobCandidates> JobCandidates { get; set; }
+
+        public DbSet<JobCandidateStatus> JobCandidateStatus { get; set; }
     }
 }
