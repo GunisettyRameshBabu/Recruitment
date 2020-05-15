@@ -28,4 +28,13 @@ export class UsersessionService {
 
     return null;
   }
+
+  getLoginType() {
+    let user = sessionStorage.getItem('usersession');
+    if (user != undefined) {
+      return (JSON.parse(user) as User).loginTypes;
+    }
+
+    return null;
+  }
 }

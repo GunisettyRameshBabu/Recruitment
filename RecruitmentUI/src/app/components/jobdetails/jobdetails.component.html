@@ -1,17 +1,158 @@
 <div class="jumbotron" style="height: calc(95vh);">
-    <div class="card" style="padding-top: 10px;" *ngIf="job">
-        <div class="card-body">
-          <div >
-            <h5 class="card-title">{{job.title}}</h5> 
+  <mat-card *ngIf="job">
+    <mat-card-title>
+      {{job.jobtitle}} <span style="float:right;"> <b>Company : </b> <a [href]="job.company_url">{{job.client}}</a></span>
+    </mat-card-title>
+    <mat-card-content>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="country"><b>Country</b></label>
+                {{ job.country }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="created"><b>Created By</b></label>
+                {{ job.createdBy }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="assaigned"><b>Assaigned To</b></label>
+                {{ job.assaigned }}
+              </div>
+            </div>
+            
           </div>
           
-          <h6 class="card-subtitle mb-2 text-muted">Company : <a [href]="job.company_url">{{job.company}}</a> </h6>
+         
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="target"><b>Target Date</b></label>
+                {{ job.targetDate }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="status"><b>Job Status</b></label>
+                {{ job.status }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="contact"><b>Contact Name</b></label>
+                {{ job.contactName }}
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="jobtype"><b>Job Type</b></label>
+                {{ job.jobtype }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="industry"><b>Industry</b></label>
+                {{ job.industry }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="industry"><b>Industry</b></label>
+                {{ job.industry }}
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="country"><b>Country</b></label>
+                {{ job.country }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="state"><b>State</b></label>
+                {{ job.state }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="city"><b>City</b></label>
+                {{ job.city }}
+              </div>
+            </div>
+            
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="zip"><b>Zip Code</b></label>
+                {{ job.zip }}
+              </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-lg-4 col-xs-12 col-xl-3">
+              <div class="form-group">
+                <label for="salary"><b>Salary</b></label>
+                {{ job.salary }}
+              </div>
+            </div>
+           
+            
+          </div>
           <!-- <accordion>
             <accordion-group heading="View Details">
                 <div [innerHTML]="item.description" class="card-text"></div>
             </accordion-group>
           </accordion> -->
+          
+    </mat-card-content>
+  </mat-card>
+    
+      <br>
+      <mat-card *ngIf="job">
+        <mat-card-title>
+            Description
+        </mat-card-title>
+        <mat-card-content>
           <div [innerHTML]="job.description" class="card-text"></div>
+        </mat-card-content>
+      </mat-card>
+<br>
+      <div class="row" *ngIf="job">
+        <div class="col-12">
+          
+          <mat-card>
+            <mat-card-title>
+              Candidates 
+              <button (click)="addCandidate()" class="btn btn-primary" style="float: right;">Add Candidate</button>
+            </mat-card-title>
+            <mat-card-content>
+              <ejs-grid #grid [dataSource]='job.candidates'>
+                <e-columns>
+                    <e-column field='firstName' headerText='First Name'  ></e-column>
+                    <e-column field='lastName' headerText="Last Name" >
+                     
+                    </e-column>
+                    <e-column field='middleName' textAlign='middleName' ></e-column>
+                    <e-column field='phone' headerText='Phone'>
+                     
+                    </e-column>
+                    
+                </e-columns>
+              </ejs-grid>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
 </div>

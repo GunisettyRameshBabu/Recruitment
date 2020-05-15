@@ -155,3 +155,5 @@ C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcore
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\vbc.exe.config
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\tools\RoslynLatest\VBCSCompiler.exe.config
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\packages\EntityFramework.6.4.0\tools\netcoreapp3.0\any\ef6.runtimeconfig.json
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\AutoMapper.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

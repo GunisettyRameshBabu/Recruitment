@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { JobService } from '../../services/job.service';
 import { MatDialog } from '@angular/material/dialog';
 import { JobapplyComponent } from '../jobapply/jobapply.component';
+import { ServiceResponse } from 'src/app/models/service-response';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-jobdetails',
@@ -11,14 +13,19 @@ import { JobapplyComponent } from '../jobapply/jobapply.component';
 })
 export class JobdetailsComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute , private service: JobService, public dialog: MatDialog) { }
+  constructor(private router: ActivatedRoute , private service: JobService,
+    public dialog: MatDialog, private alertService: ToastrService) { }
   job;
   jobid;
   ngOnInit(): void {
     this.router.params.subscribe((res: any) => {
       this.jobid = res.jobid;
-      this.service.getJobDetails(this.jobid).subscribe((data: any) => {
-        this.job = data;
+      this.service.getJobDetails(this.jobid).subscribe((data: ServiceResponse) => {
+        if(data.success) {
+          this.job = data.data;
+        } else {
+          this.alertService.error(data.message);
+        }
       });
     });
   }
@@ -37,6 +44,8 @@ export class JobdetailsComponent implements OnInit {
     });
   }
 
- 
+  addCandidate() {
+    
+  }
 
 }

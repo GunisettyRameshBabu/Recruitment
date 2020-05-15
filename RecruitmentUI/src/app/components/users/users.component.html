@@ -1,36 +1,46 @@
 <div class="jumbotron" style="height: calc(95vh);">
     <div class="row">
       <div class="col-md-10 col-sm-10 col-xs-10 col-10">
-        <mat-card-title>
+        <b style="color:white">
+          <h3>
           Users
-        </mat-card-title>
+        </h3>
+        </b>
       </div>
       <div class="col-md-2 col-sm-2 col-xs-2 col-2">
         <button  class="btn btn-primary float-right" (click)="add()">Add Users</button>
       </div>
     </div>
-    <mat-card class="custom">
-     
-   
-      <mat-card-content>
-        <ejs-grid [dataSource]='users'>
-          <e-columns>
-            <e-column headerText="Actions">
-              <ng-template #template  let-data>
-                  <a (click)="edit(data)" [routerLink]="">Edit</a>
-              </ng-template>
-          </e-column>
-              <e-column field='firstName' headerText='First Name' ></e-column>
-              <e-column field='middleName' headerText='Middle Name' ></e-column>
-              <e-column field='lastName' textAlign='Last Name' ></e-column>
-              <e-column field='userid' headerText='User Id'></e-column>
-              <e-column field='email' headerText='Email'></e-column>
-              <e-column field='role' headerText='Role'></e-column>
-              <e-column field='countryName' headerText='Country'></e-column>
-          </e-columns>
-        </ejs-grid>
-      </mat-card-content>
-    </mat-card>
+    <div class="row">
+      <div class="col-12">
+        <mat-card >
+          <mat-card-content>
+            <ejs-grid [dataSource]='users'>
+              <e-columns width="50px">
+                <e-column headerText="Actions">
+                  <ng-template #template  let-data>
+                      <a (click)="edit(data)" [routerLink]="">Edit</a>
+                  </ng-template>
+              </e-column>
+                  <e-column field='firstName' headerText='First Name' ></e-column>
+                  <e-column field='middleName' headerText='Middle Name' ></e-column>
+                  <e-column field='lastName' textAlign='Last Name' ></e-column>
+                  <e-column field='userid' headerText='User Id'></e-column>
+                  <e-column field='email' headerText='Email'></e-column>
+                  <e-column field='role' headerText='Role'></e-column>
+                  <e-column field='countryName' headerText='Country'></e-column>
+                  <e-column field='active' headerText='Active'>
+                    <ng-template #template  let-data>
+                     <input type="checkbox" disabled checked *ngIf="data.active">
+                     <input type="checkbox"  disabled *ngIf="!data.active">
+                  </ng-template>
+                  </e-column>
+              </e-columns>
+            </ejs-grid>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
     
   
   </div>

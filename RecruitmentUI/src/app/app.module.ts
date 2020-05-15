@@ -23,6 +23,8 @@ import { JobapplyComponent } from './components/jobapply/jobapply.component';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { UsersComponent } from './components/users/users.component';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
+
+import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 import { AddOpeningsComponent } from './components/add-openings/add-openings.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
@@ -71,10 +73,15 @@ import { UsereditComponent } from './components/users/useredit/useredit.componen
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule
+    
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    PageService,
+        SortService,
+        FilterService,
+        GroupService
   ],
   bootstrap: [AppComponent]
 })

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,12 @@ namespace RecruitmentApi.Controllers
         private byte[] _key;
         private byte[] _iv;
         private TripleDESCryptoServiceProvider _provider;
-
-        public UsersController(DataContext context)
+        private readonly IMapper _mapper;
+      
+        public UsersController(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
             _key = System.Text.ASCIIEncoding.ASCII.GetBytes("GSYAHAGCBDUUADIADKOPAAAW");
             _iv = System.Text.ASCIIEncoding.ASCII.GetBytes("USAZBGAW");
             _provider = new TripleDESCryptoServiceProvider();
@@ -55,7 +58,8 @@ namespace RecruitmentApi.Controllers
                                           userid = x.userid,
                                           roleId = x.roleId,
                                           countryName = c.Name,
-                                          countryId = c.Id
+                                          countryId = c.Id,
+                                          active = x.active
                                       }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
@@ -88,7 +92,7 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, Users users)
+        public async Task<IActionResult> PutUsers(int id, UserDto users)
         {
             if (id != users.id)
             {
@@ -96,7 +100,8 @@ namespace RecruitmentApi.Controllers
             }
             var user = await _context.Users.FindAsync(id);
             users.password = user.password;
-            _context.Entry(user).CurrentValues.SetValues(users);
+            var usr = _mapper.Map<Users>(users);
+            _context.Entry(user).CurrentValues.SetValues(usr);
 
             try
             {

@@ -28,5 +28,7 @@ namespace RecruitmentApi.Models
         public int? country { get; set; }
 
         public string loginTypes { get; set; }
+
+        public bool active { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { Router } from '@angular/router';
@@ -9,7 +9,8 @@ import { CommonService } from 'src/app/services/common.service';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UsersComponent implements OnInit {
 
@@ -34,7 +35,7 @@ export class UsersComponent implements OnInit {
     const dialogRef = this.dialog.open(UsereditComponent, {
       data: {} ,
       position: {
-        top : '30px'
+        top : '4%'
       },
       hasBackdrop : true,
       disableClose : false
@@ -49,7 +50,7 @@ export class UsersComponent implements OnInit {
     const dialogRef = this.dialog.open(UsereditComponent, {
       data: data ,
       position: {
-        top : '30px'
+        top : '5%'
       },
       hasBackdrop : true,
       disableClose : false

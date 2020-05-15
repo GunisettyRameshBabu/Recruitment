@@ -9,15 +9,15 @@
       <ul class="navbar-nav mr-auto">
   
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home">Home</a>
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
         </li>
 
         <li class="nav-item" *ngIf="isUserLoggedIn()">
-          <a class="nav-link" routerLink="/jobopenings">Job Openings</a>
+          <a class="nav-link" routerLink="/jobopenings" routerLinkActive="active">Job Openings</a>
         </li>
 
-        <li class="nav-item" *ngIf="isUserLoggedIn()">
-          <a class="nav-link" routerLink="/users">Users</a>
+        <li class="nav-item" *ngIf="isUserLoggedIn() && getLoginType() == 'Admin'">
+          <a class="nav-link" routerLink="/users" routerLinkActive="active">Users</a>
         </li>
 
         

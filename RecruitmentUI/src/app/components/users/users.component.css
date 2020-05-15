@@ -1,0 +1,8 @@
+.jumbotron {
+    background-image: url('../../../assets/Users.jpg');
+    background-size: cover;
+}
+
+mat-card-title {
+    color: white !important;
+}

@@ -32,10 +32,7 @@ html, body{
   min-width: auto;
 }
 
-.jumbotron {
-  background-color: #fff !important; 
-  padding-top: 100px !important;
-}
+
 
 .float-right {
   float: right;

@@ -11,8 +11,8 @@ export class JobService {
 
   constructor(private http: HttpClient) { }
 
-  getJobOpenings(type) {
-   return this.http.get(environment.apiUrl + 'Openings/GetOpeningsByCountry/'+ type);
+  getJobOpenings(type,userId) {
+   return this.http.get(environment.apiUrl + 'Openings/GetOpeningsByCountry/'+ type+'/'+userId);
   }
 
   getJobDetails(id: string) {

@@ -14,3 +14,9 @@ mat-card-title {
     width: 100% !important;
 }
 
+.jumbotron {
+    background-image: url('../../../assets/graphs-job-laptop-papers-590016.jpg');
+    background-size: cover;
+    padding-top: 10px;
+}
+

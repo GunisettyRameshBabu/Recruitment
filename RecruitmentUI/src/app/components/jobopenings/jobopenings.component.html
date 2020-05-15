@@ -5,33 +5,39 @@
         Openings
       </mat-card-title>
     </div>
-    <div class="col-md-2 col-sm-2 col-xs-2 col-2">
+    <div class="col-md-2 col-sm-4 col-xs-4 col-2">
       <button  class="btn btn-primary float-right" (click)="add()">Add Job</button>
     </div>
   </div>
-  <mat-card class="custom">
-   
- 
-    <mat-card-content>
-      <ejs-grid [dataSource]='openings'>
-        <e-columns>
-            <e-column field='jobid' headerText='Job Opening ID'  ></e-column>
-            <e-column field='jobtitle' headerText='Job Title' >
-              <ng-template #template  let-data>
-                <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
-            </ng-template>
-            </e-column>
-            <e-column field='assaignedTo' textAlign='Assaigned Recruiter(s)' ></e-column>
-            <e-column field='targetdate' headerText='Target Date'></e-column>
-            <e-column field='status' headerText='Job Opening Status'></e-column>
-            <e-column field='city' headerText='City'></e-column>
-            <e-column field='client' headerText='Client Name'></e-column>
-            <e-column field='contactName' headerText='Contact Name'></e-column>
-            <e-column field='accountManager' headerText='Account Manager'></e-column>
-        </e-columns>
-      </ejs-grid>
-    </mat-card-content>
-  </mat-card>
+  <div class="row">
+    <div class="col-12">
+      <mat-card>
+        <mat-card-content>
+          <ejs-grid #grid [dataSource]='openings' [childGrid]='childGrid'>
+            <e-columns>
+                <e-column field='jobid' headerText='Job Opening ID'  ></e-column>
+                <e-column field='jobtitle' headerText='Job Title' >
+                  <ng-template #template  let-data>
+                    <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
+                </ng-template>
+                </e-column>
+                <e-column field='assaignedTo' textAlign='Assaigned Recruiter(s)' ></e-column>
+                <e-column field='targetdate' headerText='Target Date'>
+                  <ng-template #template  let-data>
+                    {{ data.targetdate | date }}
+                </ng-template>
+                </e-column>
+                <e-column field='status' headerText='Job Opening Status'></e-column>
+                <e-column field='city' headerText='City'></e-column>
+                <e-column field='client' headerText='Client Name'></e-column>
+                <e-column field='contactName' headerText='Contact Name'></e-column>
+                <e-column field='accountManager' headerText='Account Manager'></e-column>
+            </e-columns>
+          </ejs-grid>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
   
 
 </div>

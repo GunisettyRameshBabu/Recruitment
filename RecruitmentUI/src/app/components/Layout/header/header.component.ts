@@ -24,6 +24,10 @@ export class HeaderComponent implements OnInit {
     return this.sessionService.checkUserLoggedIn();
   }
 
+  getLoginType() {
+    return this.sessionService.getLoginType();
+  }
+
   getFullName() {
     let user = this.sessionService.getLoggedInUser() as User;
     if (user != null) {

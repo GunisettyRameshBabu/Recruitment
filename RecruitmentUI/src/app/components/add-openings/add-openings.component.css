@@ -11,6 +11,11 @@
     display: block;
   }
 
+  .jumbotron {
+    background-image: url('../../../assets/photo-of-led-signage-on-the-wall-942317.jpg');
+    background-size: cover;
+}
+
   /* .custom.mat-card{
     border-style: solid;
     border-width: 1px;

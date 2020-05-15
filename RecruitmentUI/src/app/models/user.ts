@@ -10,6 +10,8 @@ export class User {
     type: string;
     countryName: any;
     countryId: any;
+    loginTypes: string;
+    active: boolean;
 }
 
 export enum LoginTypes

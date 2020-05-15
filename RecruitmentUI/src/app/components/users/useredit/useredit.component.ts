@@ -46,7 +46,8 @@ export class UsereditComponent implements OnInit {
         password: new FormControl('', Validators.required),
         repassword: new FormControl('', [Validators.required]),
         roleId: new FormControl('', Validators.required),
-        countryId: new FormControl('', Validators.required)
+        countryId: new FormControl('', Validators.required),
+        active: new FormControl(false)
       });
     } else {
       this.userEditGroup = new FormGroup({
@@ -57,7 +58,8 @@ export class UsereditComponent implements OnInit {
         email: new FormControl('', [Validators.required,Validators.email]),
         userid: new FormControl(''),
         roleId: new FormControl('', Validators.required),
-        countryId: new FormControl('', Validators.required)
+        countryId: new FormControl('', Validators.required),
+        active: new FormControl(false)
       });
       this.userEditGroup.reset(this.user);
     }

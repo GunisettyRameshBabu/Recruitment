@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { LoginComponent } from '../login/login.component';
+import { UsersessionService } from 'src/app/services/usersession.service';
+import { User } from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private userSession: UsersessionService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -29,6 +33,30 @@ export class HomeComponent implements OnInit {
       console.log('The dialog was closed');
     
     });
+  }
+
+  checkUserLoggedIn() {
+    return this.userSession.checkUserLoggedIn();
+  }
+
+  hasViewPermission(type) {
+    let user = this.userSession.getLoggedInUser() as User;
+    return  user == null ? false : user.loginTypes == "Admin" ? true : user.loginTypes.split(',').indexOf(type) > 0;
+  }
+
+  view(type) {
+    switch (type) {
+      case 'in':
+        case 'gl':
+          case 'all':
+        this.router.navigate(['jobopenings']);
+        break;
+        case 'new':
+          this.router.navigate(['addjob']);
+          break;
+      default:
+        break;
+    }
   }
 
 }

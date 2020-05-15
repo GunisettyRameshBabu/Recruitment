@@ -1,12 +1,16 @@
 
-<div class="container-fluid" id="home">
-        <div class="row">
+<div class="container-fluid" >
+  
+  <mat-card  id="home">
+    <mat-card-content>
+        <div class="row" style="margin-top: 10%;margin-left: 10%;margin-bottom: 20%;">
             <div class="col-lg-4 col-sm-12 col-xs-12 col-xl-3 col-md-4 my-auto">
                 <div class="card" >
                     <div class="card-body">
                       <h5 class="card-title">India Openings</h5>
                       <p class="card-text">Log In to see the India Openings</p>
-                      <button class="btn btn-primary" (click)="Login('in')">Log In</button>
+                      <button class="btn btn-primary" *ngIf="!checkUserLoggedIn() || !hasViewPermission('India')" (click)="Login('in')">Log In</button>
+                      <button class="btn btn-primary" *ngIf="checkUserLoggedIn() && hasViewPermission('India')" (click)="view('in')">View</button>
                     </div>
                   </div>
             </div>
@@ -15,7 +19,8 @@
                   <div class="card-body">
                     <h5 class="card-title">Global Openings</h5>
                     <p class="card-text">Log In to see the Global Openings</p>
-                    <button class="btn btn-primary" (click)="Login('gl')">Log In</button>
+                    <button class="btn btn-primary" *ngIf="!checkUserLoggedIn() || !hasViewPermission('Global')" (click)="Login('gl')">Log In</button>
+                    <button class="btn btn-primary" *ngIf="checkUserLoggedIn() && hasViewPermission('Global')" (click)="view('gl')">View</button>
                   </div>
                   </div>
             </div>
@@ -24,13 +29,14 @@
                   <div class="card-body">
                     <h5 class="card-title">New Openings</h5>
                     <p class="card-text">Log In to see the New Openings</p>
-                    <button class="btn btn-primary" (click)="Login('new')">Log In</button>
+                    <button class="btn btn-primary" *ngIf="!checkUserLoggedIn() || !hasViewPermission('New')" (click)="Login('new')">Log In</button>
+                    <button class="btn btn-primary" *ngIf="checkUserLoggedIn() && hasViewPermission('New')" (click)="view('new')">Add New</button>
                   </div>
                   </div>
             </div>
         </div>
- 
-   
+    </mat-card-content>
+  </mat-card>
     
   </div>
 

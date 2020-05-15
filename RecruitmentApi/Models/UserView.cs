@@ -26,5 +26,7 @@ namespace RecruitmentApi.Models
 
         public string countryName { get; set; }
         public int countryId { get; set; }
+
+        public bool active { get; set; }
     }
 }

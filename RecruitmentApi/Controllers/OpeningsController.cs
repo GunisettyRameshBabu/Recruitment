@@ -24,15 +24,16 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/Openings/
-        [HttpGet("GetOpeningsByCountry/{id}")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<OpeningsListView>>>> GetOpeningsByCountry(string id)
+        [HttpGet("GetOpeningsByCountry/{id}/{userId}")]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<OpeningsListView>>>> GetOpeningsByCountry(string id, string userId)
         {
             var response = new ServiceResponse<IEnumerable<OpeningsListView>>();
             try
             {
                 var countries = _context.Countries.ToList();
-              var  filteredCountries = ((id == "in" ? countries.Where(x => x.Code == "IN").Select(x => x.Id) : ( id == "all" ? countries.Select(x => x.Id) :
-                    countries.Where(x => x.Code != "IN").Select(x => x.Id))).ToList());
+                var user = _context.Users.FirstOrDefault(x => x.userid == userId);
+                var filteredCountries = ((id == "in" ? countries.Where(x => x.Code == "IN").Select(x => x.Id) : (id == "all" ? countries.Select(x => x.Id) :
+                      countries.Where(x => x.Code != "IN").Select(x => x.Id))).ToList());
                 response.Data = await (from o in _context.Openings
                                        join a in _context.Users on o.assaignedTo equals a.userid into assaigns
                                        from a in assaigns.DefaultIfEmpty()
@@ -43,7 +44,7 @@ namespace RecruitmentApi.Controllers
                                        join am in _context.Users on o.accountManager equals am.userid into accounts
                                        from am in accounts.DefaultIfEmpty()
                                        join s in _context.JobStatus on o.status equals s.Id
-                                       where filteredCountries.Contains(o.country)
+                                       where filteredCountries.Contains(o.country) && ((user != null && user.roleId == 1) || (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
                                        select new OpeningsListView()
                                        {
                                            accountManager = (am == null ? "" : am.firstName + " " + (am.middleName ?? "") + am.lastName),
@@ -66,21 +67,80 @@ namespace RecruitmentApi.Controllers
             }
 
             return Ok(response);
-           
+
         }
 
         // GET: api/Openings/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Openings>> GetOpenings(string id)
+        public async Task<ServiceResponse<OpeningsDto>> GetOpenings(string id)
         {
-            var openings = await _context.Openings.FirstOrDefaultAsync(x => x.jobid == id);
-
-            if (openings == null)
+            var response = new ServiceResponse<OpeningsDto>();
+            try
             {
-                return NotFound();
+                var openings = await (from x in _context.Openings
+                                      join cr in _context.Users on x.createdBy equals cr.userid
+                                      join st in _context.JobStatus on x.status equals st.Id
+                                      join cou in _context.Countries on x.country equals cou.Id
+                                      join sta in _context.State on x.state equals sta.Id
+                                      join ci in _context.Citys on x.city equals ci.Id
+                                      join ass in _context.Users on x.assaignedTo equals ass.userid into assains
+                                      from ass in assains.DefaultIfEmpty()
+                                      join cl in _context.ClientCodes on x.client equals cl.Id
+                                      join con in _context.Users on x.contactName equals con.userid into contacts
+                                      from con in contacts.DefaultIfEmpty()
+                                      join acc in _context.Users on x.accountManager equals acc.userid into accounts
+                                      from acc in accounts.DefaultIfEmpty()
+                                      join exp in _context.Experience on x.experience equals exp.Id
+                                      join indus in _context.Industry on x.industry equals indus.Id
+                                      join types in _context.JobTypes on x.jobtype equals types.Id
+
+
+                                      where x.jobid == id
+                                      select new OpeningsDto()
+                                      {
+                                          jobid = x.jobid,
+                                          accountManager = (acc == null ? "" : acc.firstName + " " + (acc.middleName ?? "") + acc.lastName),
+                                          state = sta.Name,
+                                          country = cou.Name,
+                                          assaigned = (ass == null ? "" : ass.firstName + " " + (ass.middleName ?? "") + ass.lastName),
+                                          city = ci.Name,
+                                          client = cl.Name,
+                                          contactName = (con == null ? "" : con.firstName + " " + (con.middleName ?? "") + con.lastName),
+                                          description = x.description,
+                                          experience = exp.Name,
+                                          jobtitle = x.jobtitle,
+                                          status = st.Name,
+                                          zip = x.zip,
+                                          targetDate = x.targetdate,
+                                          salary = x.salary,
+                                          createdBy = (cr == null ? "" : cr.firstName + " " + (cr.middleName ?? "") + cr.lastName),
+                                          industry = indus.Name,
+                                          jobtype = types.Name,
+                                          company_url = cl.url
+
+                                      }).FirstOrDefaultAsync();
+
+                if (openings == null)
+                {
+                    response.Message = "Job Id not found";
+                    response.Success = false;
+                    return response;
+                }
+
+                openings.Candidates = _context.JobCandidates.Where(x => x.jobid == id).ToList();
+                response.Data = openings;
+                response.Message = "Success";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Success = false;
+                return response;
             }
 
-            return openings;
+
+            return response;
         }
 
         // PUT: api/Openings/5
@@ -163,7 +223,7 @@ namespace RecruitmentApi.Controllers
             }
 
             return Ok(response);
-           
+
         }
 
         // DELETE: api/Openings/5
