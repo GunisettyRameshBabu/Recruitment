@@ -22,6 +22,19 @@ namespace RecruitmentApi.Controllers
             _context = context;
         }
 
+        [HttpGet("Download/{id}")]
+        public async Task<IActionResult> Download(int id)
+        {
+            var candidate = _context.JobCandidates.Find(id);
+            if (candidate == null)
+            {
+                return NotFound("Resume Not Found");
+            }
+            
+            
+            return File(candidate.resume, "application/octet-stream"); // returns a FileStreamResult
+        }
+
         // GET: api/JobCandidates
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JobCandidatesDto>>> GetJobCandidates()
@@ -108,6 +121,44 @@ namespace RecruitmentApi.Controllers
                 response.Message = ex.Message;
             }
            
+
+
+            return response;
+        }
+
+        [HttpGet("GetCandidatesByJobId/{id}")]
+        public async Task<ServiceResponse<List<JobCandidatesDto>>> GetCandidatesByJobId(int id)
+        {
+            var response = new ServiceResponse<List<JobCandidatesDto>>();
+            try
+            {
+                response.Data = await (from x in _context.JobCandidates
+                                       join s in _context.JobCandidateStatus on x.status equals s.id
+                                       where x.id == id
+                                       select new JobCandidatesDto()
+                                       {
+                                           jobid = x.jobid,
+                                           firstName = x.firstName,
+                                           id = x.id,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           phone = x.phone,
+                                           resume = x.resume,
+                                           status = s.id,
+                                           statusName = s.name,
+                                           email = x.email,
+                                           fileName = x.fileName
+                                       }).ToListAsync();
+
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
 
 
             return response;

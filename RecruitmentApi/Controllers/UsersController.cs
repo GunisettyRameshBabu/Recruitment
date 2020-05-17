@@ -88,6 +88,34 @@ namespace RecruitmentApi.Controllers
             return users;
         }
 
+        // GET: api/Users/5
+        [HttpGet("GetUsersByCountry")]
+        public async Task<ServiceResponse<List<UserList>>> GetUsersByCountry()
+        {
+            var response = new ServiceResponse<List<UserList>>();
+            try
+            {
+                response.Data = await (from x in _context.Users
+                                  select new UserList
+                                  {
+                                      id = x.userid,
+                                      name = x.firstName + " " + (x.middleName ?? "") + " "+ x.lastName ,
+                                      country  = x.country
+                                  }).ToListAsync();
+                response.Message = "Users List";
+                response.Success = true;
+
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Success = false;
+            }
+
+          
+            return response;
+        }
+
         // PUT: api/Users/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.

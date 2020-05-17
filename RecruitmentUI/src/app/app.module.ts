@@ -22,7 +22,7 @@ import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JobapplyComponent } from './components/jobapply/jobapply.component';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { UsersComponent } from './components/users/users.component';
-import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { GridModule, DetailRowService,ToolbarService, ExcelExportService, EditService } from '@syncfusion/ej2-angular-grids';
 
 import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 import { AddOpeningsComponent } from './components/add-openings/add-openings.component';
@@ -38,6 +38,7 @@ import { UsereditComponent } from './components/users/useredit/useredit.componen
 import { JobcandidatesComponent } from './components/jobcandidates/jobcandidates.component';
 import { AddcandidateComponent } from './components/jobcandidates/addcandidate/addcandidate.component';
 
+import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,7 +78,7 @@ import { AddcandidateComponent } from './components/jobcandidates/addcandidate/a
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    
+    UploaderModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
@@ -85,7 +86,10 @@ import { AddcandidateComponent } from './components/jobcandidates/addcandidate/a
     PageService,
         SortService,
         FilterService,
-        GroupService
+        GroupService,
+        DetailRowService,
+        ExcelExportService, ToolbarService,
+        EditService
   ],
   bootstrap: [AppComponent]
 })

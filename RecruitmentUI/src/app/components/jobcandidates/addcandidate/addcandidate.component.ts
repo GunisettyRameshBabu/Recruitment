@@ -20,6 +20,7 @@ import { User } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { HttpEventType } from '@angular/common/http';
 
+
 @Component({
   selector: 'app-addcandidate',
   templateUrl: './addcandidate.component.html',
@@ -32,8 +33,9 @@ export class AddcandidateComponent implements OnInit {
   statuses: any[] = [];
   @ViewChild('fileInput', { static: false }) file: ElementRef;
   resume: any;
-  percentage: number = 0;
+  percentage = 0;
   user: User;
+  public dropEle: HTMLElement ;
 
   constructor(
     public dialogRef: MatDialogRef<AddcandidateComponent>,
@@ -48,6 +50,7 @@ export class AddcandidateComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dropEle = document.getElementById('droparea');
     this.jobService.getCandidateStatus().subscribe((res: any) => {
       this.statuses = res;
     });
@@ -62,6 +65,7 @@ export class AddcandidateComponent implements OnInit {
       phone: new FormControl('', Validators.required),
       createdBy: new FormControl('', Validators.required),
       modifiedBy: new FormControl(''),
+      fileName: new FormControl('')
     });
 
     this.jobGroup.reset(this.job);
@@ -112,5 +116,9 @@ export class AddcandidateComponent implements OnInit {
 
   public uploadFile = (files) => {
     this.resume = files;
+  }
+
+  public browseClick() {
+    document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click(); return false;
   }
 }

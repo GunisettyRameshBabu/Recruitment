@@ -5,8 +5,15 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
+    public class OpeningsList
+    {
+        public IEnumerable<OpeningsListView> Jobs { get; set; }
+
+        public IEnumerable<JobCandidatesDto> Candidates { get; set; }
+    }
     public class OpeningsListView
     {
+        public int id { get; set; }
         public string jobid { get; set; }
 
         public string jobtitle { get; set; }

@@ -1,38 +1,84 @@
-<mat-card>
-    <mat-card-title>
-      Candidates 
-      <button (click)="addCandidate()" class="btn btn-primary" style="float: right;">Add Candidate</button>
-    </mat-card-title>
-    <mat-card-content>
-<ejs-grid #grid [dataSource]='candidates'>
+<ejs-grid #grid [dataSource]='candidates' [toolbar]='toolbar' [editSettings]='editSettings'
+[allowExcelExport]='true' (toolbarClick)='toolbarClick($event)'>
     <e-columns>
-      <e-column  >
-        <ng-template #template  let-data>
-          <a [routerLink]="" (click)="Edit(data)">Edit</a>
-      </ng-template>
-      </e-column>
-        <e-column field='firstName' headerText='First Name'  ></e-column>
+        <e-column width="100">
+            <ng-template #template  let-data>
+               <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)">
+            </ng-template>
+        </e-column>
+        <e-column field='firstName' headerText='First Name' width="150" >
+         
+        </e-column>
         <e-column field='lastName' headerText="Last Name" >
          
         </e-column>
-        <e-column field='middleName' textAlign='middleName' ></e-column>
+        <e-column field='middleName' headerText='Middle Name' ></e-column>
         <e-column field='phone' headerText='Phone'>
             
          
         </e-column>
-        <e-column field='statusName' headerText='Status'>
+        <e-column field='status' headerText='Status'>
 
-        </e-column>
+             </e-column>
         <e-column field='email' headerText='Email'>
 
         </e-column>
         <e-column field='resume' headerText='Resume'>
           <ng-template #template  let-data>
-            <a [href]="data.resume" *ngIf="data.fileName != '' && data.fileName != undefined">{{ data.fileName }}</a>
+            <button type="button" class="btn btn-link" (click)="getResume(data)"  *ngIf="data.fileName != '' && data.fileName != undefined">{{ data.fileName }}</button>
         </ng-template>
-          
+        <<ng-template #editTemplate>
+        </ng-template>
+        
+      
+       
         </e-column>
+      
     </e-columns>
+    <!-- <ng-template #editSettingsTemplate let-data>
+        <div [formGroup]="candidateForm">
+          <div class="form-row">
+              <div class="form-group col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                  <div class="e-float-input e-control-wrapper" [ngClass]="{'e-error': firstName.invalid && (firstName.dirty || firstName.touched)}">
+                      <input formControlName="firstName" required id="firstName" name="firstName" type="text" [attr.disabled]="!data.isAdd ? '' : null" #firstName>
+                      <span class="e-float-line"></span>
+                      <label class="e-float-text e-label-top" for="firstName"> First Name</label>
+                  </div>
+                  <div id="firstNameError" *ngIf='firstName.invalid && (firstName.dirty || firstName.touched)'>
+                      <label class="e-error" id="firstName-info" style="display: block;">*First Name is required</label>
+                  </div>
+              </div>
+              <div class="form-group col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                  <div class="e-float-input e-control-wrapper"">
+                      <input formControlName="middleName" id="middleName" name="middleName" type="text" #middleName>
+                      <span class="e-float-line"></span>
+                      <label class="e-float-text e-label-top" for="middleName">Middle Name</label>
+                  </div>
+                  
+              </div>
+              <div class="form-group col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <div class="e-float-input e-control-wrapper" [ngClass]="{'e-error': lastName.invalid && (lastName.dirty || lastName.touched)}">
+                    <input formControlName="lastName" required id="lastName" name="lastName" type="text" [attr.disabled]="!data.isAdd ? '' : null" #lastName>
+                    <span class="e-float-line"></span>
+                    <label class="e-float-text e-label-top" for="lastName"> Last Name</label>
+                </div>
+                <div id="lastNameError" *ngIf='lastName.invalid && (lastName.dirty || lastName.touched)'>
+                    <label class="e-error" id="lastName-info" style="display: block;">*Last Name is required</label>
+                </div>
+            </div>
+
+            <div class="form-group col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+              <div class="e-float-input e-control-wrapper" [ngClass]="{'e-error': email.invalid && (email.dirty || email.touched)}">
+                  <input formControlName="email" required id="email" name="email" type="text" [attr.disabled]="!data.isAdd ? '' : null" #email>
+                  <span class="e-float-line"></span>
+                  <label class="e-float-text e-label-top" for="email"> Email</label>
+              </div>
+              <div id="emailError" *ngIf='email.invalid && (email.dirty || email.touched)'>
+                  <label class="e-error" id="email-info" style="display: block;">*Email is required</label>
+              </div>
+          </div>
+       
+         
+      </div> 
+      </ng-template> -->
   </ejs-grid>
-    </mat-card-content>
-</mat-card>

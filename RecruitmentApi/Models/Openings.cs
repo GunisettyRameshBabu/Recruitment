@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class Openings
+    public class Openings : BaseEntity
     {
         public int id { get; set; }
 
@@ -14,14 +14,6 @@ namespace RecruitmentApi.Models
         public string jobtitle { get; set; }
 
         public string assaignedTo { get; set; }
-
-        public DateTime createdate { get; set; }
-
-        public DateTime? modifieddate { get; set; }
-        
-        public string  modifiedBy { get; set; }
-
-        public string createdBy { get; set; }
 
         public DateTime targetdate { get; set; }
 

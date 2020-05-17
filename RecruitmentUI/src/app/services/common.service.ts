@@ -7,6 +7,10 @@ import { environment } from 'src/environments/environment';
 })
 export class CommonService {
 
+  GetUsersByCountry() {
+    return this.http.get(environment.apiUrl +  'Users/GetUsersByCountry');
+  }
+
   constructor(private http: HttpClient) { }
 
   getMasterData(type: string) {
@@ -19,6 +23,10 @@ export class CommonService {
 
   getCitiesByState(id: number) {
     return this.http.get(environment.apiUrl + 'Cities/GetCitiesByState/'+ id);
+  }
+
+  downloadResume(id: number) {
+    return this.http.get(environment.apiUrl + 'JobCandidates/Download/'+ id, {responseType: 'blob'});
   }
 
 

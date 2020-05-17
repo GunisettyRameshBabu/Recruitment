@@ -1,27 +1,28 @@
 <div class="jumbotron" style="height: calc(95vh);">
-  <div class="row">
-    <div class="col-md-10 col-sm-10 col-xs-10 col-10">
-      <mat-card-title>
-        Openings
-      </mat-card-title>
-    </div>
-    <div class="col-md-2 col-sm-4 col-xs-4 col-2">
-      <button  class="btn btn-primary float-right" (click)="add()">Add Job</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <mat-card>
-        <mat-card-content>
-          <ejs-grid #grid [dataSource]='openings' [childGrid]='childGrid'>
+  <div class = "e-card">
+    <div class="e-card-header">
+        <div class="e-card-header-caption">
+            <div class="e-card-header-title">
+              Openings
+            </div>
+        </div>
+        <div class="e-card-content">
+          <ejs-grid #grid [dataSource]='openings.jobs' [childGrid]='childGrid' [toolbar]='toolbarOptions'
+          [allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [editSettings]='editSettings'
+          [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true' [allowFiltering]='true'>
             <e-columns>
-                <e-column field='jobid' headerText='Job Opening ID'  ></e-column>
+             
+                <e-column field='jobid' headerText='Job Opening ID'  >
+                  <ng-template #template  let-data>
+                    <a  [routerLink]="['','editjob', data.id]">{{ data.jobid }}</a>
+                </ng-template>
+                </e-column>
                 <e-column field='jobtitle' headerText='Job Title' >
                   <ng-template #template  let-data>
                     <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
                 </ng-template>
                 </e-column>
-                <e-column field='assaignedTo' textAlign='Assaigned Recruiter(s)' ></e-column>
+                <e-column field='assaignedTo' headerText='Assaigned Recruiter(s)' ></e-column>
                 <e-column field='targetdate' headerText='Target Date'>
                   <ng-template #template  let-data>
                     {{ data.targetdate | date }}
@@ -34,10 +35,8 @@
                 <e-column field='accountManager' headerText='Account Manager'></e-column>
             </e-columns>
           </ejs-grid>
-        </mat-card-content>
-      </mat-card>
+        </div>
     </div>
-  </div>
-  
+</div>
 
 </div>

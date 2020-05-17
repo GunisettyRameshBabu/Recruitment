@@ -1,17 +1,21 @@
 export class Candidates {
-    id: any;
+    id?: any;
 
-    jobid: any;
+    jobid?: any;
 
-    firstName: any;
+    firstName?: any;
 
-    middleName: any;
+    middleName?: any;
 
-    lastName: any;
+    lastName?: any;
 
-    phone: any;
+    phone?: any;
 
-    resume: any;
+    resume?: any;
 
-    status: any;
+    status?: any;
+
+    email?: any;
+    createdBy?: any;
+    modifiedBy?: any;
 }

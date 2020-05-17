@@ -25,16 +25,17 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Openings/
         [HttpGet("GetOpeningsByCountry/{id}/{userId}")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<OpeningsListView>>>> GetOpeningsByCountry(string id, string userId)
+        public async Task<ActionResult<ServiceResponse<OpeningsList>>> GetOpeningsByCountry(string id, string userId)
         {
-            var response = new ServiceResponse<IEnumerable<OpeningsListView>>();
+            var response = new ServiceResponse<OpeningsList>();
             try
             {
                 var countries = _context.Countries.ToList();
                 var user = _context.Users.FirstOrDefault(x => x.userid == userId);
                 var filteredCountries = ((id == "in" ? countries.Where(x => x.Code == "IN").Select(x => x.Id) : (id == "all" ? countries.Select(x => x.Id) :
                       countries.Where(x => x.Code != "IN").Select(x => x.Id))).ToList());
-                response.Data = await (from o in _context.Openings
+                response.Data = new OpeningsList();
+                response.Data.Jobs = await (from o in _context.Openings
                                        join a in _context.Users on o.assaignedTo equals a.userid into assaigns
                                        from a in assaigns.DefaultIfEmpty()
                                        join c in _context.Citys on o.city equals c.Id
@@ -47,6 +48,7 @@ namespace RecruitmentApi.Controllers
                                        where filteredCountries.Contains(o.country) && ((user != null && user.roleId == 1) || (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
                                        select new OpeningsListView()
                                        {
+                                           id = o.id,
                                            accountManager = (am == null ? "" : am.firstName + " " + (am.middleName ?? "") + am.lastName),
                                            assaignedTo = (a == null ? "" : a.firstName + " " + (a.middleName ?? "") + a.lastName),
                                            city = c.Name,
@@ -57,6 +59,24 @@ namespace RecruitmentApi.Controllers
                                            status = s.Name,
                                            targetdate = o.targetdate
                                        }).ToListAsync();
+
+                response.Data.Candidates = await (from x in _context.JobCandidates
+                                                  join s in _context.JobCandidateStatus on x.status equals s.id
+                                                  where response.Data.Jobs.Select(x => x.jobid).Contains(x.jobid)
+                                                  select new JobCandidatesDto()
+                                                  {
+                                                      jobid = x.jobid,
+                                                      firstName = x.firstName,
+                                                      id = x.id,
+                                                      lastName = x.lastName,
+                                                      middleName = x.middleName,
+                                                      phone = x.phone,
+                                                      resume = x.resume,
+                                                      status = s.id,
+                                                      statusName = s.name,
+                                                      email = x.email,
+                                                      fileName = x.fileName
+                                                  }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }
@@ -158,46 +178,75 @@ namespace RecruitmentApi.Controllers
 
             return response;
         }
+        // GET: api/Openings/
+        [HttpGet("GetOpeningById/{id}")]
+        public async Task<ServiceResponse<Openings>> GetOpeningById(int id)
+        {
+            var response = new ServiceResponse<Openings>();
+            try
+            {
+                response.Data = _context.Openings.Find(id);
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+
+        }
+
 
         // PUT: api/Openings/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOpenings(int id, Openings openings)
+        public async Task<ServiceResponse<bool>> PutOpenings(int id, Openings openings)
         {
+            var response = new ServiceResponse<bool>();
             if (id != openings.id)
             {
-                return BadRequest();
+                response.Success = false;
+                response.Message = "Invalid job id , Please check";
             }
-
-            _context.Entry(openings).State = EntityState.Modified;
+           
 
             try
             {
+                openings.modifiedDate = DateTime.Now;
+                var job = _context.Openings.Find(id);
+                _context.Entry(job).CurrentValues.SetValues(openings);
                 await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "Job Opening updated successfully";
+                response.Data = true;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                response.Success = false;
                 if (!OpeningsExists(id))
                 {
-                    return NotFound();
+                    response.Message = "Invalid job id , Please check";
                 }
                 else
                 {
-                    throw;
+                    response.Message = ex.Message;
                 }
             }
 
-            return NoContent();
+            return response;
         }
 
         // POST: api/Openings
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<Openings>>> PostOpenings(JobOpeningView openings)
+        public async Task<ActionResult<ServiceResponse<bool>>> PostOpenings(Openings openings)
         {
-            var response = new ServiceResponse<Openings>();
+            var response = new ServiceResponse<bool>();
 
             try
             {
@@ -208,29 +257,14 @@ namespace RecruitmentApi.Controllers
                     return Ok(response);
                 }
 
-                var opening = new Openings();
-                opening.client = openings.Client;
-                opening.city = openings.City;
-                opening.country = openings.Country;
-                opening.createdate = DateTime.Now;
-                opening.description = openings.Description;
-                opening.experience = openings.Experience;
-                opening.industry = openings.Industry;
-                opening.isclientConfidencial = openings.ClientVisible;
-                opening.jobid = openings.JobCode;
-                opening.jobtitle = openings.JobTitle;
-                opening.zip = openings.Zip;
-                opening.targetdate = openings.TargetDate;
-                opening.state = openings.State;
-                opening.createdBy = "Gunisettyr@gmail.com";
-                opening.status = 2;
-                opening.jobtype = openings.JobType;
+                openings.createdDate = DateTime.Now;
 
-                _context.Openings.Add(opening);
+                _context.Openings.Add(openings);
                 await _context.SaveChangesAsync();
 
                 response.Success = true;
-                response.Message = "Added";
+                response.Message = "Job Opening added successfully";
+                response.Data = true;
             }
             catch (Exception ex)
             {

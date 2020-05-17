@@ -41,6 +41,11 @@ const routes: Routes = [
     canActivate : [AuthGuard]
   },
   {
+    path : 'editjob/:id',
+    component : AddOpeningsComponent,
+    canActivate : [AuthGuard]
+  },
+  {
     path : 'users',
     component : UsersComponent,
     canActivate : [AuthGuard]

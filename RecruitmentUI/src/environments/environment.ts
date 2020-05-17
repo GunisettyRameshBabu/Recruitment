@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-   apiUrl : 'http://localhost:9743/api/'
-  //apiUrl: 'https://recruitmentapi.azurewebsites.net/api/'
+   apiUrl : 'http://localhost:9743/api/',
+  //apiUrl: 'https://recruitmentapi.azurewebsites.net/api/',
+  env:'dev'
 };
 
 /*

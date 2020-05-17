@@ -24,12 +24,20 @@ export class JobService {
     return this.http.get(environment.apiUrl + 'Openings/' + id);
   }
 
+  getJobForEdit(id: number) {
+    return this.http.get(environment.apiUrl + 'Openings/GetOpeningById/' + id);
+  }
+
   applyJob(job: Jobapply) {
     return this.http.post(environment.apiUrl + 'JobAttachments', job);
   }
 
-  addOpening(opening: Opening) {
-    return this.http.post(environment.apiUrl + 'Openings', opening);
+  addOrUpdateOpening(opening: Opening) {
+    if (opening.id == 0) {
+      return this.http.post(environment.apiUrl + 'Openings', opening);
+    } else {
+      return this.http.put(environment.apiUrl + 'Openings/'+opening.id, opening);
+    }
   }
 
   getNewJobid(id: any) {

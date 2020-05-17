@@ -6,5 +6,6 @@ export const ApiEndPoints = {
    clients: 'ClientCodes',
    jobtype: 'JobTypes',
    experience: 'Experiences',
-   roles: 'Roles'
+   roles: 'Roles',
+   status: 'JobStatus'
   };

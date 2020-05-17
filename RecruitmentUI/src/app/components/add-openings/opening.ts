@@ -13,4 +13,9 @@ export class Opening {
       clientVisible: boolean;
       experience: any;
   targetdate: any;
+  id: number;
+  createddate: any;
+  createdBy:any;
+  modifiedBy: any;
+  modifieddate: any;
 }
