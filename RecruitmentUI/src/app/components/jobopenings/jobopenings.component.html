@@ -12,27 +12,27 @@
           [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true' [allowFiltering]='true'>
             <e-columns>
              
-                <e-column field='jobid' headerText='Job Opening ID'  >
+                <e-column field='jobid' headerText='Job Opening ID' width="150" >
                   <ng-template #template  let-data>
                     <a  [routerLink]="['','editjob', data.id]">{{ data.jobid }}</a>
                 </ng-template>
                 </e-column>
-                <e-column field='jobtitle' headerText='Job Title' >
+                <e-column field='jobtitle' headerText='Job Title' width="150" >
                   <ng-template #template  let-data>
                     <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
                 </ng-template>
                 </e-column>
-                <e-column field='assaignedTo' headerText='Assaigned Recruiter(s)' ></e-column>
-                <e-column field='targetdate' headerText='Target Date'>
+                <e-column field='assaignedTo' headerText='Assaigned Recruiter(s)' width="150" ></e-column>
+                <e-column field='targetdate' headerText='Target Date' width="150" >
                   <ng-template #template  let-data>
                     {{ data.targetdate | date }}
                 </ng-template>
                 </e-column>
-                <e-column field='status' headerText='Job Opening Status'></e-column>
-                <e-column field='city' headerText='City'></e-column>
-                <e-column field='client' headerText='Client Name'></e-column>
-                <e-column field='contactName' headerText='Contact Name'></e-column>
-                <e-column field='accountManager' headerText='Account Manager'></e-column>
+                <e-column field='status' headerText='Job Opening Status' width="150" ></e-column>
+                <e-column field='city' headerText='City' width="150" ></e-column>
+                <e-column field='client' headerText='Client Name' width="150" ></e-column>
+                <e-column field='contactName' headerText='Contact Name' width="150" ></e-column>
+                <e-column field='accountManager' headerText='Account Manager' width="150" ></e-column>
             </e-columns>
           </ejs-grid>
         </div>

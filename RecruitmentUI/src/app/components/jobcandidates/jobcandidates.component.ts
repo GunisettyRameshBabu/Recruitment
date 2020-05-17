@@ -97,7 +97,7 @@ export class JobcandidatesComponent implements OnInit {
       const excelExportProperties: ExcelExportProperties = {
         fileName: 'jobcandidates.xlsx',
       };
-      this.grid.excelExport();
+      this.grid.excelExport(excelExportProperties);
     } else if (args.item.id.indexOf('Add Candidate') > 0) {
       this.addCandidate();
     } 

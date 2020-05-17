@@ -87,7 +87,7 @@ export class JobopeningsComponent implements OnInit {
       const excelExportProperties: ExcelExportProperties = {
         fileName: 'jobopenings.xlsx',
       };
-      this.grid.excelExport();
+      this.grid.excelExport(excelExportProperties);
     } 
     else if(args.item.id.indexOf('add') > 0) {
       this.router.navigate(['addjob']);

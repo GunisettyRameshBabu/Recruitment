@@ -160,7 +160,7 @@
               <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
                   <input type="file" #fileInput id="fileUpload" name="fileUpload" multiple="multiple" accept="*" style="display:none;" (change)="uploadFile(fileInput.files)" />
-                  <input type="text" id="upload" name="upload" readonly formControlName="fileName" class="required">
+                  <input type="text" id="upload" name="upload" readonly formControlName="fileName" matInput>
                   <span class="e-float-line"></span>
                   <label class="e-float-text e-label-top" for="upload">Upload Resume</label>
                 </div>

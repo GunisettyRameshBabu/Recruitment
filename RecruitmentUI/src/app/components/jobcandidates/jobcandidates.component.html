@@ -1,7 +1,7 @@
 <ejs-grid #grid [dataSource]='candidates' [toolbar]='toolbar' [editSettings]='editSettings'
 [allowExcelExport]='true' (toolbarClick)='toolbarClick($event)'>
     <e-columns>
-        <e-column width="100">
+        <e-column width="60">
             <ng-template #template  let-data>
                <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)">
             </ng-template>
@@ -9,21 +9,21 @@
         <e-column field='firstName' headerText='First Name' width="150" >
          
         </e-column>
-        <e-column field='lastName' headerText="Last Name" >
+        <e-column field='lastName' headerText="Last Name" width="150">
          
         </e-column>
-        <e-column field='middleName' headerText='Middle Name' ></e-column>
-        <e-column field='phone' headerText='Phone'>
+        <e-column field='middleName' headerText='Middle Name' width="150"></e-column>
+        <e-column field='phone' headerText='Phone' width="150">
             
          
         </e-column>
-        <e-column field='status' headerText='Status'>
+        <e-column field='status' headerText='Status' width="150">
 
              </e-column>
-        <e-column field='email' headerText='Email'>
+        <e-column field='email' headerText='Email' width="150">
 
         </e-column>
-        <e-column field='resume' headerText='Resume'>
+        <e-column field='resume' headerText='Resume' width="150">
           <ng-template #template  let-data>
             <button type="button" class="btn btn-link" (click)="getResume(data)"  *ngIf="data.fileName != '' && data.fileName != undefined">{{ data.fileName }}</button>
         </ng-template>

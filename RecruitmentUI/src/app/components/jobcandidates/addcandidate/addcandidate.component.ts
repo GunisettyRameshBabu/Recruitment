@@ -115,6 +115,7 @@ export class AddcandidateComponent implements OnInit {
   }
 
   public uploadFile = (files) => {
+    console.log(files);
     this.resume = files;
   }
 
