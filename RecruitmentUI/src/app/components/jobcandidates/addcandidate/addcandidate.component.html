@@ -110,16 +110,14 @@
                 *ngIf="job.id == 0"
                 placeholder="Phone"
                 type="text"
-                formControlName="phone"
-              />
+                formControlName="phone" />
               <input
                 matInput
                 *ngIf="job.id != 0"
                 readonly
                 placeholder="Phone"
                 type="text"
-                formControlName="phone"
-              />
+                formControlName="phone" />
               <mat-error *ngIf="hasError('phone', 'required')"
                 >Phone is required</mat-error
               >

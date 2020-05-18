@@ -74,7 +74,7 @@ export class JobService {
     }
     return this.http.put(
       environment.apiUrl + 'JobCandidates/UploadAttachment/' + id,
-      formData , {reportProgress: true }
+      formData , {reportProgress: true , observe: 'events' }
     );
   };
 }

@@ -146,6 +146,10 @@ export class AddOpeningsComponent implements OnInit {
     });
   }
 
+  cancel() {
+    this.router.navigate(['jobopenings']);
+  }
+
   onSubmit() {
     if (this.jobGroup.valid) {
       this.user = this.userSession.getLoggedInUser() as User;

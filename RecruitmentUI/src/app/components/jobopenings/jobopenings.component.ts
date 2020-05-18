@@ -59,7 +59,7 @@ export class JobopeningsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.toolbarOptions = ['Openings','ExcelExport', 'Add'];
+    this.toolbarOptions = ['Openings', 'ExcelExport', 'Add'];
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.editSettings = { allowAdding: true };
     let user = this.sessionService.getLoggedInUser() as User;
@@ -80,6 +80,10 @@ export class JobopeningsComponent implements OnInit {
     this.router.navigate(['jobdetails', item.jobid]);
   }
 
+  Edit(data) {
+    this.router.navigate(['', 'editjob', data.id]);
+  }
+
   toolbarClick(args: ClickEventArgs): void {
     console.log(args);
     if (args.item.id.indexOf('excelexport') > 0) {
@@ -88,8 +92,7 @@ export class JobopeningsComponent implements OnInit {
         fileName: 'jobopenings.xlsx',
       };
       this.grid.excelExport(excelExportProperties);
-    } 
-    else if(args.item.id.indexOf('add') > 0) {
+    } else if (args.item.id.indexOf('add') > 0) {
       this.router.navigate(['addjob']);
     }
   }

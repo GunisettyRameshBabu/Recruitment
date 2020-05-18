@@ -11,11 +11,13 @@
           [allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [editSettings]='editSettings'
           [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true' [allowFiltering]='true'>
             <e-columns>
-             
+              <e-column width="60" >
+                <ng-template #template  let-data>
+                  <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)">
+              </ng-template>
+              </e-column>
                 <e-column field='jobid' headerText='Job Opening ID' width="150" >
-                  <ng-template #template  let-data>
-                    <a  [routerLink]="['','editjob', data.id]">{{ data.jobid }}</a>
-                </ng-template>
+                 
                 </e-column>
                 <e-column field='jobtitle' headerText='Job Title' width="150" >
                   <ng-template #template  let-data>
