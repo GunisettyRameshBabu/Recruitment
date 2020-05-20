@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/services/common.service';
-import { ApiEndPoints } from 'src/app/constants/api-end-points';
+import { ApiEndPoints, MasterData } from 'src/app/constants/api-end-points';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Opening } from './opening';
 import { JobService } from 'src/app/services/job.service';
@@ -90,9 +90,13 @@ export class AddOpeningsComponent implements OnInit {
       assaignedTo: new FormControl(''),
     });
     this.commonService
-      .getMasterData(ApiEndPoints.industries)
-      .subscribe((res: any) => {
-        this.industries = res;
+      .getMasterDataByType(MasterData.Industry)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.industries = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
       });
 
     // this.commonService.getMasterData(ApiEndPoints.cities).subscribe((res: any) => {
@@ -104,33 +108,53 @@ export class AddOpeningsComponent implements OnInit {
     // });
 
     this.commonService
-      .getMasterData(ApiEndPoints.countries)
-      .subscribe((res: any) => {
-        this.countries = res;
+      .getCountries()
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.countries = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
       });
 
     this.commonService
-      .getMasterData(ApiEndPoints.jobtype)
-      .subscribe((res: any) => {
-        this.jobtypes = res;
+      .getMasterDataByType(MasterData.JobTypes)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.jobtypes = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
       });
 
     this.commonService
-      .getMasterData(ApiEndPoints.clients)
-      .subscribe((res: any) => {
-        this.clients = res;
+      .getClientCodes()
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.clients = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
       });
 
     this.commonService
-      .getMasterData(ApiEndPoints.experience)
-      .subscribe((res: any) => {
-        this.experiences = res;
+      .getMasterDataByType(MasterData.Experience)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.experiences = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
       });
 
     this.commonService
-      .getMasterData(ApiEndPoints.status)
-      .subscribe((res: any) => {
-        this.statuses = res;
+      .getMasterDataByType(MasterData.JobStatus)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.statuses = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
       });
 
     this.commonService.GetUsersByCountry().subscribe((res: ServiceResponse) => {
@@ -142,6 +166,8 @@ export class AddOpeningsComponent implements OnInit {
                 (x) => x.country == this.jobGroup.controls.country.value
               )
             : this.usersList;
+      }else {
+        this.alertService.error(res.message);
       }
     });
   }
@@ -157,9 +183,9 @@ export class AddOpeningsComponent implements OnInit {
         this.jobGroup.controls.value != undefined &&
         +this.jobGroup.controls.id.value > 0
       ) {
-        this.jobGroup.controls.modifiedBy.setValue(this.user.userid);
+        this.jobGroup.controls.modifiedBy.setValue(this.user.id);
       } else {
-        this.jobGroup.controls.createdBy.setValue(this.user.userid);
+        this.jobGroup.controls.createdBy.setValue(this.user.id);
       }
       this.jobService
         .addOrUpdateOpening(this.jobGroup.value)

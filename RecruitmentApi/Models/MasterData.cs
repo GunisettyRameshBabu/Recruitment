@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class Roles
+    public class MasterData : BaseEntity
     {
         public int id { get; set; }
 
-        public string Name { get; set; }
+        public string name { get; set; }
+
+        public int type { get; set; }
     }
 }

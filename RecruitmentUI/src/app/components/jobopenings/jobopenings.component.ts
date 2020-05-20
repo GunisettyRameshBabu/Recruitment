@@ -65,7 +65,7 @@ export class JobopeningsComponent implements OnInit {
     let user = this.sessionService.getLoggedInUser() as User;
     this.type = user.type;
     this.jobService
-      .getJobOpenings(this.type, user.userid)
+      .getJobOpenings(user.id)
       .subscribe((res: any) => {
         if (res.success) {
           this.openings = res.data;

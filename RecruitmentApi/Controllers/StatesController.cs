@@ -25,9 +25,21 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/States
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<State>>> GetState()
+        public async Task<ServiceResponse<IEnumerable<State>>> GetState()
         {
-            return await _context.State.ToListAsync();
+            var response = new ServiceResponse<IEnumerable<State>>();
+            try
+            {
+                response.Data = await _context.State.ToListAsync();
+                response.Success = true;
+                response.Message = "Data Retrived";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         [Route("GetStatesByCountry/{id}")]
@@ -51,76 +63,133 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/States/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<State>> GetState(int id)
+        public async Task<ServiceResponse<State>> GetState(int id)
         {
-            var state = await _context.State.FindAsync(id);
-
-            if (state == null)
+            var response = new ServiceResponse<State>();
+            try
             {
-                return NotFound();
+                response.Data = await _context.State.FindAsync(id);
+                if (response.Data == null)
+                {
+                    response.Success = false;
+                    response.Message = "Data not found";
+                    return response;
+                }
+                response.Success = true;
+                response.Message = "Data Retrived";
             }
-
-            return state;
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         // PUT: api/States/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutState(int id, State state)
+        public async Task<ServiceResponse<int>> PutState(int id, State state)
         {
-            if (id != state.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(state).State = EntityState.Modified;
-
+            var response = new ServiceResponse<int>();
             try
             {
+                if (id != state.Id)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid state";
+                    return response;
+                }
+
+                var item = _context.State.Find(id);
+                if (item == null)
+                {
+                    response.Success = false;
+                    response.Message = "state not found";
+                    return response;
+                }
+                _context.Entry(item).CurrentValues.SetValues(state);
                 await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "State updated successfully";
+                response.Data = state.Id;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!StateExists(id))
                 {
-                    return NotFound();
+                    response.Success = false;
+                    response.Message = "State not found";
                 }
                 else
                 {
-                    throw;
+                    response.Success = false;
+                    response.Message = ex.Message;
                 }
             }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
-            return NoContent();
+            return response;
         }
 
         // POST: api/States
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<State>> PostState(State state)
+        public async Task<ServiceResponse<int>> PostState(State state)
         {
-            _context.State.Add(state);
-            await _context.SaveChangesAsync();
+            var response = new ServiceResponse<int>();
+            try
+            {
+                _context.State.Add(state);
+                await _context.SaveChangesAsync();
+                response.Data = state.Id;
+                response.Success = true;
+                response.Message = "Stateadded successfullu";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
-            return CreatedAtAction("GetState", new { id = state.Id }, state);
+
+            return response;
         }
 
         // DELETE: api/States/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<State>> DeleteState(int id)
+        public async Task<ServiceResponse<bool>> DeleteState(int id)
         {
-            var state = await _context.State.FindAsync(id);
-            if (state == null)
+            var response = new ServiceResponse<bool>();
+            try
             {
-                return NotFound();
+                var masterData = await _context.State.FindAsync(id);
+                if (masterData == null)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid City";
+                    return response;
+                }
+
+                _context.State.Remove(masterData);
+                await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "State deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
             }
 
-            _context.State.Remove(state);
-            await _context.SaveChangesAsync();
 
-            return state;
+            return response;
         }
 
         private bool StateExists(int id)

@@ -1,44 +1,105 @@
-
-<div class="container-fluid" >
-  
-  <mat-card  id="home">
-    <mat-card-content>
-        <div class="row" style="margin-top: 10%;margin-left: 10%;margin-bottom: 20%;">
-            <div class="col-lg-4 col-sm-12 col-xs-12 col-xl-3 col-md-4 my-auto">
-                <div class="card" >
-                    <div class="card-body">
-                      <h5 class="card-title">India Openings</h5>
-                      <p class="card-text">Log In to see the India Openings</p>
-                      <button class="btn btn-primary" *ngIf="!checkUserLoggedIn() || !hasViewPermission('India')" (click)="Login('in')">Log In</button>
-                      <button class="btn btn-primary" *ngIf="checkUserLoggedIn() && hasViewPermission('India')" (click)="view('in')">View</button>
-                    </div>
-                  </div>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col-lg-3 col-sm-12 col-xs-12 col-xl-3 col-md-3">
+      <div class="e-card">
+        <div class="e-card-header">
+          <div class="e-card-header-caption">
+            <div class="e-card-header-title">
+              <h5>India Recruitment</h5>
             </div>
-            <div class="col-lg-4 col-sm-12 col-xs-12 col-xl-3 col-md-4 my-auto">
-                <div class="card" >
-                  <div class="card-body">
-                    <h5 class="card-title">Global Openings</h5>
-                    <p class="card-text">Log In to see the Global Openings</p>
-                    <button class="btn btn-primary" *ngIf="!checkUserLoggedIn() || !hasViewPermission('Global')" (click)="Login('gl')">Log In</button>
-                    <button class="btn btn-primary" *ngIf="checkUserLoggedIn() && hasViewPermission('Global')" (click)="view('gl')">View</button>
-                  </div>
-                  </div>
-            </div>
-            <div class="col-lg-4 col-sm-12 col-xs-12 col-xl-3 col-md-4 my-auto">
-                <div class="card" >
-                  <div class="card-body">
-                    <h5 class="card-title">New Openings</h5>
-                    <p class="card-text">Log In to see the New Openings</p>
-                    <button class="btn btn-primary" *ngIf="!checkUserLoggedIn() || !hasViewPermission('New')" (click)="Login('new')">Log In</button>
-                    <button class="btn btn-primary" *ngIf="checkUserLoggedIn() && hasViewPermission('New')" (click)="view('new')">Add New</button>
-                  </div>
-                  </div>
-            </div>
+          </div>
         </div>
-    </mat-card-content>
-  </mat-card>
-    
+        <div class="e-card-content">
+          <h6>Click see the India Openings</h6>
+        </div>
+        <div class="e-card-actions">
+          <button
+            class="btn btn-primary"
+            *ngIf="!checkUserLoggedIn() || !hasViewPermission('India')"
+            (click)="Login('in')"
+          >
+            Log In
+          </button>
+          <button
+            class="btn btn-primary"
+            *ngIf="checkUserLoggedIn() && hasViewPermission('India')"
+            (click)="view('in')"
+          >
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1 col-sm-12 col-xs-12 col-xl-1 col-md-1">
+      <br>
+    </div>
+
+    <div class="col-lg-3 col-sm-12 col-xs-12 col-xl-3 col-md-3">
+     
+      <div class="e-card">
+        <div class="e-card-header">
+          <div class="e-card-header-caption">
+            <div class="e-card-header-title">
+              <h5>Global Recruitment</h5>
+            </div>
+          </div>
+        </div>
+        <div class="e-card-content">
+          <h6>Click see the Global Openings</h6>
+        </div>
+        <div class="e-card-actions">
+          <button
+            class="btn btn-primary"
+            *ngIf="!checkUserLoggedIn() || !hasViewPermission('Global')"
+            (click)="Login('gl')"
+          >
+            Log In
+          </button>
+          <button
+            class="btn btn-primary"
+            *ngIf="checkUserLoggedIn() && hasViewPermission('Global')"
+            (click)="view('gl')"
+          >
+            View
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1 col-sm-12 col-xs-12 col-xl-1 col-md-1">
+      <br>
+    </div>
+    <div class="col-lg-4 col-sm-12 col-xs-12 col-xl-4 col-md-4">
+      <div class="e-card">
+        <div class="e-card-header">
+          <div class="e-card-header-caption">
+            <div class="e-card-header-title">
+              <h5>All Job postions</h5>
+            </div>
+          </div>
+        </div>
+        <div class="e-card-content">
+          <h6>Click to View , Create and Edit Openings</h6>
+        </div>
+        <div class="e-card-actions">
+          <button
+            class="btn btn-primary"
+            *ngIf="!checkUserLoggedIn() || !hasViewPermission('New')"
+            (click)="Login('all')"
+          >
+            Log In
+          </button>
+          <button
+            class="btn btn-primary"
+            *ngIf="checkUserLoggedIn() && hasViewPermission('New')"
+            (click)="view('all')"
+          >
+            view
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-
-  
+  <br />
+ <app-recruit-care></app-recruit-care>
+</div>

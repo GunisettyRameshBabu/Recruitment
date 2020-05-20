@@ -19,7 +19,6 @@ export class UsersService {
   }
 
   updateuser(user: User) {
-    console.log(user);
     return this.http.put(environment.apiUrl + 'Users/'+ user.id, user);
   }
 }

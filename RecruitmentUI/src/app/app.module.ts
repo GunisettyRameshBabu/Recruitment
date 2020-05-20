@@ -39,6 +39,16 @@ import { JobcandidatesComponent } from './components/jobcandidates/jobcandidates
 import { AddcandidateComponent } from './components/jobcandidates/addcandidate/addcandidate.component';
 
 import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MasterDataComponent } from './components/Admin/master-data/master-data.component';
+import { MenuModule } from '@syncfusion/ej2-angular-navigations';
+import { RecruitCareComponent } from './components/recruit-care/recruit-care.component';
+import { RecruitCareEditComponent } from './components/recruit-care/recruit-care-edit/recruit-care-edit.component';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { MomentModule } from 'angular2-moment';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { EditOrAddMasterDataComponent } from './components/Admin/master-data/edit-or-add-master-data/edit-or-add-master-data.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +66,12 @@ import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
     AddOpeningsComponent,
     UsereditComponent,
     JobcandidatesComponent,
-    AddcandidateComponent
+    AddcandidateComponent,
+    DashboardComponent,
+    MasterDataComponent,
+    RecruitCareComponent,
+    RecruitCareEditComponent,
+    EditOrAddMasterDataComponent
   ],
   imports: [
     BrowserModule,
@@ -78,7 +93,11 @@ import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    UploaderModule
+    UploaderModule,
+    MenuModule, 
+    NgIdleKeepaliveModule.forRoot(),
+    MomentModule,
+    ModalModule.forRoot()
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

@@ -12,6 +12,12 @@ export class User {
     countryId: any;
     loginTypes: string;
     active: boolean;
+    roleName: any;
+    createdBy: any;
+    createdDate: any;
+    modifiedBy: any;
+    modifiedDate: any;
+    sessionId: any;
 }
 
 export enum LoginTypes

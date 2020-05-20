@@ -24,28 +24,26 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/Openings/
-        [HttpGet("GetOpeningsByCountry/{id}/{userId}")]
-        public async Task<ActionResult<ServiceResponse<OpeningsList>>> GetOpeningsByCountry(string id, string userId)
+        [HttpGet("GetOpeningsByCountry/{userId}")]
+        public async Task<ActionResult<ServiceResponse<OpeningsList>>> GetOpeningsByCountry(int userId)
         {
             var response = new ServiceResponse<OpeningsList>();
             try
             {
-                var countries = _context.Countries.ToList();
-                var user = _context.Users.FirstOrDefault(x => x.userid == userId);
-                var filteredCountries = ((id == "in" ? countries.Where(x => x.Code == "IN").Select(x => x.Id) : (id == "all" ? countries.Select(x => x.Id) :
-                      countries.Where(x => x.Code != "IN").Select(x => x.Id))).ToList());
+                var user = _context.Users.FirstOrDefault(x => x.id == userId);
+               
                 response.Data = new OpeningsList();
                 response.Data.Jobs = await (from o in _context.Openings
-                                       join a in _context.Users on o.assaignedTo equals a.userid into assaigns
+                                       join a in _context.Users on o.assaignedTo equals a.id into assaigns
                                        from a in assaigns.DefaultIfEmpty()
                                        join c in _context.Citys on o.city equals c.Id
                                        join cl in _context.ClientCodes on o.client equals cl.Id
-                                       join co in _context.Users on o.contactName equals co.userid into contacts
+                                       join co in _context.Users on o.contactName equals co.id into contacts
                                        from co in contacts.DefaultIfEmpty()
-                                       join am in _context.Users on o.accountManager equals am.userid into accounts
+                                       join am in _context.Users on o.accountManager equals am.id into accounts
                                        from am in accounts.DefaultIfEmpty()
-                                       join s in _context.JobStatus on o.status equals s.Id
-                                       where filteredCountries.Contains(o.country) && ((user != null && user.roleId == 1) || (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
+                                       join s in _context.MasterData on o.status equals s.id
+                                       where o.country == user.country && ((user != null && user.roleId == 1) || (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
                                        select new OpeningsListView()
                                        {
                                            id = o.id,
@@ -56,14 +54,14 @@ namespace RecruitmentApi.Controllers
                                            contactName = (co == null ? "" : co.firstName + " " + (co.middleName ?? "") + co.lastName),
                                            jobid = o.jobid,
                                            jobtitle = o.jobtitle,
-                                           status = s.Name,
+                                           status = s.name,
                                            targetdate = o.targetdate
                                        }).ToListAsync();
 
                 response.Data.Candidates = await (from x in _context.JobCandidates
-                                                  join s in _context.JobCandidateStatus on x.status equals s.id
+                                                  join s in _context.MasterData on x.status equals s.id
                                                   where response.Data.Jobs.Select(x => x.jobid).Contains(x.jobid)
-                                                  select new JobCandidatesDto()
+                                                  select new JobCandidatesView()
                                                   {
                                                       jobid = x.jobid,
                                                       firstName = x.firstName,
@@ -92,31 +90,31 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Openings/5
         [HttpGet("{id}")]
-        public async Task<ServiceResponse<OpeningsDto>> GetOpenings(string id)
+        public async Task<ServiceResponse<OpeningsView>> GetOpenings(string id)
         {
-            var response = new ServiceResponse<OpeningsDto>();
+            var response = new ServiceResponse<OpeningsView>();
             try
             {
                 var openings = await (from x in _context.Openings
-                                      join cr in _context.Users on x.createdBy equals cr.userid
-                                      join st in _context.JobStatus on x.status equals st.Id
+                                      join cr in _context.Users on x.createdBy equals cr.id
+                                      join st in _context.MasterData on x.status equals st.id
                                       join cou in _context.Countries on x.country equals cou.Id
                                       join sta in _context.State on x.state equals sta.Id
                                       join ci in _context.Citys on x.city equals ci.Id
-                                      join ass in _context.Users on x.assaignedTo equals ass.userid into assains
+                                      join ass in _context.Users on x.assaignedTo equals ass.id into assains
                                       from ass in assains.DefaultIfEmpty()
                                       join cl in _context.ClientCodes on x.client equals cl.Id
-                                      join con in _context.Users on x.contactName equals con.userid into contacts
+                                      join con in _context.Users on x.contactName equals con.id into contacts
                                       from con in contacts.DefaultIfEmpty()
-                                      join acc in _context.Users on x.accountManager equals acc.userid into accounts
+                                      join acc in _context.Users on x.accountManager equals acc.id into accounts
                                       from acc in accounts.DefaultIfEmpty()
-                                      join exp in _context.Experience on x.experience equals exp.Id
-                                      join indus in _context.Industry on x.industry equals indus.Id
-                                      join types in _context.JobTypes on x.jobtype equals types.Id
+                                      join exp in _context.MasterData on x.experience equals exp.id
+                                      join indus in _context.MasterData on x.industry equals indus.id
+                                      join types in _context.MasterData on x.jobtype equals types.id
 
 
                                       where x.jobid == id
-                                      select new OpeningsDto()
+                                      select new OpeningsView()
                                       {
                                           jobid = x.jobid,
                                           accountManager = (acc == null ? "" : acc.firstName + " " + (acc.middleName ?? "") + acc.lastName),
@@ -127,15 +125,15 @@ namespace RecruitmentApi.Controllers
                                           client = cl.Name,
                                           contactName = (con == null ? "" : con.firstName + " " + (con.middleName ?? "") + con.lastName),
                                           description = x.description,
-                                          experience = exp.Name,
+                                          experience = exp.name,
                                           jobtitle = x.jobtitle,
-                                          status = st.Name,
+                                          status = st.name,
                                           zip = x.zip,
                                           targetDate = x.targetdate,
                                           salary = x.salary,
                                           createdBy = (cr == null ? "" : cr.firstName + " " + (cr.middleName ?? "") + cr.lastName),
-                                          industry = indus.Name,
-                                          jobtype = types.Name,
+                                          industry = indus.name,
+                                          jobtype = types.name,
                                           company_url = cl.url
 
                                       }).FirstOrDefaultAsync();
@@ -148,9 +146,9 @@ namespace RecruitmentApi.Controllers
                 }
 
                 openings.Candidates = (from x in _context.JobCandidates
-                                       join s in _context.JobCandidateStatus on x.status equals s.id
+                                       join s in _context.MasterData on x.status equals s.id
                                       where x.jobid == id
-                                      select new JobCandidatesDto()
+                                      select new JobCandidatesView()
                                       {
                                           jobid = x.jobid,
                                           firstName = x.firstName,
@@ -200,6 +198,31 @@ namespace RecruitmentApi.Controllers
         }
 
 
+        // GET: api/Openings/
+        [HttpGet("GetJobs/{id}")]
+        public async Task<ServiceResponse<IList<DropdownModel>>> GetJobs(int id)
+        {
+            var response = new ServiceResponse<IList<DropdownModel>>();
+            try
+            {
+                response.Data = await (from x in _context.Openings
+                                      select new DropdownModel()
+                                      {
+                                         id = x.id,
+                                          name = x.jobid + " - " + x.jobtitle
+                                      }).ToListAsync();
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+
+            return response;
+
+        }
         // PUT: api/Openings/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

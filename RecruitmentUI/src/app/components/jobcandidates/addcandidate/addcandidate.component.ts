@@ -19,6 +19,8 @@ import { JobService } from 'src/app/services/job.service';
 import { User } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { HttpEventType } from '@angular/common/http';
+import { CommonService } from 'src/app/services/common.service';
+import { MasterData } from 'src/app/constants/api-end-points';
 
 
 @Component({
@@ -43,7 +45,8 @@ export class AddcandidateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private alertService: ToastrService,
     private jobService: JobService,
-    private userSession: UsersessionService
+    private userSession: UsersessionService,
+    private commonService: CommonService
   ) {
     this.job = data;
     console.log(this.job);
@@ -51,9 +54,15 @@ export class AddcandidateComponent implements OnInit {
 
   ngOnInit(): void {
     this.dropEle = document.getElementById('droparea');
-    this.jobService.getCandidateStatus().subscribe((res: any) => {
-      this.statuses = res;
-    });
+    this.commonService
+      .getMasterDataByType(MasterData.JobCandidateStatus)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.statuses = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
+      });
     this.jobGroup = this.formBuilder.group({
       id: new FormControl(''),
       jobid: new FormControl('', Validators.required),
@@ -65,14 +74,15 @@ export class AddcandidateComponent implements OnInit {
       phone: new FormControl('', Validators.required),
       createdBy: new FormControl('', Validators.required),
       modifiedBy: new FormControl(''),
-      fileName: new FormControl('')
+      fileName: new FormControl(''),
+      createdDate: new FormControl(new Date())
     });
 
     this.jobGroup.reset(this.job);
     this.user = this.userSession.getLoggedInUser() as User;
-    this.jobGroup.controls.createdBy.setValue(this.user.userid);
+    this.jobGroup.controls.createdBy.setValue(this.user.id);
     if (this.jobGroup.controls.id.value != "0") {
-      this.jobGroup.controls.modifiedBy.setValue(this.user.userid);
+      this.jobGroup.controls.modifiedBy.setValue(this.user.id);
     }
   }
 
@@ -117,6 +127,7 @@ export class AddcandidateComponent implements OnInit {
   public uploadFile = (files) => {
     console.log(files);
     this.resume = files;
+    this.jobGroup.controls.fileName.setValue(files[0].name);
   }
 
   public browseClick() {

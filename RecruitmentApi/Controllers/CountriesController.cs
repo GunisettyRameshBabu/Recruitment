@@ -25,28 +25,51 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
+        public async Task<ServiceResponse<IEnumerable<Country>>> GetCountries()
         {
-            return await _context.Countries.ToListAsync();
+            var response = new ServiceResponse<IEnumerable<Country>>();
+            try
+            {
+                response.Data = await _context.Countries.ToListAsync();
+                response.Success = true;
+                response.Message = "Data Retrived";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         // GET: api/Countries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Country>> GetCountry(int id)
+        public async Task<ServiceResponse<Country>> GetCountry(int id)
         {
-            var country = await _context.Countries.FindAsync(id);
-
-            if (country == null)
+            var response = new ServiceResponse<Country>();
+            try
             {
-                return NotFound();
+                response.Data = await _context.Countries.FindAsync(id);
+                if (response.Data == null)
+                {
+                    response.Success = false;
+                    response.Message = "Data not found";
+                    return response;
+                }
+                response.Success = true;
+                response.Message = "Data Retrived";
             }
-
-            return country;
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         [Route("GetJobCode/{id}")]
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<string>>> GetJobCode(int id)
+        public async Task<ServiceResponse<string>> GetJobCode(int id)
         {
             var response = new ServiceResponse<string>();
             try
@@ -62,66 +85,113 @@ namespace RecruitmentApi.Controllers
                 response.Success = false;
                 response.Message = ex.Message;
             }
-            return Ok(response);
+            return response;
         }
         // PUT: api/Countries/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, Country country)
+        public async Task<ServiceResponse<int>> PutCountry(int id, Country country)
         {
-            if (id != country.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(country).State = EntityState.Modified;
-
+            var response = new ServiceResponse<int>();
             try
             {
+                if (id != country.Id)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid country";
+                    return response;
+                }
+
+                var item = _context.Countries.Find(id);
+                if (item == null)
+                {
+                    response.Success = false;
+                    response.Message = "Countries not found";
+                    return response;
+                }
+                _context.Entry(item).CurrentValues.SetValues(country);
                 await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "Countries updated successfully";
+                response.Data = country.Id;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!CountryExists(id))
                 {
-                    return NotFound();
+                    response.Success = false;
+                    response.Message = "Country not found";
                 }
                 else
                 {
-                    throw;
+                    response.Success = false;
+                    response.Message = ex.Message;
                 }
             }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
-            return NoContent();
+            return response;
         }
 
         // POST: api/Countries
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Country>> PostCountry(Country country)
+        public async Task<ServiceResponse<int>> PostCountry(Country country)
         {
             _context.Countries.Add(country);
-            await _context.SaveChangesAsync();
+            var response = new ServiceResponse<int>();
+            try
+            {
+                _context.Countries.Add(country);
+                await _context.SaveChangesAsync();
+                response.Data = country.Id;
+                response.Success = true;
+                response.Message = "Country added successfullu";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
-            return CreatedAtAction("GetCountry", new { id = country.Id }, country);
+
+            return response;
         }
 
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Country>> DeleteCountry(int id)
+        public async Task<ServiceResponse<bool>> DeleteCountry(int id)
         {
-            var country = await _context.Countries.FindAsync(id);
-            if (country == null)
+            var response = new ServiceResponse<bool>();
+            try
             {
-                return NotFound();
+                var masterData = await _context.Countries.FindAsync(id);
+                if (masterData == null)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid Country";
+                    return response;
+                }
+
+                _context.Countries.Remove(masterData);
+                await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "Country deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
             }
 
-            _context.Countries.Remove(country);
-            await _context.SaveChangesAsync();
 
-            return country;
+            return response;
         }
 
         private bool CountryExists(int id)

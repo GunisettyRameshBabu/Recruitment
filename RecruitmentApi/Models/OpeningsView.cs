@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class OpeningsDto
+    public class OpeningsView
     {
 
-        public OpeningsDto()
+        public OpeningsView()
         {
-            Candidates = new List<JobCandidatesDto>();
+            Candidates = new List<JobCandidatesView>();
         }
         public string jobid { get; set; }
 
@@ -50,6 +50,6 @@ namespace RecruitmentApi.Models
 
         public string company_url { get; set; }
 
-        public IList<JobCandidatesDto> Candidates { get; set; }
+        public IList<JobCandidatesView> Candidates { get; set; }
     }
 }

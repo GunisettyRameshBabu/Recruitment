@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class UserView
+    public class UserView : BaseEntity
     {
         public int id { get; set; }
 

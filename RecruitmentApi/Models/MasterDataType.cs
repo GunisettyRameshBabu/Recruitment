@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class JobTypes
+    public class MasterDataType
     {
-        public int Id { get; set; }
+        public int id { get; set; }
 
-        public string Name { get; set; }
+        public string name { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class Users
+    public class Users : BaseEntity
     {
         public int id { get; set; }
 

@@ -23,6 +23,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { CommonService } from 'src/app/services/common.service';
+import { MasterData } from 'src/app/constants/api-end-points';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-jobcandidates',
@@ -38,10 +40,13 @@ export class JobcandidatesComponent implements OnInit {
   editSettings: EditSettingsModel;
   public toolbar;
   candidate: Candidates;
-  statuses = [];
   dropEle: HTMLElement;
   editparams: any;
-  constructor(public dialog: MatDialog, private jobService: JobService, private commonService: CommonService) {}
+  constructor(
+    public dialog: MatDialog,
+    private jobService: JobService,
+    private commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
     this.editparams = { params: { popupHeight: '300px' } };
@@ -51,9 +56,6 @@ export class JobcandidatesComponent implements OnInit {
       allowAdding: false,
     };
     this.toolbar = ['Candidates', 'Add Candidate', 'ExcelExport'];
-    this.jobService.getCandidateStatus().subscribe((res: any) => {
-      this.statuses = res;
-    });
   }
 
   addCandidate() {
@@ -87,6 +89,8 @@ export class JobcandidatesComponent implements OnInit {
       phone: new FormControl('', Validators.required),
       createdBy: new FormControl('', Validators.required),
       modifiedBy: new FormControl(''),
+      createdDate: new FormControl(''),
+      modifiedDate: new FormControl('')
     });
   }
 
@@ -100,7 +104,7 @@ export class JobcandidatesComponent implements OnInit {
       this.grid.excelExport(excelExportProperties);
     } else if (args.item.id.indexOf('Add Candidate') > 0) {
       this.addCandidate();
-    } 
+    }
   }
 
   private reloadData(result: any) {

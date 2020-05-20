@@ -39,24 +39,10 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.sessionService.signOutSession();
-    this.alertService.success('User logged out successfully');
-    this.router.navigate(['']);
   }
 
   login(type:any) {
-    const dialogRef = this.dialog.open(LoginComponent, {
-      data: {type} ,
-      position: {
-        top : '75px'
-      },
-      hasBackdrop : true,
-      disableClose : false
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    
-    });
+    this.router.navigate(['']);
   }
 
 }

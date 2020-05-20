@@ -10,14 +10,14 @@ import { Opening } from '../components/add-openings/opening';
 export class JobService {
   constructor(private http: HttpClient) {}
 
-  getJobOpenings(type, userId) {
+  getJobOpenings(userId) {
     return this.http.get(
-      environment.apiUrl +
-        'Openings/GetOpeningsByCountry/' +
-        type +
-        '/' +
-        userId
+      environment.apiUrl + 'Openings/GetOpeningsByCountry/' + userId
     );
+  }
+
+  getJobs(id) {
+    return this.http.get(environment.apiUrl + 'Openings/GetJobs/' + id);
   }
 
   getJobDetails(id: string) {
@@ -36,7 +36,10 @@ export class JobService {
     if (opening.id == 0) {
       return this.http.post(environment.apiUrl + 'Openings', opening);
     } else {
-      return this.http.put(environment.apiUrl + 'Openings/'+opening.id, opening);
+      return this.http.put(
+        environment.apiUrl + 'Openings/' + opening.id,
+        opening
+      );
     }
   }
 
@@ -49,20 +52,19 @@ export class JobService {
   }
 
   getJobCandidates(jobid) {
-    return this.http.get(environment.apiUrl + 'JobCandidates/GetByJobId/'+ jobid);
+    return this.http.get(
+      environment.apiUrl + 'JobCandidates/GetByJobId/' + jobid
+    );
   }
 
   public addOrUpdateCandidate = (candidate) => {
     if (candidate.id != 0) {
       return this.http.put(
-        environment.apiUrl + 'JobCandidates/'+ candidate.id,
+        environment.apiUrl + 'JobCandidates/' + candidate.id,
         candidate
       );
     } else {
-      return this.http.post(
-        environment.apiUrl + 'JobCandidates',
-        candidate
-      );
+      return this.http.post(environment.apiUrl + 'JobCandidates', candidate);
     }
   };
 
@@ -74,7 +76,24 @@ export class JobService {
     }
     return this.http.put(
       environment.apiUrl + 'JobCandidates/UploadAttachment/' + id,
-      formData , {reportProgress: true , observe: 'events' }
+      formData
     );
   };
+
+  public GetRecruitCare(userid) {
+    return this.http.get(
+      environment.apiUrl + 'RecruitCares/GetRecruitCareByMe/' + userid
+    );
+  }
+
+  public addOrUpdateRecruitCare(item) {
+    if (item.id > 0) {
+      return this.http.put(
+        environment.apiUrl + 'RecruitCares/' + item.id,
+        item
+      );
+    } else {
+      return this.http.post(environment.apiUrl + 'RecruitCares', item);
+    }
+  }
 }

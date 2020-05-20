@@ -7,7 +7,7 @@ namespace RecruitmentApi.Models
 {
     public class UserList
     {
-        public string id { get; set; }
+        public int id { get; set; }
 
         public string name { get; set; }
 

@@ -39,6 +39,8 @@ html {
     width: 100%;
     min-height: 100%;
     padding: 20px;
+    background-image: url('../../../assets/Users.jpg');
+    background-size: cover;
   }
 
   

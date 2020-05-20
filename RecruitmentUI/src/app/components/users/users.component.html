@@ -16,13 +16,13 @@
                     <img src="../../../assets/edit-black-18dp.svg" (click)="edit(data)">
                 </ng-template>
                 </e-column>
-                  <e-column field='firstName' headerText='First Name' ></e-column>
-                  <e-column field='middleName' headerText='Middle Name' ></e-column>
-                  <e-column field='lastName' headerText='Last Name' ></e-column>
-                  <e-column field='userid' headerText='User Id'></e-column>
-                  <e-column field='email' headerText='Email'></e-column>
-                  <e-column field='role' headerText='Role'></e-column>
-                  <e-column field='countryName' headerText='Country'></e-column>
+                  <e-column field='firstName' headerText='First Name' width="150"></e-column>
+                  <e-column field='middleName' headerText='Middle Name' width="150"></e-column>
+                  <e-column field='lastName' headerText='Last Name' width="150"></e-column>
+                  <e-column field='userid' headerText='User Id' width="150"></e-column>
+                  <e-column field='email' headerText='Email' width="150"></e-column>
+                  <e-column field='role' headerText='Role' width="150"></e-column>
+                  <e-column field='countryName' headerText='Country' width="150"></e-column>
                   <e-column field='active' headerText='Active'>
                     <ng-template #template  let-data>
                      <input type="checkbox" disabled checked *ngIf="data.active">
@@ -36,3 +36,8 @@
   </div>
 
   </div>
+
+  <ng-template #useredit>
+   <input type="text">
+  </ng-template>
+  

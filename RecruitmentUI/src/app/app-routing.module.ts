@@ -7,17 +7,25 @@ import { AuthGuard } from './Guards/auth.guard';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { AddOpeningsComponent } from './components/add-openings/add-openings.component';
 import { UsersComponent } from './components/users/users.component';
+import { LoginComponent } from './components/login/login.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MasterDataComponent } from './components/Admin/master-data/master-data.component';
 
 
 const routes: Routes = [
   {
     path : '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
+    path:'login',
+    component: LoginComponent
+  },
+  {
     path : 'home',
-    component : HomeComponent
+    component : HomeComponent,
+    canActivate : [AuthGuard]
   },
   {
     path : 'jobopenings',
@@ -48,6 +56,16 @@ const routes: Routes = [
   {
     path : 'users',
     component : UsersComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'dashboard',
+    component : DashboardComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'master',
+    component : MasterDataComponent,
     canActivate : [AuthGuard]
   },
   {

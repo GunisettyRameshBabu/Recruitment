@@ -25,7 +25,7 @@ namespace RecruitmentApi.Controllers
         private byte[] _iv;
         private TripleDESCryptoServiceProvider _provider;
         private readonly IMapper _mapper;
-      
+
         public UsersController(DataContext context, IMapper mapper)
         {
             _context = context;
@@ -42,25 +42,29 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IEnumerable<UserView>>();
             try
             {
-                
+
                 response.Data = await (from x in _context.Users
-                                      join y in _context.Roles on x.roleId equals y.id
-                                      join c in _context.Countries on x.country equals c.Id into countries
-                                      from c in countries.DefaultIfEmpty()
-                                      select new UserView()
-                                      {
-                                          id = x.id,
-                                          email = x.email,
-                                          firstName = x.firstName,
-                                          lastName = x.lastName,
-                                          middleName = x.middleName,
-                                          role = y.Name,
-                                          userid = x.userid,
-                                          roleId = x.roleId,
-                                          countryName = c.Name,
-                                          countryId = c.Id,
-                                          active = x.active
-                                      }).ToListAsync();
+                                       join y in _context.MasterData on x.roleId equals y.id
+                                       join c in _context.Countries on x.country equals c.Id into countries
+                                       from c in countries.DefaultIfEmpty()
+                                       select new UserView()
+                                       {
+                                           id = x.id,
+                                           email = x.email,
+                                           firstName = x.firstName,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           role = y.name,
+                                           userid = x.userid,
+                                           roleId = x.roleId,
+                                           countryName = c.Name,
+                                           countryId = c.Id,
+                                           active = x.active,
+                                           modifiedDate = x.modifiedDate,
+                                           createdDate = x.createdDate,
+                                           createdBy = x.createdBy,
+                                           modifiedBy = x.modifiedBy
+                                       }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }
@@ -70,8 +74,8 @@ namespace RecruitmentApi.Controllers
                 response.Success = false;
             }
 
-           return Ok(response);
-            
+            return Ok(response);
+
         }
 
         // GET: api/Users/5
@@ -96,12 +100,12 @@ namespace RecruitmentApi.Controllers
             try
             {
                 response.Data = await (from x in _context.Users
-                                  select new UserList
-                                  {
-                                      id = x.userid,
-                                      name = x.firstName + " " + (x.middleName ?? "") + " "+ x.lastName ,
-                                      country  = x.country
-                                  }).ToListAsync();
+                                       select new UserList
+                                       {
+                                           id = x.id,
+                                           name = x.firstName + " " + (x.middleName ?? "") + " " + x.lastName,
+                                           country = x.country
+                                       }).ToListAsync();
                 response.Message = "Users List";
                 response.Success = true;
 
@@ -112,7 +116,7 @@ namespace RecruitmentApi.Controllers
                 response.Success = false;
             }
 
-          
+
             return response;
         }
 
@@ -120,34 +124,42 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, UserDto users)
+        public async Task<ServiceResponse<bool>> PutUsers(int id, UserDto users)
         {
-            if (id != users.id)
-            {
-                return BadRequest();
-            }
-            var user = await _context.Users.FindAsync(id);
-            users.password = user.password;
-            var usr = _mapper.Map<Users>(users);
-            _context.Entry(user).CurrentValues.SetValues(usr);
-
+            var response = new ServiceResponse<bool>();
             try
             {
+                if (id != users.id)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid user id";
+                    return response;
+                }
+                var user = await _context.Users.FindAsync(id);
+                users.password = user.password;
+                users.modifiedDate = DateTime.Now;
+                var usr = _mapper.Map<Users>(users);
+                _context.Entry(user).CurrentValues.SetValues(usr);
                 await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "User updated successfully";
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 if (!UsersExists(id))
                 {
-                    return NotFound();
+                    response.Success = false;
+                    response.Message = "User not found";
+                    return response;
                 }
                 else
                 {
-                    throw;
+                    response.Success = false;
+                    response.Message = ex.Message;
+                    return response;
                 }
             }
-
-            return NoContent();
+            return response;
         }
 
         // POST: api/Users
@@ -158,19 +170,9 @@ namespace RecruitmentApi.Controllers
         {
 
             users.password = EncodePasswordToBase64(users.password);
-
-            _context.Users.Add(new Users 
-            {
-                id = users.id,
-                email = users.email,
-                firstName = users.firstName,
-                lastName = users.lastName,
-                middleName = users.middleName,
-                password = users.password,
-                roleId = users.roleId,
-                userid = users.userid
-        
-            });
+            var user = _mapper.Map<Users>(users);
+            user.createdDate = DateTime.Now;
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUsers", new { id = users.id }, users);
@@ -208,31 +210,84 @@ namespace RecruitmentApi.Controllers
             return Ok(response);
         }
 
-        private async Task<ServiceResponse<Users>> validateUser(UserLoginDto userdto)
+        // GET: api/Users/Logout
+        [HttpGet("Logout/{id}")]
+        public async Task<ServiceResponse<bool>> Logout(string id)
         {
-            var response = new ServiceResponse<Users>();
+            var response = new ServiceResponse<bool>();
             try
             {
-                Users user = await _context.Users.FirstOrDefaultAsync(x => x.userid.ToLower().Equals(userdto.UserId.ToLower()));
-                if (user == null)
+                var session = _context.UserSession.Find(id);
+                if (session == null)
+                {
+                    response.Message = "Invalid session";
+                    response.Success = false;
+                    return response;
+                }
+
+                session.outTime = DateTime.Now;
+                _context.Entry(session).CurrentValues.SetValues(session);
+                await _context.SaveChangesAsync();
+                response.Message = "Logout Successfully";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.Success = false;
+            }
+            return response;
+        }
+
+        private async Task<ServiceResponse<UserDto>> validateUser(UserLoginDto userdto)
+        {
+            var response = new ServiceResponse<UserDto>();
+            try
+            {
+                response.Data = await (from x in _context.Users
+                                       join y in _context.MasterData on x.roleId equals y.id
+                                       where x.userid.ToLower() == userdto.UserId.ToLower()
+                                       select new UserDto()
+                                       {
+                                           id = x.id,
+                                           roleId = x.roleId,
+                                           active = x.active,
+                                           countryId = x.country,
+                                           email = x.email,
+                                           firstName = x.firstName,
+                                           lastName = x.lastName,
+                                           loginTypes = x.loginTypes,
+                                           middleName = x.middleName,
+                                           roleName = y.name,
+                                           userid = x.userid,
+                                           password = x.password
+                                       }).FirstOrDefaultAsync();
+                if (response.Data == null)
                 {
                     response.Success = false;
                     response.Message = "User not found.";
                 }
-                else if (DecodeFrom64(user.password) != userdto.Password)
+                else if (DecodeFrom64(response.Data.password) != userdto.Password)
                 {
                     response.Success = false;
                     response.Message = "Wrong password.";
                 }
-                else if((string.IsNullOrEmpty(user.loginTypes) || !user.loginTypes.Split(',').Contains(userdto.LoginType.ToString())) && user.loginTypes != "Admin")
-                {
-                    response.Success = false;
-                    response.Message = "You are not authorized to view this content";
-                }
+                //else if((string.IsNullOrEmpty(user.loginTypes) || !user.loginTypes.Split(',').Contains(userdto.LoginType.ToString())) && user.loginTypes != "Admin")
+                //{
+                //    response.Success = false;
+                //    response.Message = "You are not authorized to view this content";
+                //}
                 else
                 {
-                    response.Data = user;
                     response.Success = true;
+                    var userSession = new UserSession();
+                    userSession.sessionId = Guid.NewGuid().ToString();
+                    userSession.userid = response.Data.id;
+                    userSession.inTime = DateTime.Now;
+                    _context.UserSession.Add(userSession);
+                    _context.SaveChanges();
+                    response.Data.sessionId = userSession.sessionId;
+                    response.Message = "Login Success";
                 }
             }
             catch (Exception ex)

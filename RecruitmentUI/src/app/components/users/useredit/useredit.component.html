@@ -1,4 +1,4 @@
-<div class="jumbotron">
+
   <form *ngIf="user.id == undefined"
     class="example-form"
     [formGroup]="userGroup"
@@ -13,8 +13,9 @@
     <div class="e-card-header">
         <div class="e-card-header-caption">
             <div class="e-card-header-title">
+              <h5> Add User</h5>
             </div>
-        </div>
+        
         <div class="e-card-content">
         <div class="row">
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
@@ -146,6 +147,7 @@
           </div>
         </div>
         </div>
+      </div>
     </div>
   </div>
   
@@ -164,8 +166,9 @@
   <div class="e-card-header">
       <div class="e-card-header-caption">
           <div class="e-card-header-title">
+            <h5>Edit User</h5>
           </div>
-      </div>
+      
       <div class="e-card-content">
       <div class="row">
         <div class="col-md-4 col-sm-12 col-xs-12 col-lg-4 col-xlg-4">
@@ -274,7 +277,8 @@
         </div>
       </div>
       </div>
+    </div>
   </div>
 </div>
 </form>
-</div>
+

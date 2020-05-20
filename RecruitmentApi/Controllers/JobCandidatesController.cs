@@ -37,11 +37,11 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/JobCandidates
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JobCandidatesDto>>> GetJobCandidates()
+        public async Task<ActionResult<IEnumerable<JobCandidatesView>>> GetJobCandidates()
         {
             return await (from x in _context.JobCandidates
-                          join s in _context.JobCandidateStatus on x.status equals s.id
-                          select new JobCandidatesDto()
+                          join s in _context.MasterData on x.status equals s.id
+                          select new JobCandidatesView()
                           {
                               jobid = x.jobid,
                               firstName = x.firstName,
@@ -53,18 +53,22 @@ namespace RecruitmentApi.Controllers
                               status = s.id,
                               statusName = s.name,
                               email = x.email,
-                              fileName = x.fileName
+                              fileName = x.fileName,
+                              createdBy = x.createdBy,
+                              createdDate = x.createdDate,
+                              modifiedBy = x.modifiedBy,
+                              modifiedDate = x.modifiedDate
                           }).ToListAsync();
         }
 
         // GET: api/JobCandidates/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<JobCandidatesDto>> GetJobCandidates(int id)
+        public async Task<ActionResult<JobCandidatesView>> GetJobCandidates(int id)
         {
             var jobCandidates = await (from x in _context.JobCandidates
-                                       join s in _context.JobCandidateStatus on x.status equals s.id
+                                       join s in _context.MasterData on x.status equals s.id
                                        where x.id == id
-                                       select new JobCandidatesDto()
+                                       select new JobCandidatesView()
                                        {
                                            jobid = x.jobid,
                                            firstName = x.firstName,
@@ -76,7 +80,11 @@ namespace RecruitmentApi.Controllers
                                            status = s.id,
                                            statusName = s.name,
                                            email = x.email,
-                                           fileName = x.fileName
+                                           fileName = x.fileName,
+                                           createdBy = x.createdBy,
+                                           createdDate = x.createdDate,
+                                           modifiedBy = x.modifiedBy,
+                                           modifiedDate = x.modifiedDate
                                        }).FirstOrDefaultAsync();
 
             if (jobCandidates == null)
@@ -89,15 +97,15 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/JobCandidates/5
         [HttpGet("GetByJobId/{id}")]
-        public async Task<ServiceResponse<List<JobCandidatesDto>>> GetByJobId(string id)
+        public async Task<ServiceResponse<List<JobCandidatesView>>> GetByJobId(string id)
         {
-            var response = new ServiceResponse<List<JobCandidatesDto>>();
+            var response = new ServiceResponse<List<JobCandidatesView>>();
             try
             {
                 response.Data = await (from x in _context.JobCandidates
-                                           join s in _context.JobCandidateStatus on x.status equals s.id
+                                           join s in _context.MasterData on x.status equals s.id
                                            where x.jobid == id
-                                           select new JobCandidatesDto()
+                                           select new JobCandidatesView()
                                            {
                                                jobid = x.jobid,
                                                firstName = x.firstName,
@@ -109,7 +117,11 @@ namespace RecruitmentApi.Controllers
                                                status = s.id,
                                                statusName = s.name,
                                                email = x.email,
-                                               fileName = x.fileName
+                                               fileName = x.fileName,
+                                               createdBy = x.createdBy,
+                                               createdDate = x.createdDate,
+                                               modifiedBy = x.modifiedBy,
+                                               modifiedDate = x.modifiedDate
                                            }).ToListAsync();
 
                 response.Success = true;
@@ -127,15 +139,15 @@ namespace RecruitmentApi.Controllers
         }
 
         [HttpGet("GetCandidatesByJobId/{id}")]
-        public async Task<ServiceResponse<List<JobCandidatesDto>>> GetCandidatesByJobId(int id)
+        public async Task<ServiceResponse<List<JobCandidatesView>>> GetCandidatesByJobId(int id)
         {
-            var response = new ServiceResponse<List<JobCandidatesDto>>();
+            var response = new ServiceResponse<List<JobCandidatesView>>();
             try
             {
                 response.Data = await (from x in _context.JobCandidates
-                                       join s in _context.JobCandidateStatus on x.status equals s.id
+                                       join s in _context.MasterData on x.status equals s.id
                                        where x.id == id
-                                       select new JobCandidatesDto()
+                                       select new JobCandidatesView()
                                        {
                                            jobid = x.jobid,
                                            firstName = x.firstName,
@@ -147,7 +159,11 @@ namespace RecruitmentApi.Controllers
                                            status = s.id,
                                            statusName = s.name,
                                            email = x.email,
-                                           fileName = x.fileName
+                                           fileName = x.fileName,
+                                           createdBy = x.createdBy,
+                                           createdDate = x.createdDate,
+                                           modifiedBy = x.modifiedBy,
+                                           modifiedDate = x.modifiedDate
                                        }).ToListAsync();
 
                 response.Success = true;
@@ -221,9 +237,9 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("UploadAttachment/{id}"), DisableRequestSizeLimit]
-        public async Task<ServiceResponse<JobCandidatesDto>> UploadAttachment(int id)
+        public async Task<ServiceResponse<JobCandidatesView>> UploadAttachment(int id)
         {
-            var response = new ServiceResponse<JobCandidatesDto>();
+            var response = new ServiceResponse<JobCandidatesView>();
             if (!Request.Form.Files.Any() || id <= 0)
             {
                 response.Success = false;
@@ -249,9 +265,9 @@ namespace RecruitmentApi.Controllers
                 response.Success = true;
                 response.Message = "Add or Update Success";
                 response.Data = await (from x in _context.JobCandidates
-                                       join s in _context.JobCandidateStatus on x.status equals s.id
+                                       join s in _context.MasterData on x.status equals s.id
                                        where x.id == id
-                                       select new JobCandidatesDto()
+                                       select new JobCandidatesView()
                                        {
                                            jobid = x.jobid,
                                            firstName = x.firstName,
@@ -263,7 +279,11 @@ namespace RecruitmentApi.Controllers
                                            statusName = s.name,
                                            status = s.id,
                                            email = x.email,
-                                           fileName = x.fileName
+                                           fileName = x.fileName,
+                                           createdBy = x.createdBy,
+                                           createdDate = x.createdDate,
+                                           modifiedBy = x.modifiedBy,
+                                           modifiedDate = x.modifiedDate
                                        }).FirstOrDefaultAsync();
                 await _context.SaveChangesAsync();
             }
@@ -281,6 +301,12 @@ namespace RecruitmentApi.Controllers
                     response.Message = ex.Message;
                     return response;
                 }
+            } 
+            catch(Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
             }
 
             return response;
@@ -305,7 +331,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message =  ex.Message.IndexOf("duplicate") > 0 ? "Candidate already added" : ex.Message;
+                response.Message = ex.InnerException != null && ex.InnerException.Message.IndexOf("duplicate") > 0 ? "Candidate already added" :   ex.Message.IndexOf("duplicate") > 0 ? "Candidate already added" : ex.Message;
             }
             return response;
             

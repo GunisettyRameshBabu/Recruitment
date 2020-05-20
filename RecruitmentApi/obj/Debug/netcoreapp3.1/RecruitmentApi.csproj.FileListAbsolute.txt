@@ -302,6 +302,5 @@ C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreap
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\packages\EntityFramework.6.4.0\tools\netcoreapp3.0\any\ef6.runtimeconfig.json
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\AutoMapper.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
-C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.csprojAssemblyReference.cache
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.MvcApplicationPartsAssemblyInfo.cs

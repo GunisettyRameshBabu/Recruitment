@@ -13,7 +13,7 @@ namespace RecruitmentApi.Models
 
         public string jobtitle { get; set; }
 
-        public string assaignedTo { get; set; }
+        public int? assaignedTo { get; set; }
 
         public DateTime targetdate { get; set; }
 
@@ -29,11 +29,11 @@ namespace RecruitmentApi.Models
 
         public bool isclientConfidencial { get; set; }
 
-        public string contactName { get; set; }
+        public int? contactName { get; set; }
 
         public int jobtype { get; set; }
 
-        public string accountManager { get; set; }
+        public int? accountManager { get; set; }
 
         public int industry { get; set; }
 

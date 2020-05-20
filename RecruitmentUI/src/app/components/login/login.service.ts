@@ -13,4 +13,8 @@ export class LoginService {
   validateuser(login: Login) {
     return this.http.post(environment.apiUrl + 'Users/Login', login);
   }
+
+  logout(session: string) {
+    return this.http.get(environment.apiUrl + 'Users/Logout/'+ session);
+  }
 }

@@ -25,28 +25,51 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Cities
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<City>>> GetCitys()
+        public async Task<ServiceResponse<IEnumerable<City>>> GetCitys()
         {
-            return await _context.Citys.ToListAsync();
+            var response = new ServiceResponse<IEnumerable<City>>();
+            try
+            {
+                response.Data = await _context.Citys.ToListAsync();
+                response.Success = true;
+                response.Message = "Data Retrived";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         // GET: api/Cities/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<City>> GetCity(int id)
+        public async Task<ServiceResponse<City>> GetCity(int id)
         {
-            var city = await _context.Citys.FindAsync(id);
-
-            if (city == null)
+            var response = new ServiceResponse<City>();
+            try
             {
-                return NotFound();
+                response.Data = await _context.Citys.FindAsync(id);
+                if (response.Data == null)
+                {
+                    response.Success = false;
+                    response.Message = "Data not found";
+                    return response;
+                }
+                response.Success = true;
+                response.Message = "Data Retrived";
             }
-
-            return city;
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
         [Route("GetCitiesByState/{id}")]
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<IList<City>>>> GetStatesByCountry(int id)
+        public async Task<ServiceResponse<IList<City>>> GetStatesByCountry(int id)
         {
             var response = new ServiceResponse<IList<City>>();
             try
@@ -60,7 +83,7 @@ namespace RecruitmentApi.Controllers
                 response.Success = false;
                 response.Message = ex.Message;
             }
-            return Ok(response);
+            return response;
         }
 
 
@@ -69,60 +92,106 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<ServiceResponse<int>> PutCity(int id, City city)
         {
-            if (id != city.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(city).State = EntityState.Modified;
-
+            var response = new ServiceResponse<int>();
             try
             {
+                if (id != city.Id)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid city";
+                    return response;
+                }
+
+                var item = _context.Citys.Find(id);
+                if (item == null)
+                {
+                    response.Success = false;
+                    response.Message = "City not found";
+                    return response;
+                }
+                _context.Entry(item).CurrentValues.SetValues(city);
                 await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "City updated successfully";
+                response.Data = city.Id;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!CityExists(id))
                 {
-                    return NotFound();
+                    response.Success = false;
+                    response.Message = "City not found";
                 }
                 else
                 {
-                    throw;
+                    response.Success = false;
+                    response.Message = ex.Message;
                 }
             }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
-            return NoContent();
+            return response;
         }
 
         // POST: api/Cities
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<City>> PostCity(City city)
+        public async Task<ServiceResponse<int>> PostCity(City city)
         {
-            _context.Citys.Add(city);
-            await _context.SaveChangesAsync();
+            var response = new ServiceResponse<int>();
+            try
+            {
+                _context.Citys.Add(city);
+                await _context.SaveChangesAsync();
+                response.Data = city.Id;
+                response.Success = true;
+                response.Message = "Master data type added successfullu";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
 
-            return CreatedAtAction("GetCity", new { id = city.Id }, city);
+
+            return response;
         }
 
         // DELETE: api/Cities/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<City>> DeleteCity(int id)
+        public async Task<ServiceResponse<bool>> DeleteCity(int id)
         {
-            var city = await _context.Citys.FindAsync(id);
-            if (city == null)
+            var response = new ServiceResponse<bool>();
+            try
             {
-                return NotFound();
+                var masterData = await _context.Citys.FindAsync(id);
+                if (masterData == null)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid City";
+                    return response;
+                }
+
+                _context.Citys.Remove(masterData);
+                await _context.SaveChangesAsync();
+                response.Success = true;
+                response.Message = "City deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
             }
 
-            _context.Citys.Remove(city);
-            await _context.SaveChangesAsync();
 
-            return city;
+            return response;
         }
 
         private bool CityExists(int id)

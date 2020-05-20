@@ -9,7 +9,7 @@ namespace RecruitmentApi.Models
     {
         public IEnumerable<OpeningsListView> Jobs { get; set; }
 
-        public IEnumerable<JobCandidatesDto> Candidates { get; set; }
+        public IEnumerable<JobCandidatesView> Candidates { get; set; }
     }
     public class OpeningsListView
     {
