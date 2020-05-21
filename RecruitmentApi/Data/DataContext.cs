@@ -33,5 +33,9 @@ namespace RecruitmentApi.Data
         public DbSet<MasterDataType> MasterDataType { get; set; }
 
         public DbSet<UserSession> UserSession { get; set; }
+
+        public DbSet<ExceptionLog> ExceptionLog { get; set; }
+
+
     }
 }

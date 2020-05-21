@@ -12,7 +12,8 @@ import { UsersessionService } from 'src/app/services/usersession.service';
 import { User } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { CommonService } from 'src/app/services/common.service';
-import { MasterData } from 'src/app/constants/api-end-points';
+import { MasterDataTypes } from 'src/app/constants/api-end-points';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 
 @Component({
   selector: 'app-recruit-care-edit',
@@ -27,6 +28,7 @@ export class RecruitCareEditComponent implements OnInit {
   user: User;
   statusList = [];
   resume: any;
+  noticeList = [];
   constructor(
     public dialogRef: MatDialogRef<RecruitCareEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,7 +36,8 @@ export class RecruitCareEditComponent implements OnInit {
     private alertService: ToastrService,
     private jobService: JobService,
     private userSession: UsersessionService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private masterDataService: MasterdataService
   ) {
     this.recruit = data;
   }
@@ -55,7 +58,8 @@ export class RecruitCareEditComponent implements OnInit {
       modifiedBy: new FormControl(''),
       createdDate: new FormControl(''),
       modifiedDate: new FormControl(''),
-      fileName: new FormControl('', Validators.required)
+      fileName: new FormControl('', Validators.required),
+      noticePeriod: new FormControl(''),
     });
     this.recruitGroup.reset(this.recruit);
     this.jobService
@@ -68,11 +72,21 @@ export class RecruitCareEditComponent implements OnInit {
         }
       });
 
-    this.commonService
-      .getMasterDataByType(MasterData.JobCandidateStatus)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.JobCandidateStatus)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.statusList = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
+      });
+
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.NoticePerid)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.noticeList = res.data;
         } else {
           this.alertService.error(res.message);
         }
@@ -91,14 +105,22 @@ export class RecruitCareEditComponent implements OnInit {
         .addOrUpdateRecruitCare(this.recruitGroup.value)
         .subscribe((res: ServiceResponse) => {
           if (res.success) {
-            this.jobService.addRecruitCareResume(res.data, this.resume).subscribe((res1: ServiceResponse) => {
-              if (res1.success) {
-                this.alertService.show(res1.message);
-                this.dialogRef.close();
-              } else {
-                this.alertService.error(res1.message);
-              }
-            });
+            if (this.resume != undefined&& this.resume.length > 0 ) {
+              this.jobService
+              .addRecruitCareResume(res.data, this.resume)
+              .subscribe((res1: ServiceResponse) => {
+                if (res1.success) {
+                  this.alertService.success(res1.message);
+                  this.dialogRef.close();
+                } else {
+                  this.alertService.error(res1.message);
+                }
+              });
+            }
+            else {
+              this.alertService.success(res.message);
+              this.dialogRef.close();
+            }
           } else {
             this.alertService.error(res.message);
           }
@@ -118,5 +140,5 @@ export class RecruitCareEditComponent implements OnInit {
     console.log(files);
     this.resume = files;
     this.recruitGroup.controls.fileName.setValue(files[0].name);
-  }
+  };
 }

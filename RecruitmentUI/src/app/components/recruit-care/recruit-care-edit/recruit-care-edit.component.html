@@ -109,7 +109,21 @@
                 >
               </mat-form-field>
             </div>
-            <div class="col-md-8 col-sm-12 col-xs-12 col-lg-8 col-xlg-8">
+            <div class="col-md-4 col-sm-12 col-xs-12 col-lg-4 col-xlg-4">
+              <mat-form-field>
+                <mat-label>Notice Period *</mat-label>
+                <mat-select formControlName="noticePeriod">
+                  <mat-option [value]=""> </mat-option>
+                  <mat-option *ngFor="let i of noticeList" [value]="i.id">
+                    {{ i.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="hasError('noticePeriod', 'required')"
+                  >Notice Period is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 col-sm-12 col-xs-12 col-lg-4 col-xlg-4">
               <mat-form-field>
                 <mat-label>Comments *</mat-label>
                 <textarea
@@ -139,7 +153,7 @@
                     style="display: none;"
                     (change)="uploadFile(fileInput.files)"
                   />
-                  <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
+                  <div class="col-md-8 col-sm-12 col-xs-12 col-lg-8 col-xlg-8">
                     <mat-form-field>
                       <mat-label>Upload Resume *</mat-label>
                       <input
@@ -156,7 +170,7 @@
                       >
                     </mat-form-field>
                   </div>
-                  <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
+                  <div class="col-md-4 col-sm-12 col-xs-12 col-lg-4 col-xlg-4">
                     <button
                       id="browse"
                       type="button"

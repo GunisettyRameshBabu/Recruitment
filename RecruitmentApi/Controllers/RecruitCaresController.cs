@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using RecruitmentApi.Data;
 using RecruitmentApi.Models;
 
@@ -16,10 +17,12 @@ namespace RecruitmentApi.Controllers
     public class RecruitCaresController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConfiguration _configuration;
 
-        public RecruitCaresController(DataContext context)
+        public RecruitCaresController(DataContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: api/RecruitCares
@@ -29,33 +32,38 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IEnumerable<RecruitCareView>>();
             try
             {
-                response.Data = (from x in _context.RecruitCare
-                                  join y in _context.Openings on x.jobid equals y.id
-                                  join s in _context.MasterData on x.status equals s.id
-                                  join c in _context.Users on x.createdBy equals c.id
-                                  join m in _context.Users on x.modifiedBy equals m.id into modifiedUsers
-                                  from m in modifiedUsers.DefaultIfEmpty()
-                                  select new RecruitCareView()
-                                  {
-                                      jobid = y.id,
-                                      jobName = y.jobid,
-                                      comments = x.comments,
-                                      createdBy = x.createdBy,
-                                      createdByName = c.firstName + " " + (c.middleName ?? "") + c.lastName,
-                                      email = x.email,
-                                      id = x.id,
-                                      modifiedBy = x.modifiedBy,
-                                      modifiedName = (m != null ? (m.firstName + " " + (m.middleName ?? "") + m.lastName) : ""),
-                                      modifiedDate = x.modifiedDate,
-                                      name = (x != null ? (x.firstName + " " + (x.middleName ?? "") + x.lastName) : ""),
-                                      createdDate = x.createdDate.Value,
-                                      firstName = x.firstName,
-                                      lastName = x.lastName,
-                                      middleName = x.middleName,
-                                      phone = x.phone,
-                                      status = x.status,
-                                      statusName = s.name
-                                  }).ToList();
+                response.Data = await (from x in _context.RecruitCare
+                                       join y in _context.Openings on x.jobid equals y.id
+                                       join s in _context.MasterData on x.status equals s.id
+                                       join c in _context.Users on x.createdBy equals c.id
+                                       join m in _context.Users on x.modifiedBy equals m.id into modifiedUsers
+                                       from m in modifiedUsers.DefaultIfEmpty()
+                                       join n in _context.MasterData on x.noticePeriod equals n.id into notices
+                                       from n in notices.DefaultIfEmpty()
+                                       select new RecruitCareView()
+                                       {
+                                           jobid = y.id,
+                                           jobName = y.jobid,
+                                           comments = x.comments,
+                                           createdBy = x.createdBy,
+                                           createdByName = c.firstName + " " + (c.middleName ?? "") + c.lastName,
+                                           email = x.email,
+                                           id = x.id,
+                                           modifiedBy = x.modifiedBy,
+                                           modifiedName = (m != null ? (m.firstName + " " + (m.middleName ?? "") + m.lastName) : ""),
+                                           modifiedDate = x.modifiedDate,
+                                           name = (x != null ? (x.firstName + " " + (x.middleName ?? "") + x.lastName) : ""),
+                                           createdDate = x.createdDate.Value,
+                                           firstName = x.firstName,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           phone = x.phone,
+                                           status = x.status,
+                                           statusName = s.name,
+                                           fileName = x.fileName,
+                                           noticePeriod = x.noticePeriod,
+                                           notice = n.name
+                                       }).ToListAsync();
 
                 response.Success = true;
                 response.Message = "Success";
@@ -64,7 +72,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -76,34 +84,39 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IEnumerable<RecruitCareView>>();
             try
             {
-                response.Data = (from x in _context.RecruitCare
-                                 join y in _context.Openings on x.jobid equals y.id
-                                 join s in _context.MasterData on x.status equals s.id
-                                 join c in _context.Users on x.createdBy equals c.id
-                                 join m in _context.Users on x.modifiedBy equals m.id into modifiedUsers
-                                 from m in modifiedUsers.DefaultIfEmpty()
-                                 where x.createdBy == id || x.modifiedBy == id
-                                 select new RecruitCareView()
-                                 {
-                                     jobid = y.id,
-                                     jobName = y.jobid,
-                                     comments = x.comments,
-                                     createdBy = x.createdBy,
-                                     createdByName = c.firstName + " " + (c.middleName ?? "") + c.lastName,
-                                     email = x.email,
-                                     id = x.id,
-                                     modifiedBy = x.modifiedBy,
-                                     modifiedName = ( m != null ? (m.firstName + " " + (m.middleName ?? "") + m.lastName) : ""),
-                                     modifiedDate = x.modifiedDate,
-                                     name = (x != null ? (x.firstName + " " + (x.middleName ?? "") + x.lastName) : ""),
-                                     createdDate = x.createdDate.Value,
-                                     firstName = x.firstName,
-                                     lastName = x.lastName,
-                                     middleName = x.middleName,
-                                     phone = x.phone,
-                                     status = x.status,
-                                     statusName = s.name
-                                 }).ToList();
+                response.Data = await (from x in _context.RecruitCare
+                                       join y in _context.Openings on x.jobid equals y.id
+                                       join s in _context.MasterData on x.status equals s.id
+                                       join c in _context.Users on x.createdBy equals c.id
+                                       join m in _context.Users on x.modifiedBy equals m.id into modifiedUsers
+                                       from m in modifiedUsers.DefaultIfEmpty()
+                                       join n in _context.MasterData on x.noticePeriod equals n.id into notices
+                                       from n in notices.DefaultIfEmpty()
+                                       where x.createdBy == id || x.modifiedBy == id
+                                       select new RecruitCareView()
+                                       {
+                                           jobid = y.id,
+                                           jobName = y.jobid,
+                                           comments = x.comments,
+                                           createdBy = x.createdBy,
+                                           createdByName = c.firstName + " " + (c.middleName ?? "") + c.lastName,
+                                           email = x.email,
+                                           id = x.id,
+                                           modifiedBy = x.modifiedBy,
+                                           modifiedName = (m != null ? (m.firstName + " " + (m.middleName ?? "") + m.lastName) : ""),
+                                           modifiedDate = x.modifiedDate,
+                                           name = (x != null ? (x.firstName + " " + (x.middleName ?? "") + x.lastName) : ""),
+                                           createdDate = x.createdDate.Value,
+                                           firstName = x.firstName,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           phone = x.phone,
+                                           status = x.status,
+                                           statusName = s.name,
+                                           fileName = x.fileName,
+                                           noticePeriod = x.noticePeriod,
+                                           notice = n.name
+                                       }).ToListAsync();
 
                 response.Success = true;
                 response.Message = "Success";
@@ -112,7 +125,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -135,9 +148,9 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<ServiceResponse<bool>> PutRecruitCare(int id, RecruitCare recruitCare)
+        public async Task<ServiceResponse<int>> PutRecruitCare(int id, RecruitCare recruitCare)
         {
-            var response = new ServiceResponse<bool>();
+            var response = new ServiceResponse<int>();
             try
             {
                 if (recruitCare == null || recruitCare.id <= 0 || id != recruitCare.id)
@@ -152,11 +165,11 @@ namespace RecruitmentApi.Controllers
                 await _context.SaveChangesAsync();
                 response.Success = true;
                 response.Message = "Recruitcare item updated successfully";
-                response.Data = true;
+                response.Data = recruitCare.id;
             }
             catch (Exception ex)
             {
-                response.Message = ex.Message;
+                response.Message = await CustomLog.Log(ex, _context);
                 response.Success = false;
             }
             return response;
@@ -193,7 +206,7 @@ namespace RecruitmentApi.Controllers
                 }
                 response.Success = true;
                 response.Message = "Add or Update Success";
-                
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException ex)
@@ -207,14 +220,14 @@ namespace RecruitmentApi.Controllers
                 else
                 {
                     response.Success = false;
-                    response.Message = ex.Message;
+                    response.Message = await CustomLog.Log(ex, _context);
                     return response;
                 }
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                response.Message = await CustomLog.Log(ex, _context);
                 return response;
             }
 
@@ -225,9 +238,9 @@ namespace RecruitmentApi.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ServiceResponse<bool>> PostRecruitCare(RecruitCare recruitCare)
+        public async Task<ServiceResponse<int>> PostRecruitCare(RecruitCare recruitCare)
         {
-            var response = new ServiceResponse<bool>();
+            var response = new ServiceResponse<int>();
             try
             {
                 if (recruitCare == null || recruitCare.id > 0)
@@ -241,16 +254,46 @@ namespace RecruitmentApi.Controllers
                 await _context.SaveChangesAsync();
                 response.Success = true;
                 response.Message = "Recruitcare item added successfully";
-                response.Data = true;
+                response.Data = recruitCare.id;
             }
             catch (Exception ex)
             {
-                response.Message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                response.Message = await CustomLog.Log(ex, _context);
                 response.Success = false;
             }
             return response;
         }
 
+
+        [HttpPost("SendEmail")]
+        public async Task<ServiceResponse<bool>> SendEmail(EmailModel[] emailModel)
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                if (emailModel == null)
+                {
+                    response.Message = "Invalid item , Please correct and try again";
+                    response.Success = false;
+                    return response;
+                }
+                var list = new List<EmailResponse>();
+                foreach (var item in emailModel.Select(x => x.key).Distinct())
+                {
+                   list.Add(new EmailResponse(item,Email.SendEmail(emailModel.Where(x => x.key == item).Select(x => x.value).ToList(), string.Format("Job Info {0}", item),item , _context, _configuration)));
+                }
+               
+                response.Success = list.Any(x => x.status) ;
+                response.Message = list.Any(x => x.status) ? "Email Sent Successfully" : "Unable to send emails for jobs " + string.Join(",", list.Select(x => x.key));
+                response.Data = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = await CustomLog.Log(ex, _context);
+                response.Success = false;
+            }
+            return response;
+        }
         // DELETE: api/RecruitCares/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<RecruitCare>> DeleteRecruitCare(int id)

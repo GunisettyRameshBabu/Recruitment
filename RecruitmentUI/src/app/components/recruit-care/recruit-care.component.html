@@ -11,12 +11,18 @@
             [toolbar]="toolbar"
             [editSettings]="editSettings"
             [allowExcelExport]="true" (toolbarClick)='toolbarClick($event)'
+            [enableHover]="false" [allowSelection]="true" [selectionSettings]="selectOptions"
+            (checkboxChange)="checkboxChange($event)"
           >
             <e-columns>
+              <e-column type='checkbox' width='50'></e-column>
                <e-column width="50" >
                   <ng-template #template  let-data>
                     <img src="../../../assets/edit-black-18dp.svg" (click)="edit(data)">
                 </ng-template>
+                </e-column>
+                <e-column isPrimaryKey=true field="id" visible=false>
+
                 </e-column>
               <e-column width="150" field="jobName" headerText="Job ID">
               </e-column>
@@ -25,6 +31,12 @@
               <e-column field="phone" headerText="Phone" width="100">
               </e-column>
               <e-column field="statusName" headerText="Status" width="100">
+               
+              </e-column>
+              <e-column field="notice" headerText="Notice Period" width="100">
+               
+              </e-column>
+              <e-column field="fileName" headerText="Resume" width="100">
                
               </e-column>
               <e-column field="email" headerText="Email" width="100">

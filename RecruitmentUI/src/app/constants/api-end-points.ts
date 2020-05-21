@@ -10,11 +10,12 @@ export const ApiEndPoints = {
   status: 'JobStatus',
 };
 
-export enum MasterData {
+export enum MasterDataTypes {
   Experience = 1,
   Industry,
   JobCandidateStatus,
   JobStatus,
   JobTypes,
   Roles,
+  NoticePerid
 }

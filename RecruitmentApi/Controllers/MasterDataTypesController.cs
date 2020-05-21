@@ -35,7 +35,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -60,7 +60,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -104,13 +104,13 @@ namespace RecruitmentApi.Controllers
                 else
                 {
                     response.Success = false;
-                    response.Message = ex.Message;
+                     response.Message = await CustomLog.Log(ex, _context);
                 }
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
 
             return response;
@@ -134,7 +134,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
 
 
@@ -164,7 +164,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
 
 

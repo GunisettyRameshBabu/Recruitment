@@ -20,7 +20,8 @@ import { User } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { HttpEventType } from '@angular/common/http';
 import { CommonService } from 'src/app/services/common.service';
-import { MasterData } from 'src/app/constants/api-end-points';
+import { MasterDataTypes } from 'src/app/constants/api-end-points';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 
 
 @Component({
@@ -46,7 +47,8 @@ export class AddcandidateComponent implements OnInit {
     private alertService: ToastrService,
     private jobService: JobService,
     private userSession: UsersessionService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private masterDataService: MasterdataService
   ) {
     this.job = data;
     console.log(this.job);
@@ -54,8 +56,8 @@ export class AddcandidateComponent implements OnInit {
 
   ngOnInit(): void {
     this.dropEle = document.getElementById('droparea');
-    this.commonService
-      .getMasterDataByType(MasterData.JobCandidateStatus)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.JobCandidateStatus)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.statuses = res.data;

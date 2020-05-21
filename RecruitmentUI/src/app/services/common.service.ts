@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { MasterData } from '../constants/api-end-points';
+import { MasterDataTypes } from '../constants/api-end-points';
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +14,7 @@ export class CommonService {
 
   constructor(private http: HttpClient) { }
 
-  getMasterDataByType(type: MasterData) {
-    return this.http.get(environment.apiUrl + 'MasterDatas/GetMasterDataByType/' + (type as number));
-  }
-
-  getMasterDataType() {
-    return this.http.get(environment.apiUrl + 'MasterDataTypes');
-  }
-
-  getMasterData() {
-    return this.http.get(environment.apiUrl + 'MasterDatas');
-  }
+  
 
   getClientCodes() {
     return this.http.get(environment.apiUrl + 'ClientCodes');

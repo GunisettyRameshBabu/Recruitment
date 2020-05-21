@@ -43,5 +43,9 @@ namespace RecruitmentApi.Models
         public string jobName { get; internal set; }
 
         public string fileName { get; set; }
+
+        public int noticePeriod { get; set; }
+
+        public string notice { get; set; }
     }
 }

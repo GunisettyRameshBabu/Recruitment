@@ -40,7 +40,7 @@ namespace RecruitmentApi.Controllers
                                             createdBy = x.createdBy,
                                             createdDate = x.createdDate,
                                             createdName = c.firstName + " " + (c.middleName ?? "")  +  " " + c.lastName,
-                                            modifedName = (m != null ? m.firstName + " " + (m.middleName ?? "") + " " + m.lastName : ""),
+                                            modifiedName = (m != null ? m.firstName + " " + (m.middleName ?? "") + " " + m.lastName : ""),
                                             modifiedDate = x.modifiedDate,
                                             name = x.name,
                                             type = x.type,
@@ -53,7 +53,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -78,7 +78,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -112,7 +112,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -157,13 +157,13 @@ namespace RecruitmentApi.Controllers
                 else
                 {
                     response.Success = false;
-                    response.Message = ex.Message;
+                     response.Message = await CustomLog.Log(ex, _context);
                 }
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
 
             return response;
@@ -178,6 +178,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
+                masterData.createdDate = DateTime.Now;
                 _context.MasterData.Add(masterData);
                 await _context.SaveChangesAsync();
                 response.Data = masterData.id;
@@ -187,7 +188,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
             
 
@@ -217,7 +218,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                response.Message = ex.Message;
+                 response.Message = await CustomLog.Log(ex, _context);
             }
            
 

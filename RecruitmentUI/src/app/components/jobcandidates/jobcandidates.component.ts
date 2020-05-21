@@ -23,8 +23,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { CommonService } from 'src/app/services/common.service';
-import { MasterData } from 'src/app/constants/api-end-points';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-jobcandidates',
@@ -34,7 +32,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class JobcandidatesComponent implements OnInit {
   @ViewChild('grid') public grid: GridComponent;
-  @ViewChild('candidateForm') public candidateForm: FormGroup;
+  public candidateForm: FormGroup;
   @Input() candidates: Candidates[] = [];
   @Input() jobid: any;
   editSettings: EditSettingsModel;
@@ -49,6 +47,7 @@ export class JobcandidatesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dialog.closeAll();
     this.editparams = { params: { popupHeight: '300px' } };
     this.dropEle = document.getElementById('droparea');
     this.editSettings = {

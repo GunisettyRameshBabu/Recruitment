@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-   
+   this.dialog.closeAll();
   }
   Login(type: any) {
     const dialogRef = this.dialog.open(LoginComponent, {
@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit {
       },
       hasBackdrop: true,
       disableClose: false,
+    
     });
 
     dialogRef.afterClosed().subscribe((result) => {

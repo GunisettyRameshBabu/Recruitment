@@ -1,10 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  Inject,
+} from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
   Validators,
   FormControl,
 } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { UsersessionService } from 'src/app/services/usersession.service';
+import { User } from 'src/app/models/user';
+import { MasterdataService } from 'src/app/services/masterdata.service';
+import { ServiceResponse } from 'src/app/models/service-response';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-or-add-master-data',
@@ -12,11 +25,21 @@ import {
   styleUrls: ['./edit-or-add-master-data.component.css'],
 })
 export class EditOrAddMasterDataComponent implements OnInit {
-  @Input() data;
+  masterData;
   masterGroup: FormGroup;
-  @Input() dataTypes = [];
-  @Output() close: EventEmitter<boolean> = new EventEmitter();
-  constructor(private formBuilder: FormBuilder, ) {}
+  dataTypes = [];
+  user: User;
+  constructor(
+    private formBuilder: FormBuilder,
+    public dialogRef: MatDialogRef<EditOrAddMasterDataComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private userSession: UsersessionService,
+    private masterDataService: MasterdataService,
+    private alertService: ToastrService
+  ) {
+    this.dataTypes = data.types;
+    this.masterData = data.item;
+  }
 
   ngOnInit(): void {
     this.masterGroup = this.formBuilder.group({
@@ -28,16 +51,34 @@ export class EditOrAddMasterDataComponent implements OnInit {
       modifiedBy: new FormControl(''),
       modifiedDate: new FormControl(''),
     });
-
-    this.masterGroup.reset(this.data);
+    this.user = this.userSession.getLoggedInUser() as User;
+    this.masterGroup.reset(this.masterData);
   }
 
   closed() {
-    this.close.emit(false);
+   
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 
   onSubmit() {
     if (this.masterGroup.valid) {
+      if (this.masterData.id > 0) {
+        this.masterGroup.controls.modifiedBy.setValue(this.user.id);
+      } else {
+        this.masterGroup.controls.createdBy.setValue(this.user.id);
+      }
+
+      this.masterDataService.addOrUpdateMasterData(this.masterGroup.value).subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.alertService.success(res.message);
+          this.dialogRef.close();
+        } else {
+          this.alertService.success(res.message);
+        }
+      });
     }
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-error',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private modal: MatDialog) { }
 
   ngOnInit(): void {
+    this.modal.closeAll();
   }
 
 }

@@ -19,7 +19,6 @@ import { JobdetailsComponent } from './components/jobdetails/jobdetails.componen
 import { ErrorComponent } from './components/error/error.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { JobapplyComponent } from './components/jobapply/jobapply.component';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { UsersComponent } from './components/users/users.component';
 import { GridModule, DetailRowService,ToolbarService, ExcelExportService, EditService } from '@syncfusion/ej2-angular-grids';
@@ -60,7 +59,6 @@ import { EditOrAddMasterDataComponent } from './components/Admin/master-data/edi
     JobdetailsComponent,
     ErrorComponent,
     PageNotFoundComponent,
-    JobapplyComponent,
     UnAuthorizedComponent,
     UsersComponent,
     AddOpeningsComponent,

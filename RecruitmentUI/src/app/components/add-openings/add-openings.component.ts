@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonService } from 'src/app/services/common.service';
-import { ApiEndPoints, MasterData } from 'src/app/constants/api-end-points';
+import { ApiEndPoints, MasterDataTypes } from 'src/app/constants/api-end-points';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Opening } from './opening';
 import { JobService } from 'src/app/services/job.service';
@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { UsersessionService } from 'src/app/services/usersession.service';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 
 @Component({
   selector: 'app-add-openings',
@@ -38,7 +39,8 @@ export class AddOpeningsComponent implements OnInit {
     private alertService: ToastrService,
     private router: Router,
     private activated: ActivatedRoute,
-    private userSession: UsersessionService
+    private userSession: UsersessionService,
+    private masterDataService: MasterdataService
   ) {}
 
   ngOnInit(): void {
@@ -89,8 +91,8 @@ export class AddOpeningsComponent implements OnInit {
       contactName: new FormControl(''),
       assaignedTo: new FormControl(''),
     });
-    this.commonService
-      .getMasterDataByType(MasterData.Industry)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.Industry)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.industries = res.data;
@@ -117,8 +119,8 @@ export class AddOpeningsComponent implements OnInit {
         }
       });
 
-    this.commonService
-      .getMasterDataByType(MasterData.JobTypes)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.JobTypes)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.jobtypes = res.data;
@@ -137,8 +139,8 @@ export class AddOpeningsComponent implements OnInit {
         }
       });
 
-    this.commonService
-      .getMasterDataByType(MasterData.Experience)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.Experience)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.experiences = res.data;
@@ -147,8 +149,8 @@ export class AddOpeningsComponent implements OnInit {
         }
       });
 
-    this.commonService
-      .getMasterDataByType(MasterData.JobStatus)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.JobStatus)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.statuses = res.data;

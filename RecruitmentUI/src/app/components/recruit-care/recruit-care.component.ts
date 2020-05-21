@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { EditSettingsModel, ExcelExportProperties, GridComponent } from '@syncfusion/ej2-angular-grids';
+import {
+  EditSettingsModel,
+  ExcelExportProperties,
+  GridComponent,
+} from '@syncfusion/ej2-angular-grids';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { User } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
@@ -20,6 +24,7 @@ export class RecruitCareComponent implements OnInit {
   editSettings: EditSettingsModel;
   toolbar: string[];
   user: User;
+  public selectOptions: Object;
   constructor(
     private userSession: UsersessionService,
     private jobService: JobService,
@@ -28,6 +33,7 @@ export class RecruitCareComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.dialog.closeAll();
     this.user = this.userSession.getLoggedInUser();
     this.getData();
     this.editSettings = {
@@ -35,7 +41,12 @@ export class RecruitCareComponent implements OnInit {
       allowAdding: false,
       mode: 'Dialog',
     };
-    this.toolbar = ['Add Record', 'ExcelExport'];
+    this.toolbar = ['Add Record', 'ExcelExport', 'Send Email'];
+
+    this.selectOptions = {
+      persistSelection: true,
+      checkboxMode: 'ResetOnRowClick',
+    };
   }
 
   private getData() {
@@ -44,15 +55,14 @@ export class RecruitCareComponent implements OnInit {
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.candidates = res.data;
-        }
-        else {
+        } else {
           this.alertService.error(res.message);
         }
       });
   }
 
   add() {
-    this.showPopup({ id : 0 });
+    this.showPopup({ id: 0 });
   }
 
   edit(data) {
@@ -63,12 +73,12 @@ export class RecruitCareComponent implements OnInit {
     const dialogRef = this.dialog.open(RecruitCareEditComponent, {
       data,
       position: {
-        top: '7%'
+        top: '7%',
       },
       hasBackdrop: true,
-      disableClose: true
+      disableClose: true,
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.getData();
     });
   }
@@ -83,6 +93,31 @@ export class RecruitCareComponent implements OnInit {
       this.grid.excelExport(excelExportProperties);
     } else if (args.item.id.indexOf('Add Record') > 0) {
       this.add();
-    } 
+    } else if (args.item.id.indexOf('Send Email') > 0) {
+      this.sendEmail();
+    }
+  }
+
+  sendEmail() {
+    const selectedRecords = this.grid.getSelectedRecords();
+    if (selectedRecords.length > 0) {
+      const items = selectedRecords.map((x: any) => {
+        return { key: x.jobName , value: x.email };
+      });
+      this.jobService.SendEmail(items).subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.alertService.success(res.message);
+        } else {
+          this.alertService.success(res.message);
+        }
+      });
+    } else {
+      this.alertService.error('Please select atlease one record to send email');
+    }
+  }
+
+  checkboxChange(args: any) {
+    //console.log(JSON.stringify(args));
+    console.log(args);
   }
 }

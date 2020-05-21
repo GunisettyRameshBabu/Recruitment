@@ -8,6 +8,9 @@ import {
   ExcelExportProperties,
   GridComponent,
 } from '@syncfusion/ej2-angular-grids';
+import { MatDialog } from '@angular/material/dialog';
+import { EditOrAddMasterDataComponent } from './edit-or-add-master-data/edit-or-add-master-data.component';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 
 @Component({
   selector: 'app-master-data',
@@ -26,13 +29,16 @@ export class MasterDataComponent implements OnInit {
   constructor(
     private userSession: UsersessionService,
     private commonService: CommonService,
-    private alertService: ToastrService
+    private alertService: ToastrService,
+    private modal: MatDialog,
+    private masterDataService: MasterdataService
   ) {}
 
   ngOnInit(): void {
+    this.modal.closeAll();
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.user = this.userSession.getLoggedInUser();
-    this.commonService.getMasterDataType().subscribe((res: ServiceResponse) => {
+    this.masterDataService.getMasterDataType().subscribe((res: ServiceResponse) => {
       if (res.success) {
         this.masterTypes = res.data;
       } else {
@@ -49,7 +55,7 @@ export class MasterDataComponent implements OnInit {
   }
 
   getData() {
-    this.commonService.getMasterData().subscribe((res: ServiceResponse) => {
+    this.masterDataService.getMasterData().subscribe((res: ServiceResponse) => {
       if (res.success) {
         this.masterdata = res.data;
       } else {
@@ -62,6 +68,7 @@ export class MasterDataComponent implements OnInit {
 
   edit(data) {
     this.masterItem = data;
+    this.open();
   }
 
   toolbarClick(args: ClickEventArgs): void {
@@ -71,9 +78,26 @@ export class MasterDataComponent implements OnInit {
         fileName: 'Master Data.xlsx',
       };
       this.grid.excelExport(excelExportProperties);
-    } else if (args.item.id.indexOf('Add Candidate') > 0) {
-      this.masterItem = {};
+    } else if (args.item.id.indexOf('Add Master Record') > 0) {
+      this.masterItem = {id: 0};
+      this.open();
     }
+  }
+
+  open() {
+    const dialogRef = this.modal.open(EditOrAddMasterDataComponent, {
+      data: {item : this.masterItem , types: this.masterTypes } ,
+      position: {
+        top : '7%'
+      },
+      hasBackdrop : false,
+      disableClose : false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.masterItem = undefined;
+      this.getData();
+    });
   }
 
 }

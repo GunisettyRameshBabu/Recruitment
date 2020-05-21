@@ -17,6 +17,6 @@ namespace RecruitmentApi.Models
 
         public string createdName { get; set; }
 
-        public string modifedName { get; set; }
+        public string modifiedName { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import {
   FormBuilder,
   FormGroup,
@@ -32,12 +32,14 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private alertService: ToastrService,
     private sessionService: UsersessionService,
-    private router: Router
+    private router: Router,
+    private modal: MatDialog
   ) {
     // this.type = this.data;
   }
 
   onNoClick(): void {
+    this.modal.closeAll();
     // this.dialogRef.close();
   }
   ngOnInit(): void {

@@ -72,6 +72,9 @@ export class AppComponent {
     this.idle.watch();
     this.idleState = 'Started.';
     this.timedOut = false;
+    if (this.childModal != undefined) {
+      this.childModal.hide();
+    }
   }
 
   stay() {
@@ -80,11 +83,11 @@ export class AppComponent {
   }
 
   logout() {
-    this.userSession.signOutSession();  
+    this.userSession.signOutSession();
     this.childModal.hide();
   }
 
   hideChildModal() {
-   this.stay();
+    this.stay();
   }
 }

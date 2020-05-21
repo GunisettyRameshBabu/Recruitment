@@ -157,3 +157,10 @@ C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcore
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\packages\EntityFramework.6.4.0\tools\netcoreapp3.0\any\ef6.runtimeconfig.json
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\AutoMapper.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.Extensions.Logging.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.Extensions.Logging.File.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.Formatting.Compact.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.Sinks.Async.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.Sinks.File.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Release\netcoreapp3.1\Serilog.Sinks.RollingFile.dll

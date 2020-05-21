@@ -15,6 +15,7 @@ import {
 } from '@syncfusion/ej2-angular-grids';
 
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-jobopenings',
@@ -55,10 +56,12 @@ export class JobopeningsComponent implements OnInit {
     public jobService: JobService,
     private router: Router,
     private alertService: ToastrService,
-    private sessionService: UsersessionService
+    private sessionService: UsersessionService,
+    private modal: MatDialog
   ) {}
 
   ngOnInit(): void {
+    this.modal.closeAll();
     this.toolbarOptions = ['Openings', 'ExcelExport', 'Add'];
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.editSettings = { allowAdding: true };

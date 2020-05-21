@@ -28,5 +28,7 @@ namespace RecruitmentApi.Models
         public byte[] resume { get; set; }
 
         public string fileName { get; set; }
+
+        public int noticePeriod { get; set; }
     }
 }

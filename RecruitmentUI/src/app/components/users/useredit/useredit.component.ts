@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'src/app/models/user';
 import { CommonService } from 'src/app/services/common.service';
-import { ApiEndPoints, MasterData } from 'src/app/constants/api-end-points';
+import { ApiEndPoints, MasterDataTypes } from 'src/app/constants/api-end-points';
 import { UsersService } from 'src/app/services/users.service';
 import { ToastrService } from 'ngx-toastr';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { UsersessionService } from 'src/app/services/usersession.service';
+import { MasterdataService } from 'src/app/services/masterdata.service';
 
 @Component({
   selector: 'app-useredit',
@@ -30,14 +31,15 @@ export class UsereditComponent implements OnInit {
     private commonService: CommonService,
     private userService: UsersService,
     private alertService: ToastrService,
-    private userSession: UsersessionService
+    private userSession: UsersessionService,
+    private masterDataService: MasterdataService
   ) {
     this.user = data;
   }
 
   ngOnInit(): void {
-    this.commonService
-      .getMasterDataByType(MasterData.Roles)
+    this.masterDataService
+      .getMasterDataByType(MasterDataTypes.Roles)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.roles = res.data;

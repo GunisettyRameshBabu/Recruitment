@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Jobapply } from '../components/jobapply/jobapply';
 import { Opening } from '../components/add-openings/opening';
 
 @Injectable({
@@ -28,9 +27,7 @@ export class JobService {
     return this.http.get(environment.apiUrl + 'Openings/GetOpeningById/' + id);
   }
 
-  applyJob(job: Jobapply) {
-    return this.http.post(environment.apiUrl + 'JobAttachments', job);
-  }
+
 
   addOrUpdateOpening(opening: Opening) {
     if (opening.id == 0) {
@@ -107,5 +104,11 @@ export class JobService {
     } else {
       return this.http.post(environment.apiUrl + 'RecruitCares', item);
     }
+  }
+
+  public SendEmail(data: { key: string , value: any }[] ) {
+    return this.http.post(
+      environment.apiUrl + 'RecruitCares/SendEmail', data
+    );
   }
 }
