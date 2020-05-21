@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -158,6 +159,65 @@ namespace RecruitmentApi.Controllers
                 response.Message = ex.Message;
                 response.Success = false;
             }
+            return response;
+        }
+
+        // PUT: api/RecruitCares/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("UploadAttachment/{id}"), DisableRequestSizeLimit]
+        public async Task<ServiceResponse<bool>> UploadAttachment(int id)
+        {
+            var response = new ServiceResponse<bool>();
+            if (!Request.Form.Files.Any() || id <= 0)
+            {
+                response.Success = false;
+                response.Message = "Unable to find resume or invalid candidate info";
+                return response;
+            }
+
+            try
+            {
+                var candidate = _context.RecruitCare.Find(id);
+                if (candidate == null)
+                {
+                    response.Success = false;
+                    response.Message = "Unable to find candidate";
+                    return response;
+                }
+                using (var memoryStream = new MemoryStream())
+                {
+                    Request.Form.Files[0].CopyTo(memoryStream);
+                    candidate.resume = memoryStream.ToArray();
+                    candidate.fileName = Request.Form.Files[0].FileName;
+                }
+                response.Success = true;
+                response.Message = "Add or Update Success";
+                
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!RecruitCareExists(id))
+                {
+                    response.Success = false;
+                    response.Message = "Unable to find Recruit care candidate info";
+                    return response;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = ex.Message;
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+                return response;
+            }
+
             return response;
         }
 

@@ -3,9 +3,11 @@ import { UsersessionService } from 'src/app/services/usersession.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { ToastrService } from 'ngx-toastr';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { ExcelExportProperties, GridComponent } from '@syncfusion/ej2-angular-grids';
+import {
+  ExcelExportProperties,
+  GridComponent,
+} from '@syncfusion/ej2-angular-grids';
 
 @Component({
   selector: 'app-master-data',
@@ -14,20 +16,17 @@ import { ExcelExportProperties, GridComponent } from '@syncfusion/ej2-angular-gr
 })
 export class MasterDataComponent implements OnInit {
   @ViewChild('grid') public grid: GridComponent;
-  @ViewChild('childModal') public editTemplate;
   user: any;
   editSettings: { allowEditing: boolean; allowAdding: boolean; mode: string };
   toolbar: string[];
   masterdata = [];
   pageSettings: { pageSizes: boolean; pageSize: number };
   masterTypes = [];
-  modalRef: BsModalRef;
   masterItem: any;
   constructor(
     private userSession: UsersessionService,
     private commonService: CommonService,
-    private alertService: ToastrService,
-    private modalService: BsModalService
+    private alertService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -59,23 +58,10 @@ export class MasterDataComponent implements OnInit {
     });
   }
 
+
+
   edit(data) {
     this.masterItem = data;
-    this.openModalWithClass();
-  }
-
- 
-
-  openModalWithClass() {
-   this.editTemplate.show();
-  }
-
-  onClose(event) {
-    this.masterItem = null;
-    this.editTemplate.hide();
-    if (event) {
-      this.getData();
-    }
   }
 
   toolbarClick(args: ClickEventArgs): void {
@@ -87,11 +73,7 @@ export class MasterDataComponent implements OnInit {
       this.grid.excelExport(excelExportProperties);
     } else if (args.item.id.indexOf('Add Candidate') > 0) {
       this.masterItem = {};
-      this.openModalWithClass();
     }
   }
 
-  hideChildModal() {
-    this.editTemplate.hide();
-   }
 }

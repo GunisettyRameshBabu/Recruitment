@@ -80,6 +80,18 @@ export class JobService {
     );
   };
 
+  public addRecruitCareResume = (id, files) => {
+    const formData = new FormData();
+    if (files != undefined && files.length > 0) {
+      let fileToUpload = files[0];
+      formData.append('file', fileToUpload, fileToUpload.name);
+    }
+    return this.http.put(
+      environment.apiUrl + 'RecruitCares/UploadAttachment/' + id,
+      formData
+    );
+  };
+
   public GetRecruitCare(userid) {
     return this.http.get(
       environment.apiUrl + 'RecruitCares/GetRecruitCareByMe/' + userid

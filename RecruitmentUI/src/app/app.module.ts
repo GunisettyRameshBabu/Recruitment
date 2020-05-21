@@ -37,7 +37,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { UsereditComponent } from './components/users/useredit/useredit.component';
 import { JobcandidatesComponent } from './components/jobcandidates/jobcandidates.component';
 import { AddcandidateComponent } from './components/jobcandidates/addcandidate/addcandidate.component';
-
+import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { UploaderModule  } from '@syncfusion/ej2-angular-inputs';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MasterDataComponent } from './components/Admin/master-data/master-data.component';
@@ -97,7 +97,8 @@ import { EditOrAddMasterDataComponent } from './components/Admin/master-data/edi
     MenuModule, 
     NgIdleKeepaliveModule.forRoot(),
     MomentModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    DialogModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

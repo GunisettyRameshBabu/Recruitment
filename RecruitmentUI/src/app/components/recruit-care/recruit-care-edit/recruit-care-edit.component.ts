@@ -26,6 +26,7 @@ export class RecruitCareEditComponent implements OnInit {
   jobs = [];
   user: User;
   statusList = [];
+  resume: any;
   constructor(
     public dialogRef: MatDialogRef<RecruitCareEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -53,7 +54,8 @@ export class RecruitCareEditComponent implements OnInit {
       createdBy: new FormControl(''),
       modifiedBy: new FormControl(''),
       createdDate: new FormControl(''),
-      modifiedDate: new FormControl('')
+      modifiedDate: new FormControl(''),
+      fileName: new FormControl('', Validators.required)
     });
     this.recruitGroup.reset(this.recruit);
     this.jobService
@@ -89,8 +91,14 @@ export class RecruitCareEditComponent implements OnInit {
         .addOrUpdateRecruitCare(this.recruitGroup.value)
         .subscribe((res: ServiceResponse) => {
           if (res.success) {
-            this.alertService.show(res.message);
-            this.dialogRef.close();
+            this.jobService.addRecruitCareResume(res.data, this.resume).subscribe((res1: ServiceResponse) => {
+              if (res1.success) {
+                this.alertService.show(res1.message);
+                this.dialogRef.close();
+              } else {
+                this.alertService.error(res1.message);
+              }
+            });
           } else {
             this.alertService.error(res.message);
           }
@@ -104,5 +112,11 @@ export class RecruitCareEditComponent implements OnInit {
 
   public hasError(controlName: string, errorName: string) {
     return this.recruitGroup.controls[controlName].hasError(errorName);
+  }
+
+  public uploadFile = (files) => {
+    console.log(files);
+    this.resume = files;
+    this.recruitGroup.controls.fileName.setValue(files[0].name);
   }
 }

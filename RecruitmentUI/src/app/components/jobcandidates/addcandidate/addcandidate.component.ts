@@ -130,7 +130,4 @@ export class AddcandidateComponent implements OnInit {
     this.jobGroup.controls.fileName.setValue(files[0].name);
   }
 
-  public browseClick() {
-    document.getElementsByClassName('e-file-select-wrap')[0].querySelector('button').click(); return false;
-  }
 }

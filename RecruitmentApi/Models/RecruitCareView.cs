@@ -41,5 +41,7 @@ namespace RecruitmentApi.Models
 
         public DateTime createdDate { get; set; }
         public string jobName { get; internal set; }
+
+        public string fileName { get; set; }
     }
 }

@@ -24,5 +24,9 @@ namespace RecruitmentApi.Models
         public string phone { get; set; }
 
         public int status { get; set; }
+
+        public byte[] resume { get; set; }
+
+        public string fileName { get; set; }
     }
 }
