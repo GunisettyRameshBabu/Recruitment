@@ -1,198 +1,200 @@
 <div class = "e-card">                   
   <div class="e-card-header">          
       <div class="e-card-header-caption">    
-          <div class="e-card-header-title"></div>   
+          <div class="e-card-header-title">
+           <h5> Add / Edit Candidate </h5>
+          </div>   
+          <div class="e-card-content">
+            <form
+            class="example-form"
+            [formGroup]="jobGroup"
+            (ngSubmit)="onSubmit()"
+            autocomplete="off"
+            novalidate
+            fxLayout="column wrap"
+            fxLayoutAlign="center center"
+            fxLayoutGap="10px"
+          >
+            <div class="row">
+              <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <mat-form-field>
+                  <mat-label>First Name *</mat-label>
+                  <input
+                    *ngIf="job.id == 0"
+                    matInput
+                    placeholder="First name"
+                    formControlName="firstName"
+                  />
+                  <input
+                    *ngIf="job.id != 0"
+                    readonly
+                    matInput
+                    placeholder="First name"
+                    formControlName="firstName"
+                  />
+                  <mat-error *ngIf="hasError('firstName', 'required')"
+                    >First name is required</mat-error
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <mat-form-field>
+                  <mat-label>Middle Name </mat-label>
+                  <input
+                    *ngIf="job.id == 0"
+                    matInput
+                    placeholder="Middle name"
+                    formControlName="middleName"
+                  />
+                  <input
+                    *ngIf="job.id != 0"
+                    readonly
+                    matInput
+                    placeholder="Middle name"
+                    formControlName="middleName"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <mat-form-field>
+                  <mat-label>Last Name *</mat-label>
+                  <input
+                    *ngIf="job.id == 0"
+                    matInput
+                    placeholder="Last name"
+                    formControlName="lastName"
+                  />
+                  <input
+                    *ngIf="job.id != 0"
+                    readonly
+                    matInput
+                    placeholder="Last name"
+                    formControlName="lastName"
+                  />
+                  <mat-error *ngIf="hasError('lastName', 'required')"
+                    >Last name is required</mat-error
+                  >
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <mat-form-field>
+                  <mat-label>Email *</mat-label>
+                  <input
+                    matInput
+                    placeholder="Email"
+                    formControlName="email"
+                    *ngIf="job.id == 0"
+                  />
+                  <input
+                    matInput
+                    placeholder="Email"
+                    formControlName="email"
+                    *ngIf="job.id != 0"
+                    readonly
+                  />
+                  <mat-error *ngIf="hasError('email', 'required')"
+                    >Email is required</mat-error
+                  >
+                  <mat-error *ngIf="hasError('email', 'email')"
+                    >Please enter valid email</mat-error
+                  >
+                </mat-form-field>
+              </div>
+            </div>
+        
+            <div class="row">
+              <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <mat-form-field>
+                  <mat-label>Phone *</mat-label>
+                  <input
+                    matInput
+                    *ngIf="job.id == 0"
+                    placeholder="Phone"
+                    type="number"
+                    formControlName="phone" />
+                  <input
+                    matInput
+                    *ngIf="job.id != 0"
+                    readonly
+                    placeholder="Phone"
+                    formControlName="phone" />
+                  <mat-error *ngIf="hasError('phone', 'required')"
+                    >Phone is required</mat-error
+                  >
+                </mat-form-field>
+              </div>
+        
+              <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
+                <mat-form-field>
+                  <mat-label>Status *</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option *ngFor="let i of statuses" [value]="i.id">
+                      {{ i.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="hasError('status', 'required')"
+                    >Status is required</mat-error
+                  >
+                </mat-form-field>
+              </div>
+        
+              <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
+                <!-- <input type="file" #fileInput id="fileUpload" name="fileUpload" multiple="multiple" accept="*" style="display:none;" (change)="uploadFile(fileInput.files)" />
+                        <button type="button" class="btn btn-primary" (click)="fileInput.click()">  
+                            
+                            Upload  
+                        </button>  -->
+                <!-- <div id="droparea">
+                  Drop resume here to upload
+                </div>
+                <div id="uploadfile">
+                  <ejs-uploader
+                    #defaultupload
+                    [autoUpload]="false"
+                    [dropArea]="dropEle"
+                  ></ejs-uploader>
+                </div> -->
+                <div class="e-float-input upload-area">
+                  <div class="row">
+                    <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
+                      <input type="file" #fileInput id="fileUpload" name="fileUpload" multiple="multiple" accept="application/pdf,application/msword,
+                      application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;" (change)="uploadFile(fileInput.files)" />
+                      <input  id="upload" name="upload" readonly formControlName="fileName" matInput>
+                      <span class="e-float-line"></span>
+                      <label class="e-float-text e-label-top" for="upload">Upload Resume</label>
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
+                      <button id="browse" type="button" class="e-control e-btn e-info" (click)='fileInput.click()'>Browse...</button>
+                    </div>
+                  </div>
+                  
+              </div>
+              <!-- <ejs-uploader #defaultupload id='fileupload' allowedExtensions="image/*" [autoUpload]=false [multiple]='false' (selected)='uploadFile(defaultupload.files)'></ejs-uploader>
+           -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-9">
+                <div
+                  class="btn-toolbar float-right"
+                  role="toolbar"
+                  aria-label="Toolbar with button groups"
+                >
+                  <div class="btn-group mr-2" role="group" aria-label="First group">
+                    <button type="button" class="btn btn-secondary" (click)="cancel()">
+                      Cancel
+                    </button>
+                  </div>
+                  <div class="btn-group mr-2" role="group" aria-label="Second group">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          </div> 
       </div>
-      <div class="e-card-content">
-        <form
-        class="example-form"
-        [formGroup]="jobGroup"
-        (ngSubmit)="onSubmit()"
-        autocomplete="off"
-        novalidate
-        fxLayout="column wrap"
-        fxLayoutAlign="center center"
-        fxLayoutGap="10px"
-      >
-        <div class="row">
-          <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-            <mat-form-field>
-              <mat-label>First Name *</mat-label>
-              <input
-                *ngIf="job.id == 0"
-                matInput
-                placeholder="First name"
-                formControlName="firstName"
-              />
-              <input
-                *ngIf="job.id != 0"
-                readonly
-                matInput
-                placeholder="First name"
-                formControlName="firstName"
-              />
-              <mat-error *ngIf="hasError('firstName', 'required')"
-                >First name is required</mat-error
-              >
-            </mat-form-field>
-          </div>
-          <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-            <mat-form-field>
-              <mat-label>Middle Name </mat-label>
-              <input
-                *ngIf="job.id == 0"
-                matInput
-                placeholder="Middle name"
-                formControlName="middleName"
-              />
-              <input
-                *ngIf="job.id != 0"
-                readonly
-                matInput
-                placeholder="Middle name"
-                formControlName="middleName"
-              />
-            </mat-form-field>
-          </div>
-          <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-            <mat-form-field>
-              <mat-label>Last Name *</mat-label>
-              <input
-                *ngIf="job.id == 0"
-                matInput
-                placeholder="Last name"
-                formControlName="lastName"
-              />
-              <input
-                *ngIf="job.id != 0"
-                readonly
-                matInput
-                placeholder="Last name"
-                formControlName="lastName"
-              />
-              <mat-error *ngIf="hasError('lastName', 'required')"
-                >Last name is required</mat-error
-              >
-            </mat-form-field>
-          </div>
-          <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-            <mat-form-field>
-              <mat-label>Email *</mat-label>
-              <input
-                matInput
-                placeholder="Email"
-                formControlName="email"
-                *ngIf="job.id == 0"
-              />
-              <input
-                matInput
-                placeholder="Email"
-                formControlName="email"
-                *ngIf="job.id != 0"
-                readonly
-              />
-              <mat-error *ngIf="hasError('email', 'required')"
-                >Email is required</mat-error
-              >
-              <mat-error *ngIf="hasError('email', 'email')"
-                >Please enter valid email</mat-error
-              >
-            </mat-form-field>
-          </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-            <mat-form-field>
-              <mat-label>Phone *</mat-label>
-              <input
-                matInput
-                *ngIf="job.id == 0"
-                placeholder="Phone"
-                type="text"
-                formControlName="phone" />
-              <input
-                matInput
-                *ngIf="job.id != 0"
-                readonly
-                placeholder="Phone"
-                type="text"
-                formControlName="phone" />
-              <mat-error *ngIf="hasError('phone', 'required')"
-                >Phone is required</mat-error
-              >
-            </mat-form-field>
-          </div>
-    
-          <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-            <mat-form-field>
-              <mat-label>Status *</mat-label>
-              <mat-select formControlName="status">
-                <mat-option *ngFor="let i of statuses" [value]="i.id">
-                  {{ i.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="hasError('status', 'required')"
-                >Status is required</mat-error
-              >
-            </mat-form-field>
-          </div>
-    
-          <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
-            <!-- <input type="file" #fileInput id="fileUpload" name="fileUpload" multiple="multiple" accept="*" style="display:none;" (change)="uploadFile(fileInput.files)" />
-                    <button type="button" class="btn btn-primary" (click)="fileInput.click()">  
-                        
-                        Upload  
-                    </button>  -->
-            <!-- <div id="droparea">
-              Drop resume here to upload
-            </div>
-            <div id="uploadfile">
-              <ejs-uploader
-                #defaultupload
-                [autoUpload]="false"
-                [dropArea]="dropEle"
-              ></ejs-uploader>
-            </div> -->
-            <div class="e-float-input upload-area">
-              <div class="row">
-                <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
-                  <input type="file" #fileInput id="fileUpload" name="fileUpload" multiple="multiple" accept="application/pdf,application/msword,
-                  application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;" (change)="uploadFile(fileInput.files)" />
-                  <input type="text" id="upload" name="upload" readonly formControlName="fileName" matInput>
-                  <span class="e-float-line"></span>
-                  <label class="e-float-text e-label-top" for="upload">Upload Resume</label>
-                </div>
-                <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
-                  <button id="browse" type="button" class="e-control e-btn e-info" (click)='fileInput.click()'>Browse...</button>
-                </div>
-              </div>
-              
-          </div>
-          <!-- <ejs-uploader #defaultupload id='fileupload' allowedExtensions="image/*" [autoUpload]=false [multiple]='false' (selected)='uploadFile(defaultupload.files)'></ejs-uploader>
-       -->
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-9">
-            <div
-              class="btn-toolbar float-right"
-              role="toolbar"
-              aria-label="Toolbar with button groups"
-            >
-              <div class="btn-group mr-2" role="group" aria-label="First group">
-                <button type="button" class="btn btn-secondary" (click)="cancel()">
-                  Cancel
-                </button>
-              </div>
-              <div class="btn-group mr-2" role="group" aria-label="Second group">
-                <button type="submit" class="btn btn-primary">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-      </div> 
+   
   </div>
 </div>
 

@@ -15,12 +15,8 @@ import {
   ExcelExportProperties,
   GridComponent,
   EditSettingsModel,
-  SaveEventArgs,
-  DialogEditEventArgs,
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { CommonService } from 'src/app/services/common.service';
 
@@ -32,7 +28,6 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class JobcandidatesComponent implements OnInit {
   @ViewChild('grid') public grid: GridComponent;
-  public candidateForm: FormGroup;
   @Input() candidates: Candidates[] = [];
   @Input() jobid: any;
   editSettings: EditSettingsModel;
@@ -76,23 +71,7 @@ export class JobcandidatesComponent implements OnInit {
     });
   }
 
-  createFormGroup(data1: Candidates): FormGroup {
-    return new FormGroup({
-      id: new FormControl(''),
-      jobid: new FormControl('', Validators.required),
-      firstName: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      middleName: new FormControl(''),
-      lastName: new FormControl('', Validators.required),
-      status: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required),
-      createdBy: new FormControl('', Validators.required),
-      modifiedBy: new FormControl(''),
-      createdDate: new FormControl(''),
-      modifiedDate: new FormControl('')
-    });
-  }
-
+ 
   toolbarClick(args: ClickEventArgs): void {
     console.log(args);
     if (args.item.id.indexOf('excelexport') > 0) {

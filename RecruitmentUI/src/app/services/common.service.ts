@@ -24,6 +24,10 @@ export class CommonService {
     return this.http.get(environment.apiUrl + 'Countries');
   }
 
+  getCountriesByUserId(id) {
+    return this.http.get(environment.apiUrl + 'Countries/GetCountriesByUserId/'+ id);
+  }
+
   getStatesByCountry(id: number) {
     return this.http.get(environment.apiUrl + 'States/GetStatesByCountry/'+ id);
   }

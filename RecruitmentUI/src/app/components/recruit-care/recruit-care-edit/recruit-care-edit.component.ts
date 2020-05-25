@@ -52,18 +52,21 @@ export class RecruitCareEditComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       jobid: new FormControl('', Validators.required),
       comments: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required),
+      phone: new FormControl('', [
+        Validators.required,
+        Validators.pattern(new RegExp("[0-9 ]{10}")),
+      ]),
       status: new FormControl('', Validators.required),
       createdBy: new FormControl(''),
       modifiedBy: new FormControl(''),
       createdDate: new FormControl(''),
       modifiedDate: new FormControl(''),
       fileName: new FormControl('', Validators.required),
-      noticePeriod: new FormControl(''),
+      noticePeriod: new FormControl('',Validators.required),
     });
     this.recruitGroup.reset(this.recruit);
     this.jobService
-      .getJobs(this.user.countryId)
+      .getJobs(this.user.countryId, this.user.id)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.jobs = res.data;
@@ -105,19 +108,18 @@ export class RecruitCareEditComponent implements OnInit {
         .addOrUpdateRecruitCare(this.recruitGroup.value)
         .subscribe((res: ServiceResponse) => {
           if (res.success) {
-            if (this.resume != undefined&& this.resume.length > 0 ) {
+            if (this.resume != undefined && this.resume.length > 0) {
               this.jobService
-              .addRecruitCareResume(res.data, this.resume)
-              .subscribe((res1: ServiceResponse) => {
-                if (res1.success) {
-                  this.alertService.success(res1.message);
-                  this.dialogRef.close();
-                } else {
-                  this.alertService.error(res1.message);
-                }
-              });
-            }
-            else {
+                .addRecruitCareResume(res.data, this.resume)
+                .subscribe((res1: ServiceResponse) => {
+                  if (res1.success) {
+                    this.alertService.success(res1.message);
+                    this.dialogRef.close();
+                  } else {
+                    this.alertService.error(res1.message);
+                  }
+                });
+            } else {
               this.alertService.success(res.message);
               this.dialogRef.close();
             }

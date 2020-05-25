@@ -38,11 +38,8 @@ export class HomeComponent implements OnInit {
   Login(type: any) {
     const dialogRef = this.dialog.open(LoginComponent, {
       data: { type },
-      position: {
-        top: '75px',
-      },
       hasBackdrop: true,
-      disableClose: false,
+      disableClose: true,
     
     });
 

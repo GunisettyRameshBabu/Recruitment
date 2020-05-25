@@ -14,8 +14,8 @@ export class Opening {
       experience: any;
   targetdate: any;
   id: number;
-  createddate: any;
+  createdDate?: any;
   createdBy:any;
-  modifiedBy: any;
-  modifieddate: any;
+  modifiedBy?: any;
+  modifieddate?: any;
 }

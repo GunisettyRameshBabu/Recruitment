@@ -9,7 +9,7 @@ namespace RecruitmentApi.Models
     {
         public int id { get; set; }
 
-        public string jobid { get; set; }
+        public int jobid { get; set; }
 
         public string firstName { get; set; }
 
@@ -17,7 +17,7 @@ namespace RecruitmentApi.Models
 
         public string lastName { get; set; }
 
-        public string phone { get; set; }
+        public long phone { get; set; }
 
         public byte[] resume { get; set; }
 

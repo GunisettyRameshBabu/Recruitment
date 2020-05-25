@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
@@ -69,12 +71,12 @@ namespace RecruitmentApi.Controllers
 
         [Route("GetCitiesByState/{id}")]
         [HttpGet]
-        public async Task<ServiceResponse<IList<City>>> GetStatesByCountry(int id)
+        public async Task<ServiceResponse<IList<City>>> GetCitiesByState(int id)
         {
             var response = new ServiceResponse<IList<City>>();
             try
             {
-                response.Data = await _context.Citys.Where(x => x.State == id).ToListAsync();
+                response.Data = await _context.Citys.Where(x => x.State == id).OrderBy(x => x.Name).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }
@@ -152,7 +154,7 @@ namespace RecruitmentApi.Controllers
                 await _context.SaveChangesAsync();
                 response.Data = city.Id;
                 response.Success = true;
-                response.Message = "Master data type added successfullu";
+                response.Message = "Master data type added successfully";
             }
             catch (Exception ex)
             {

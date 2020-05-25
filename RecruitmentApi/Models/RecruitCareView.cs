@@ -23,7 +23,7 @@ namespace RecruitmentApi.Models
 
         public string comments { get; set; }
 
-        public string phone { get; set; }
+        public long phone { get; set; }
 
         public string statusName { get; set; }
 

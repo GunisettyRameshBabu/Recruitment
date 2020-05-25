@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { RecruitCareEditComponent } from './recruit-care-edit/recruit-care-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-recruit-care',
@@ -72,9 +73,6 @@ export class RecruitCareComponent implements OnInit {
   private showPopup(data: any) {
     const dialogRef = this.dialog.open(RecruitCareEditComponent, {
       data,
-      position: {
-        top: '7%',
-      },
       hasBackdrop: true,
       disableClose: true,
     });
@@ -119,5 +117,35 @@ export class RecruitCareComponent implements OnInit {
   checkboxChange(args: any) {
     //console.log(JSON.stringify(args));
     console.log(args);
+  }
+
+  openDialog(data) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
+      data:{
+        message: 'Are you sure want to move?',
+        buttonText: {
+          ok: 'Save',
+          cancel: 'No'
+        }
+      },
+      
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+       this.move(data);
+      }
+    });
+  }
+
+  move(data) {
+    this.jobService.MoveToJobCandidates(data.id).subscribe((res: ServiceResponse) => {
+      if (res.success) {
+        this.alertService.success(res.message);
+        this.getData();
+      } else {
+        this.alertService.error(res.message);
+      }
+    })
   }
 }

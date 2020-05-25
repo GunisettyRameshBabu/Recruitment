@@ -1,5 +1,9 @@
 import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialog,
+} from '@angular/material/dialog';
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +16,8 @@ import { ToastrService } from 'ngx-toastr';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { Router } from '@angular/router';
 import { LoginTypes } from 'src/app/models/user';
+import { ServiceResponse } from 'src/app/models/service-response';
+import { ResetPasswordComponent } from '../reset-password/reset-password.component';
 
 export interface DialogData {
   type: any;
@@ -43,18 +49,17 @@ export class LoginComponent implements OnInit {
     // this.dialogRef.close();
   }
   ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+  };
     if (this.sessionService.checkUserLoggedIn()) {
-        this.router.navigate(['home']);
+      this.router.navigate(['home']);
     } else {
       this.formGroup = this.formBuilder.group({
         username: new FormControl('', [Validators.required, Validators.email]),
         password: new FormControl('', Validators.required),
       });
     }
-   
-  }
-  f() {
-    return this.formGroup.controls;
   }
   onLogin() {
     this.submitted = true;
@@ -67,20 +72,55 @@ export class LoginComponent implements OnInit {
           )
         )
         .subscribe(
-          (res: any) => {
+          (res: ServiceResponse) => {
             if (res.success) {
-              this.alertService.success('Logged Successfully');
-              this.sessionService.addUserSession(res.data);
-              this.router.navigate(['home']);
+              if (res.data.passwordChangeRequired) {
+                this.formGroup.reset();
+                this.showResetPasswordPage(res.data.id);
+              } else {
+                this.alertService.success(res.message);
+                this.sessionService.addUserSession(res.data);
+                this.router.navigate(['home']);
+              }
             } else {
-              this.alertService.error(res.message, 'Login Failed');
+              this.alertService.error(res.message);
             }
           },
           (err) => {
             console.log(err);
-            this.alertService.error(err.message, 'Unable to Login');
+            this.alertService.error(err.message);
           }
         );
     }
+  }
+
+  resetPassword() {
+    if (this.formGroup.controls.username.errors == null) {
+      this.loginService
+        .resetPassword(this.formGroup.controls.username.value)
+        .subscribe((res: ServiceResponse) => {
+          if (res.success) {
+            this.alertService.success(res.message);
+          } else {
+            this.alertService.error(res.message);
+          }
+        });
+    } else {
+      this.alertService.error('Please enter user name');
+    }
+  }
+
+  showResetPasswordPage(id) {
+    const dialogRef = this.modal.open(ResetPasswordComponent, {
+      data: { id },
+      hasBackdrop: true,
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {});
+  }
+
+  public hasError(controlName: string, errorName: string) {
+    return this.formGroup.controls[controlName].hasError(errorName);
   }
 }

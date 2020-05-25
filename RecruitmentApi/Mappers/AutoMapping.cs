@@ -14,6 +14,8 @@ namespace RecruitmentApi.Mappers
             CreateMap<Users, UserDto>().ForMember(dest =>
             dest.countryId,
             opt => opt.MapFrom(src => src.country)).ReverseMap(); // means you want to map from User to UserDTO
+
+            CreateMap<RecruitCare, JobCandidates>().ReverseMap();
         }
     }
 }

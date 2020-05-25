@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,17 +14,20 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RecruitCaresController : ControllerBase
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public RecruitCaresController(DataContext context, IConfiguration configuration)
+        public RecruitCaresController(DataContext context, IConfiguration configuration, IMapper mapper)
         {
             _context = context;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         // GET: api/RecruitCares
@@ -84,6 +89,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IEnumerable<RecruitCareView>>();
             try
             {
+                var user = _context.Users.FirstOrDefault(x => x.id == id);
                 response.Data = await (from x in _context.RecruitCare
                                        join y in _context.Openings on x.jobid equals y.id
                                        join s in _context.MasterData on x.status equals s.id
@@ -92,7 +98,7 @@ namespace RecruitmentApi.Controllers
                                        from m in modifiedUsers.DefaultIfEmpty()
                                        join n in _context.MasterData on x.noticePeriod equals n.id into notices
                                        from n in notices.DefaultIfEmpty()
-                                       where x.createdBy == id || x.modifiedBy == id
+                                       where ( user != null && user.roleId == (int)Roles.SuperAdmin ) || ( x.createdBy == id || x.modifiedBy == id)
                                        select new RecruitCareView()
                                        {
                                            jobid = y.id,
@@ -249,6 +255,13 @@ namespace RecruitmentApi.Controllers
                     response.Success = false;
                     return response;
                 }
+                var jobCandidate = _context.JobCandidates.FirstOrDefault(x => x.jobid == recruitCare.jobid && x.email == recruitCare.email);
+                if (jobCandidate != null)
+                {
+                    response.Message = $"Candidate already exist for job {jobCandidate.jobid}";
+                    response.Success = false;
+                    return response;
+                }
                 recruitCare.createdDate = DateTime.Now;
                 _context.RecruitCare.Add(recruitCare);
                 await _context.SaveChangesAsync();
@@ -314,5 +327,50 @@ namespace RecruitmentApi.Controllers
         {
             return _context.RecruitCare.Any(e => e.id == id);
         }
+
+        [HttpDelete("MoveToJobCandidates/{id}")]
+        public async Task<ServiceResponse<bool>> MoveToJobCandidates(int id)
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                var recruitCare = await _context.RecruitCare.FindAsync(id);
+                if (recruitCare == null)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid Recruitcare id";
+                    return response;
+                }
+
+                var ifExist = await _context.JobCandidates.FirstOrDefaultAsync(x => x.email == recruitCare.email && x.jobid == recruitCare.jobid);
+                if (ifExist != null)
+                {
+                    _context.RecruitCare.Remove(recruitCare);
+                    await _context.SaveChangesAsync();
+                    response.Success = true;
+                    response.Message = "Successf fully removed item from Recruitcare , Entry already exists in job candidates";
+                } else
+                {
+                    var mappedItem = _mapper.Map<JobCandidates>(recruitCare);
+                    mappedItem.modifiedDate = DateTime.Now;
+                    mappedItem.modifiedBy = mappedItem.modifiedBy ?? mappedItem.createdBy;
+                    mappedItem.id = 0;
+                    _context.RecruitCare.Remove(recruitCare);
+                    _context.JobCandidates.Add(mappedItem);
+                    await _context.SaveChangesAsync();
+                    response.Success = true;
+                    response.Message = "Successf fully moved to job candidates";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = await CustomLog.Log(ex, _context);
+                response.Success = false;
+            }
+
+            return response;
+           
+        }
+
     }
 }

@@ -12,5 +12,7 @@ namespace RecruitmentApi.Models
         public string Name { get; set; }
 
         public int Country { get; set; }
+
+        public string Code { get; set; }
     }
 }

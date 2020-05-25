@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
@@ -131,7 +133,7 @@ namespace RecruitmentApi.Controllers
                 await _context.SaveChangesAsync();
                 response.Data = clientCodes.Id;
                 response.Success = true;
-                response.Message = "Master data type added successfullu";
+                response.Message = "Master data type added successfully";
             }
             catch (Exception ex)
             {

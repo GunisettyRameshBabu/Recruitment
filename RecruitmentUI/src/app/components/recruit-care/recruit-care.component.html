@@ -16,11 +16,19 @@
           >
             <e-columns>
               <e-column type='checkbox' width='50'></e-column>
-               <e-column width="50" >
+               <e-column width="60" >
                   <ng-template #template  let-data>
                     <img src="../../../assets/edit-black-18dp.svg" (click)="edit(data)">
+                   
                 </ng-template>
                 </e-column>
+                <e-column width="60" >
+                  <ng-template #template  let-data>
+                 
+                    <img src="../../../assets/move.svg" (click)="openDialog(data)">
+                </ng-template>
+                </e-column>
+                
                 <e-column isPrimaryKey=true field="id" visible=false>
 
                 </e-column>

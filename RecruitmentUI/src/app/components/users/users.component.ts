@@ -57,9 +57,6 @@ export class UsersComponent implements OnInit {
   add() {
     const dialogRef = this.dialog.open(UsereditComponent, {
       data: {},
-      position: {
-        top: '7%',
-      },
       hasBackdrop: true,
       disableClose: false,
     });
@@ -71,12 +68,9 @@ export class UsersComponent implements OnInit {
 
   edit(data) {
     const dialogRef = this.dialog.open(UsereditComponent, {
-      data: data,
-      position: {
-        top: '7%',
-      },
-      hasBackdrop: false,
-      disableClose: false,
+      data,
+      hasBackdrop: true,
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {

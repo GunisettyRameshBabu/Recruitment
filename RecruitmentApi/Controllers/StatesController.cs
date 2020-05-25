@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
@@ -49,7 +51,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IList<State>>();
             try
             {
-                response.Data = await _context.State.Where(x => x.Country == id).ToListAsync();
+                response.Data = await _context.State.Where(x => x.Country == id).OrderBy(x => x.Name).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }
@@ -150,12 +152,35 @@ namespace RecruitmentApi.Controllers
                 await _context.SaveChangesAsync();
                 response.Data = state.Id;
                 response.Success = true;
-                response.Message = "Stateadded successfullu";
+                response.Message = "Stateadded successfully";
             }
             catch (Exception ex)
             {
                 response.Success = false;
                  response.Message = await CustomLog.Log(ex, _context);
+            }
+
+
+            return response;
+        }
+
+        [HttpPost("AddBulk")]
+        public async Task<ServiceResponse<int>> AddBulk(dynamic state)
+        {
+            var response = new ServiceResponse<int>();
+            try
+            {
+                
+                _context.State.Add(state);
+                await _context.SaveChangesAsync();
+                response.Data = state.Id;
+                response.Success = true;
+                response.Message = "State added successfully";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
 

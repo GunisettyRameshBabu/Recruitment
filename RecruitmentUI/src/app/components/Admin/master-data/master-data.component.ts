@@ -51,7 +51,7 @@ export class MasterDataComponent implements OnInit {
       allowAdding: false,
       mode: 'Dialog',
     };
-    this.toolbar = ['Add Master Record', 'ExcelExport'];
+    this.toolbar = ['Master Data','Add Master Record', 'ExcelExport'];
   }
 
   getData() {
@@ -87,11 +87,8 @@ export class MasterDataComponent implements OnInit {
   open() {
     const dialogRef = this.modal.open(EditOrAddMasterDataComponent, {
       data: {item : this.masterItem , types: this.masterTypes } ,
-      position: {
-        top : '7%'
-      },
-      hasBackdrop : false,
-      disableClose : false
+      hasBackdrop : true,
+      disableClose : true
     });
 
     dialogRef.afterClosed().subscribe(result => {

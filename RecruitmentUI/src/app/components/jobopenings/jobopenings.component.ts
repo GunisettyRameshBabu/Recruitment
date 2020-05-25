@@ -80,7 +80,7 @@ export class JobopeningsComponent implements OnInit {
   }
 
   showDetails(item) {
-    this.router.navigate(['jobdetails', item.jobid]);
+    this.router.navigate(['jobdetails', item.id]);
   }
 
   Edit(data) {

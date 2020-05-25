@@ -309,6 +309,13 @@ C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreap
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Serilog.Sinks.Async.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Serilog.Sinks.File.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Serilog.Sinks.RollingFile.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll
+C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\A217168\SourceCode\Gopan\Recruitment\RecruitmentApi\obj\Debug\netcoreapp3.1\RecruitmentApi.csprojAssemblyReference.cache

@@ -15,11 +15,11 @@ export class JobService {
     );
   }
 
-  getJobs(id) {
-    return this.http.get(environment.apiUrl + 'Openings/GetJobs/' + id);
+  getJobs(id, userid) {
+    return this.http.get(environment.apiUrl + 'Openings/GetJobs/' + id + '/'+ userid);
   }
 
-  getJobDetails(id: string) {
+  getJobDetails(id) {
     return this.http.get(environment.apiUrl + 'Openings/' + id);
   }
 
@@ -51,6 +51,18 @@ export class JobService {
   getJobCandidates(jobid) {
     return this.http.get(
       environment.apiUrl + 'JobCandidates/GetByJobId/' + jobid
+    );
+  }
+
+  getJobCandidate(id) {
+    return this.http.get(
+      environment.apiUrl + 'JobCandidates/' + id
+    );
+  }
+
+  getDashboardData() {
+    return this.http.get(
+      environment.apiUrl + 'Openings/GetDashBoardData'
     );
   }
 
@@ -95,6 +107,11 @@ export class JobService {
     );
   }
 
+  public MoveToJobCandidates(id) {
+    return this.http.delete(
+      environment.apiUrl + 'RecruitCares/MoveToJobCandidates/' + id
+    );
+  }
   public addOrUpdateRecruitCare(item) {
     if (item.id > 0) {
       return this.http.put(

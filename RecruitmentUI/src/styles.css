@@ -32,6 +32,14 @@ html, body{
 .cdk-overlay-pane.my-dialog {
   position: relative!important;
 }
+
+.cdk-global-overlay-wrapper {
+  display: flex;
+  position: absolute;
+  z-index: 1000;
+  overflow: auto;
+  pointer-events: auto;  
+}
 .close.mat-button {
   position: absolute;
   top: 0;
@@ -61,6 +69,20 @@ html, body{
 
 img {
   cursor: pointer;
+}
+
+/* Important part */
+.modal-dialog{
+  overflow-y: initial !important
+}
+.modal-body{
+  height: 250px;
+  overflow-y: auto;
+}
+
+mat-form-field {
+  width: 100%;
+  display: block;
 }
 
 /**  Copyright 2019 Google LLC. All Rights Reserved.

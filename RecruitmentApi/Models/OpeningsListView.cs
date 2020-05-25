@@ -14,7 +14,9 @@ namespace RecruitmentApi.Models
     public class OpeningsListView
     {
         public int id { get; set; }
-        public string jobid { get; set; }
+        public int jobid { get; set; }
+
+        public string jobName { get; set; }
 
         public string jobtitle { get; set; }
 

@@ -8,8 +8,8 @@
       </div>
   
       <!-- Login Form -->
-      <form [formGroup]="formGroup" (ngSubmit)="onLogin()">
-        <input type="text" id="login" class="fadeIn second" name="login" placeholder="Enter User Name" formControlName="username">
+      <form [formGroup]="formGroup" (ngSubmit)="onLogin()" *ngIf="formGroup">
+        <!-- <input type="text" id="login" class="fadeIn second" name="login" placeholder="Enter User Name" formControlName="username">
         <div class="alert alert-danger" *ngIf="submitted && formGroup.controls.username.errors">
           <div *ngIf="formGroup.controls.username.errors.required">
             Please enter user name
@@ -17,17 +17,52 @@
           <div *ngIf="formGroup.controls.username.errors.email">
             Please enter valid email
           </div>
-        </div>
-        <input type="password" id="password" class="fadeIn third" name="login" placeholder="Enter Password" formControlName = "password">
+        </div> -->
+        <mat-form-field>
+          <mat-label>User Name *</mat-label>
+          
+          <input
+            
+            matInput
+            placeholder="Enter User Name"
+            formControlName="username"
+          />
+         
+          <mat-error *ngIf="hasError('username', 'required')"
+            >Please enter user name</mat-error
+          >
+
+          <mat-error *ngIf="hasError('username', 'email')"
+            >Please enter user name</mat-error
+          >
+        </mat-form-field>
+        <!-- <input type="password" id="password" class="fadeIn third" name="login" placeholder="Enter Password" formControlName = "password">
         <div class="alert alert-danger" *ngIf="submitted && formGroup.controls.password.errors">
           <div *ngIf="formGroup.controls.password.errors.required">
             Please enter password          </div>
          
-        </div>
-        <input type="submit" class="fadeIn fourth" value="Log In">
+        </div> -->
+        <mat-form-field>
+          <mat-label>Password *</mat-label>
+          
+          <input
+            [type]="'password'"
+            matInput
+            placeholder="Enter Password"
+            formControlName="password"
+          />
+         
+          <mat-error *ngIf="hasError('password', 'required')"
+            >Please enter password</mat-error
+          >
+
+          
+        </mat-form-field>
+        <!-- <input type="submit" class="fadeIn fourth" value="Log In"> -->
+        <button mat-button color="primary">Log In</button>
       </form>
   
-      <a class="underlineHover" href="#">Forgot Password?</a>
+      <a class="underlineHover" routerLink="" (click)="resetPassword()">Forgot Password?</a>
   
     </div>
   </div>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class JobCandidatesController : ControllerBase
@@ -40,10 +42,12 @@ namespace RecruitmentApi.Controllers
         public async Task<ActionResult<IEnumerable<JobCandidatesView>>> GetJobCandidates()
         {
             return await (from x in _context.JobCandidates
+                          join j in _context.Openings on x.id equals j.id
                           join s in _context.MasterData on x.status equals s.id
                           select new JobCandidatesView()
                           {
-                              jobid = x.jobid,
+                              jobid = x.id,
+                              jobName = j.jobid,
                               firstName = x.firstName,
                               id = x.id,
                               lastName = x.lastName,
@@ -97,14 +101,15 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/JobCandidates/5
         [HttpGet("GetByJobId/{id}")]
-        public async Task<ServiceResponse<List<JobCandidatesView>>> GetByJobId(string id)
+        public async Task<ServiceResponse<List<JobCandidatesView>>> GetByJobId(int id)
         {
             var response = new ServiceResponse<List<JobCandidatesView>>();
             try
             {
                 response.Data = await (from x in _context.JobCandidates
+                                       join j in _context.Openings on x.jobid equals j.id
                                            join s in _context.MasterData on x.status equals s.id
-                                           where x.jobid == id
+                                           where j.id == id
                                            select new JobCandidatesView()
                                            {
                                                jobid = x.jobid,
@@ -321,6 +326,13 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
+                var jobCandidate = _context.RecruitCare.FirstOrDefault(x => x.jobid == jobCandidates.jobid && x.email == jobCandidates.email);
+                if (jobCandidate != null)
+                {
+                    response.Message = $"Candidate already exist in Recruit care for job {jobCandidate.jobid}, Please move from  Recruit care";
+                    response.Success = false;
+                    return response;
+                }
                 jobCandidates.createdDate = DateTime.Now;
                 _context.JobCandidates.Add(jobCandidates);
                 await _context.SaveChangesAsync();

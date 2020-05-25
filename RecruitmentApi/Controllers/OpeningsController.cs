@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
@@ -31,34 +33,36 @@ namespace RecruitmentApi.Controllers
             try
             {
                 var user = _context.Users.FirstOrDefault(x => x.id == userId);
-               
+
                 response.Data = new OpeningsList();
                 response.Data.Jobs = await (from o in _context.Openings
-                                       join a in _context.Users on o.assaignedTo equals a.id into assaigns
-                                       from a in assaigns.DefaultIfEmpty()
-                                       join c in _context.Citys on o.city equals c.Id
-                                       join cl in _context.ClientCodes on o.client equals cl.Id
-                                       join co in _context.Users on o.contactName equals co.id into contacts
-                                       from co in contacts.DefaultIfEmpty()
-                                       join am in _context.Users on o.accountManager equals am.id into accounts
-                                       from am in accounts.DefaultIfEmpty()
-                                       join s in _context.MasterData on o.status equals s.id
-                                       where o.country == user.country && ((user != null && user.roleId == 1) || (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
-                                       select new OpeningsListView()
-                                       {
-                                           id = o.id,
-                                           accountManager = (am == null ? "" : am.firstName + " " + (am.middleName ?? "") + am.lastName),
-                                           assaignedTo = (a == null ? "" : a.firstName + " " + (a.middleName ?? "") + a.lastName),
-                                           city = c.Name,
-                                           client = cl.Name,
-                                           contactName = (co == null ? "" : co.firstName + " " + (co.middleName ?? "") + co.lastName),
-                                           jobid = o.jobid,
-                                           jobtitle = o.jobtitle,
-                                           status = s.name,
-                                           targetdate = o.targetdate
-                                       }).ToListAsync();
+                                            join a in _context.Users on o.assaignedTo equals a.id into assaigns
+                                            from a in assaigns.DefaultIfEmpty()
+                                            join c in _context.Citys on o.city equals c.Id
+                                            join cl in _context.ClientCodes on o.client equals cl.Id
+                                            join co in _context.Users on o.contactName equals co.id into contacts
+                                            from co in contacts.DefaultIfEmpty()
+                                            join am in _context.Users on o.accountManager equals am.id into accounts
+                                            from am in accounts.DefaultIfEmpty()
+                                            join s in _context.MasterData on o.status equals s.id
+                                            where (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.country == user.country && (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
+                                            select new OpeningsListView()
+                                            {
+                                                id = o.id,
+                                                accountManager = (am == null ? "" : am.firstName + " " + (am.middleName ?? "") + am.lastName),
+                                                assaignedTo = (a == null ? "" : a.firstName + " " + (a.middleName ?? "") + a.lastName),
+                                                city = c.Name,
+                                                client = cl.Name,
+                                                contactName = (co == null ? "" : co.firstName + " " + (co.middleName ?? "") + co.lastName),
+                                                jobid = o.id,
+                                                jobName = o.jobid,
+                                                jobtitle = o.jobtitle,
+                                                status = s.name,
+                                                targetdate = o.targetdate
+                                            }).ToListAsync();
 
                 response.Data.Candidates = await (from x in _context.JobCandidates
+                                                  join j in _context.Openings on x.jobid equals j.id
                                                   join s in _context.MasterData on x.status equals s.id
                                                   where response.Data.Jobs.Select(x => x.jobid).Contains(x.jobid)
                                                   select new JobCandidatesView()
@@ -73,7 +77,8 @@ namespace RecruitmentApi.Controllers
                                                       status = s.id,
                                                       statusName = s.name,
                                                       email = x.email,
-                                                      fileName = x.fileName
+                                                      fileName = x.fileName,
+                                                      jobName = j.jobid
                                                   }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
@@ -81,7 +86,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
             return Ok(response);
@@ -90,7 +95,7 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Openings/5
         [HttpGet("{id}")]
-        public async Task<ServiceResponse<OpeningsView>> GetOpenings(string id)
+        public async Task<ServiceResponse<OpeningsView>> GetOpenings(int id)
         {
             var response = new ServiceResponse<OpeningsView>();
             try
@@ -113,7 +118,7 @@ namespace RecruitmentApi.Controllers
                                       join types in _context.MasterData on x.jobtype equals types.id
 
 
-                                      where x.jobid == id
+                                      where x.id == id
                                       select new OpeningsView()
                                       {
                                           jobid = x.jobid,
@@ -146,29 +151,31 @@ namespace RecruitmentApi.Controllers
                 }
 
                 openings.Candidates = (from x in _context.JobCandidates
+                                       join j in _context.Openings on x.jobid equals j.id
                                        join s in _context.MasterData on x.status equals s.id
-                                      where x.jobid == id
-                                      select new JobCandidatesView()
-                                      {
-                                          jobid = x.jobid,
-                                          firstName = x.firstName,
-                                          id = x.id,
-                                          lastName = x.lastName,
-                                          middleName = x.middleName,
-                                          phone = x.phone,
-                                          resume = x.resume,
-                                          status = s.id,
-                                          statusName = s.name,
-                                          email = x.email,
-                                          fileName = x.fileName
-                                      }).ToList();
+                                       where j.id == id
+                                       select new JobCandidatesView()
+                                       {
+                                           jobid = x.jobid,
+                                           jobName = j.jobid,
+                                           firstName = x.firstName,
+                                           id = x.id,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           phone = x.phone,
+                                           resume = x.resume,
+                                           status = s.id,
+                                           statusName = s.name,
+                                           email = x.email,
+                                           fileName = x.fileName
+                                       }).ToList();
                 response.Data = openings;
                 response.Message = "Success";
                 response.Success = true;
             }
             catch (Exception ex)
             {
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
                 response.Success = false;
                 return response;
             }
@@ -190,7 +197,39 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
+            }
+
+            return response;
+
+        }
+
+        [AllowAnonymous]
+        // GET: api/Openings/
+        [HttpGet("GetDashBoardData")]
+        public async Task<ServiceResponse<dynamic>> GetDashBoardData()
+        {
+            var response = new ServiceResponse<dynamic>();
+            try
+            {
+                var result = from j in _context.MasterData
+                             join t in _context.MasterDataType on j.type equals t.id
+                             join y in _context.JobCandidates on j.id equals y.status into jobs
+                             from y in jobs.DefaultIfEmpty()
+                             join x in _context.RecruitCare on y.status equals x.status into recruits
+                             from x in recruits.DefaultIfEmpty()
+                             where t.name == "JobCandidateStatus"
+                             orderby y.jobid
+                             group j by j.name  into g
+                             select new KeyValuePair<string, int>(g.Key, g.Count());
+                response.Data = new { Request.HttpContext.User.Identity, result };
+                response.Message = "Data Retrived";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
             return response;
@@ -199,25 +238,26 @@ namespace RecruitmentApi.Controllers
 
 
         // GET: api/Openings/
-        [HttpGet("GetJobs/{id}")]
-        public async Task<ServiceResponse<IList<DropdownModel>>> GetJobs(int id)
+        [HttpGet("GetJobs/{id}/{userid}")]
+        public async Task<ServiceResponse<IList<DropdownModel>>> GetJobs(int id, int userid)
         {
             var response = new ServiceResponse<IList<DropdownModel>>();
             try
             {
                 response.Data = await (from x in _context.Openings
-                                      select new DropdownModel()
-                                      {
-                                         id = x.id,
-                                          name = x.jobid + " - " + x.jobtitle
-                                      }).ToListAsync();
+                                       where x.country == id && (x.createdBy == userid || x.modifiedBy == userid || x.assaignedTo == userid)
+                                       select new DropdownModel()
+                                       {
+                                           id = x.id,
+                                           name = x.jobid + " - " + x.jobtitle
+                                       }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
             return response;
@@ -235,7 +275,7 @@ namespace RecruitmentApi.Controllers
                 response.Success = false;
                 response.Message = "Invalid job id , Please check";
             }
-           
+
 
             try
             {
@@ -256,7 +296,7 @@ namespace RecruitmentApi.Controllers
                 }
                 else
                 {
-                     response.Message = await CustomLog.Log(ex, _context);
+                    response.Message = await CustomLog.Log(ex, _context);
                 }
             }
 
@@ -292,7 +332,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
             return Ok(response);

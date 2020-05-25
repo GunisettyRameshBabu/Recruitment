@@ -17,4 +17,12 @@ export class LoginService {
   logout(session: string) {
     return this.http.get(environment.apiUrl + 'Users/Logout/'+ session);
   }
+
+  resetPassword(userid) {
+    return this.http.get(environment.apiUrl + 'Users/ResetPassword/'+ userid);
+  }
+
+  changePassword(user) {
+    return this.http.post(environment.apiUrl + 'Users/ChangePassword', user);
+  }
 }

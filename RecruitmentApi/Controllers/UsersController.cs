@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using RecruitmentApi.Data;
 using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,14 +31,16 @@ namespace RecruitmentApi.Controllers
         private byte[] _iv;
         private TripleDESCryptoServiceProvider _provider;
         private readonly IMapper _mapper;
+        private readonly AppSettings _appSettings;
 
-        public UsersController(DataContext context, IMapper mapper)
+        public UsersController(DataContext context, IMapper mapper, IOptions<AppSettings> appSettings)
         {
             _context = context;
             _mapper = mapper;
             _key = System.Text.ASCIIEncoding.ASCII.GetBytes("GSYAHAGCBDUUADIADKOPAAAW");
             _iv = System.Text.ASCIIEncoding.ASCII.GetBytes("USAZBGAW");
             _provider = new TripleDESCryptoServiceProvider();
+            _appSettings = appSettings.Value;
         }
 
         // GET: api/Users
@@ -201,7 +209,9 @@ namespace RecruitmentApi.Controllers
             return _context.Users.Any(e => e.userid == userid);
         }
 
+
         // GET: api/Users/Login
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserLoginDto userdto)
         {
@@ -239,6 +249,79 @@ namespace RecruitmentApi.Controllers
             return response;
         }
 
+        [AllowAnonymous]
+        // GET: api/Users/Logout
+        [HttpGet("ResetPassword/{id}")]
+        public async Task<ServiceResponse<bool>> ResetPassword(string id)
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                var user = _context.Users.FirstOrDefault(x => x.userid == id);
+                if (user == null)
+                {
+                    response.Message = "User Details not found";
+                    response.Success = false;
+                    return response;
+                } else if(!user.active)
+                {
+                    response.Message = "User is inactive , Please contact admin";
+                    response.Success = false;
+                    return response;
+                }
+
+                user.password = EncodePasswordToBase64("User@123");
+                user.passwordChangeRequired = true;
+                _context.Entry(user).CurrentValues.SetValues(user);
+                await _context.SaveChangesAsync();
+                response.Message = "Password Changed Successfully";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = await CustomLog.Log(ex, _context);
+                response.Success = false;
+            }
+            return response;
+        }
+
+        [AllowAnonymous]
+      
+        [HttpPost("ChangePassword")]
+        public async Task<ServiceResponse<bool>> ChangePassword(PasswordChangeModel passwordChangeModel)
+        {
+            var response = new ServiceResponse<bool>();
+            try
+            {
+                var user = _context.Users.FirstOrDefault(x => x.id == passwordChangeModel.id);
+                if (user == null)
+                {
+                    response.Message = "User Details not found";
+                    response.Success = false;
+                    return response;
+                }
+                else if (!user.active)
+                {
+                    response.Message = "User is inactive , Please contact admin";
+                    response.Success = false;
+                    return response;
+                }
+
+                user.password = EncodePasswordToBase64(passwordChangeModel.password);
+                user.passwordChangeRequired = false;
+                _context.Entry(user).CurrentValues.SetValues(user);
+                await _context.SaveChangesAsync();
+                response.Message = "Password Changed Successfully";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Message = await CustomLog.Log(ex, _context);
+                response.Success = false;
+            }
+            return response;
+        }
+
         private async Task<ServiceResponse<UserDto>> validateUser(UserLoginDto userdto)
         {
             var response = new ServiceResponse<UserDto>();
@@ -260,7 +343,8 @@ namespace RecruitmentApi.Controllers
                                            middleName = x.middleName,
                                            roleName = y.name,
                                            userid = x.userid,
-                                           password = x.password
+                                           password = x.password,
+                                           passwordChangeRequired = x.passwordChangeRequired
                                        }).FirstOrDefaultAsync();
                 if (response.Data == null)
                 {
@@ -287,6 +371,7 @@ namespace RecruitmentApi.Controllers
                     _context.UserSession.Add(userSession);
                     _context.SaveChanges();
                     response.Data.sessionId = userSession.sessionId;
+                    response.Data = GenerateToken(response.Data);
                     response.Message = "Login Success";
                 }
             }
@@ -298,6 +383,25 @@ namespace RecruitmentApi.Controllers
 
 
             return response;
+        }
+
+        private UserDto GenerateToken(UserDto user)
+        {
+            // authentication successful so generate jwt token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.userid)
+                }),
+                Expires = DateTime.Now.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            user.token = tokenHandler.WriteToken(token);
+            return user;
         }
 
         private bool UsersExists(int id)

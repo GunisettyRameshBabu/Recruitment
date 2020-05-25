@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using RecruitmentApi.Models;
 
 namespace RecruitmentApi.Controllers
 {
+    [Authorize]
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
@@ -30,7 +32,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IEnumerable<Country>>();
             try
             {
-                response.Data = await _context.Countries.ToListAsync();
+                response.Data = await _context.Countries.OrderBy(x => x.Name).ToListAsync();
                 response.Success = true;
                 response.Message = "Data Retrived";
             }
@@ -67,6 +69,32 @@ namespace RecruitmentApi.Controllers
             return response;
         }
 
+        // GET: api/Countries/5
+        [HttpGet("GetCountriesByUserId/{id}")]
+        public async Task<ServiceResponse<List<Country>>> GetCountriesByUserId(int id)
+        {
+            var response = new ServiceResponse<List<Country>>();
+            try
+            {
+                var user = _context.Users.FirstOrDefault(x => x.id == id);
+                response.Data = user.roleId == (int)Roles.SuperAdmin ? _context.Countries.ToList() : _context.Countries.Where(x =>  x.Id == user.country).ToList();
+                if (response.Data == null)
+                {
+                    response.Success = false;
+                    response.Message = "Data not found";
+                    return response;
+                }
+                response.Success = true;
+                response.Message = "Data Retrived";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
+            }
+            return response;
+        }
+
         [Route("GetJobCode/{id}")]
         [HttpGet]
         public async Task<ServiceResponse<string>> GetJobCode(int id)
@@ -75,8 +103,8 @@ namespace RecruitmentApi.Controllers
             try
             {
                 var item = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id);
-                var newId = _context.Openings.Max(x => x.id);
-                response.Data = item.Code + "-" +  (newId + 1);
+                var newId = _context.Openings.Any() ? _context.Openings.Max(x => x.id) : 0;
+                response.Data = item.Code + "-" +  (newId + 1).ToString("00000");
                 response.Success = true;
                 response.Message = "Success";
             }
@@ -152,7 +180,7 @@ namespace RecruitmentApi.Controllers
                 await _context.SaveChangesAsync();
                 response.Data = country.Id;
                 response.Success = true;
-                response.Message = "Country added successfullu";
+                response.Message = "Country added successfully";
             }
             catch (Exception ex)
             {

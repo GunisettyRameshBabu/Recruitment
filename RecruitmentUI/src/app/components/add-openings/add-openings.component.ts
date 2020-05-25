@@ -56,7 +56,7 @@ export class AddOpeningsComponent implements OnInit {
             this.job = res.data;
             this.jobGroup.reset(res.data);
             this.jobService
-              .getJobCandidates(res.data.jobid)
+              .getJobCandidates(res.data.id)
               .subscribe((res1: ServiceResponse) => {
                 this.candidates = res1.data;
               });
@@ -76,7 +76,7 @@ export class AddOpeningsComponent implements OnInit {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
-      zip: new FormControl('', Validators.required),
+      zip: new FormControl('', [Validators.required, Validators.pattern(new RegExp('[0-9 ]{6}')) ]),
       description: new FormControl('', Validators.required),
       jobtype: new FormControl('', Validators.required),
       client: new FormControl('', Validators.required),
@@ -84,12 +84,12 @@ export class AddOpeningsComponent implements OnInit {
       experience: new FormControl('', Validators.required),
       targetdate: new FormControl('', Validators.required),
       createdBy: new FormControl(''),
-      createdDate: new FormControl(''),
-      modifiedBy: new FormControl(''),
-      modifiedDate: new FormControl(''),
-      accountManager: new FormControl(''),
-      contactName: new FormControl(''),
-      assaignedTo: new FormControl(''),
+      createdDate: new FormControl(null),
+      modifiedBy: new FormControl(null),
+      modifiedDate: new FormControl(null),
+      accountManager: new FormControl(null),
+      contactName: new FormControl(null),
+      assaignedTo: new FormControl(null),
     });
     this.masterDataService
       .getMasterDataByType(MasterDataTypes.Industry)
@@ -110,7 +110,7 @@ export class AddOpeningsComponent implements OnInit {
     // });
 
     this.commonService
-      .getCountries()
+      .getCountriesByUserId(this.user.id)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.countries = res.data;

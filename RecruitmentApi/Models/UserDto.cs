@@ -32,5 +32,9 @@ namespace RecruitmentApi.Models
         public string roleName { get; set; }
 
         public string sessionId { get; set; }
+
+        public string token { get; set; }
+
+        public bool passwordChangeRequired { get; set; }
     }
 }

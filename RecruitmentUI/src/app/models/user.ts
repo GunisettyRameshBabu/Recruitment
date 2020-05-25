@@ -18,6 +18,7 @@ export class User {
     modifiedBy: any;
     modifiedDate: any;
     sessionId: any;
+    token: any;
 }
 
 export enum LoginTypes

@@ -30,5 +30,7 @@ namespace RecruitmentApi.Models
         public string loginTypes { get; set; }
 
         public bool active { get; set; }
+
+        public bool passwordChangeRequired { get; set; }
     }
 }
