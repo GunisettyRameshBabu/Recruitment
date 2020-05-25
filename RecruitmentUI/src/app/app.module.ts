@@ -66,6 +66,12 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { MatButtonModule } from '@angular/material/button';
 import { EqualValidatorDirective } from './Directives/equal-validator.directive';
+import { CountryMasterComponent } from './components/Admin/country-master/country-master.component';
+import { StateMasterComponent } from './components/Admin/state-master/state-master.component';
+import { CityMasterComponent } from './components/Admin/city-master/city-master.component';
+import { AddOrEditCountryComponent } from './components/Admin/country-master/add-or-edit-country/add-or-edit-country.component';
+import { AddOrEditStateComponent } from './components/Admin/state-master/add-or-edit-state/add-or-edit-state.component';
+import { AddOrEditCityComponent } from './components/Admin/city-master/add-or-edit-city/add-or-edit-city.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +98,12 @@ import { EqualValidatorDirective } from './Directives/equal-validator.directive'
     ConfirmationDialogComponent,
     ResetPasswordComponent,
     EqualValidatorDirective,
+    CountryMasterComponent,
+    StateMasterComponent,
+    CityMasterComponent,
+    AddOrEditCountryComponent,
+    AddOrEditStateComponent,
+    AddOrEditCityComponent,
   ],
   imports: [
     BrowserModule,
@@ -141,6 +153,9 @@ import { EqualValidatorDirective } from './Directives/equal-validator.directive'
     UsereditComponent,
     JobcandidatesComponent,
     ResetPasswordComponent,
+    AddOrEditCityComponent,
+    AddOrEditCountryComponent,
+    AddOrEditStateComponent
   ],
 })
 export class AppModule {}

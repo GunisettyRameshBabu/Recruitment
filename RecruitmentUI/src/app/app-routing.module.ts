@@ -10,6 +10,9 @@ import { UsersComponent } from './components/users/users.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MasterDataComponent } from './components/Admin/master-data/master-data.component';
+import { CountryMasterComponent } from './components/Admin/country-master/country-master.component';
+import { StateMasterComponent } from './components/Admin/state-master/state-master.component';
+import { CityMasterComponent } from './components/Admin/city-master/city-master.component';
 
 
 const routes: Routes = [
@@ -66,6 +69,21 @@ const routes: Routes = [
   {
     path : 'master',
     component : MasterDataComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'city',
+    component : CityMasterComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'country',
+    component : CountryMasterComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'state',
+    component : StateMasterComponent,
     canActivate : [AuthGuard]
   },
   {

@@ -31,7 +31,7 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.dialog.closeAll();
     this.editparams = { params: { popupHeight: '300px' } };
-    this.toolbar = ['Users', 'Add Users', 'ExcelExport'];
+    this.toolbar = ['Users', 'Add Users', 'Excel Export' , 'Refresh'];
     this.getUsers();
   }
 
@@ -51,6 +51,8 @@ export class UsersComponent implements OnInit {
       this.grid.excelExport(excelExportProperties);
     } else if (args.item.id.indexOf('Add User') > 0) {
       this.add();
+    } else if (args.item.id.indexOf('Refresh') > 0) {
+      this.getUsers();
     }
   }
 

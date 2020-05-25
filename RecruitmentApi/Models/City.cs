@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace RecruitmentApi.Models
 {
     [Table("City")]
-    public class City
+    public class City : BaseEntity
     {
         public int Id { get; set; }
 

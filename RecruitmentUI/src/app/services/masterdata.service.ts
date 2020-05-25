@@ -4,14 +4,15 @@ import { MasterDataTypes } from '../constants/api-end-points';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MasterdataService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getMasterDataByType(type: MasterDataTypes) {
-    return this.http.get(environment.apiUrl + 'MasterDatas/GetMasterDataByType/' + (type as number));
+    return this.http.get(
+      environment.apiUrl + 'MasterDatas/GetMasterDataByType/' + (type as number)
+    );
   }
 
   getMasterDataType() {
@@ -24,9 +25,45 @@ export class MasterdataService {
 
   addOrUpdateMasterData(data: any) {
     if (data.id > 0) {
-      return this.http.put(environment.apiUrl + "MasterDatas/"+ data.id,data);
+      return this.http.put(environment.apiUrl + 'MasterDatas/' + data.id, data);
     } else {
-      return this.http.post(environment.apiUrl + "MasterDatas",data);
+      return this.http.post(environment.apiUrl + 'MasterDatas', data);
     }
+  }
+
+  addOrUpdateState(data: any) {
+    if (data.id > 0) {
+      return this.http.put(environment.apiUrl + 'States/' + data.id, data);
+    } else {
+      return this.http.post(environment.apiUrl + 'States', data);
+    }
+  }
+
+  addOrUpdateCity(data: any) {
+    if (data.id > 0) {
+      return this.http.put(environment.apiUrl + 'Cities/' + data.id, data);
+    } else {
+      return this.http.post(environment.apiUrl + 'Cities', data);
+    }
+  }
+
+  addOrUpdateCountry(data: any) {
+    if (data.id > 0) {
+      return this.http.put(environment.apiUrl + 'Countries/' + data.id, data);
+    } else {
+      return this.http.post(environment.apiUrl + 'Countries', data);
+    }
+  }
+
+  getCountries() {
+    return this.http.get(environment.apiUrl + 'Countries');
+  }
+
+  getStates() {
+    return this.http.get(environment.apiUrl + 'States');
+  }
+
+  getCities() {
+    return this.http.get(environment.apiUrl + 'Cities');
   }
 }

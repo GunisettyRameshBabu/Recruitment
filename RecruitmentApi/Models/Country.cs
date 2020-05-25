@@ -8,7 +8,7 @@ namespace RecruitmentApi.Models
 {
 
     [Table("Country")]
-    public class Country
+    public class Country : BaseEntity
     {
         public int Id { get; set; }
 

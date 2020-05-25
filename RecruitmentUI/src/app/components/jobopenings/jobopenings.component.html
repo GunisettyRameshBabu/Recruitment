@@ -9,7 +9,7 @@
         <div class="e-card-content">
           <ejs-grid #grid [dataSource]='openings.jobs' [childGrid]='childGrid' [toolbar]='toolbarOptions'
           [allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [editSettings]='editSettings'
-          [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true' [allowFiltering]='true'>
+          [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true'>
             <e-columns>
               <e-column width="60" >
                 <ng-template #template  let-data>

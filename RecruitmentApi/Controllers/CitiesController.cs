@@ -27,12 +27,32 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Cities
         [HttpGet]
-        public async Task<ServiceResponse<IEnumerable<City>>> GetCitys()
+        public async Task<ServiceResponse<IEnumerable<CityView>>> GetCitys()
         {
-            var response = new ServiceResponse<IEnumerable<City>>();
+            var response = new ServiceResponse<IEnumerable<CityView>>();
             try
             {
-                response.Data = await _context.Citys.ToListAsync();
+                response.Data = await (from x in _context.Citys
+                                      join y in _context.State on x.State equals y.Id 
+                                      join z in _context.Countries on y.Country equals z.Id
+                                      join c in _context.Users on x.createdBy equals c.id
+                                      join m in _context.Users on x.modifiedBy equals m.id into modifies
+                                      from m in modifies.DefaultIfEmpty()
+                                      select new CityView()
+                                      { 
+                                          modifiedBy = x.modifiedBy,
+                                          countryName = z.Name,
+                                          createdBy = x.createdBy,
+                                          createdByName = Common.GetFullName(c),
+                                          createdDate = x.createdDate,
+                                          modifiedByName = Common.GetFullName(m),
+                                          modifiedDate = x.modifiedDate,
+                                          stateName = y.Name,
+                                          Name = x.Name,
+                                          Id = x.Id,
+                                          State = x.State,
+                                          country = y.Country
+                                      }).AsQueryable().ToListAsync();
                 response.Success = true;
                 response.Message = "Data Retrived";
             }
@@ -113,6 +133,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "City not found";
                     return response;
                 }
+                city.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(city);
                 await _context.SaveChangesAsync();
                 response.Success = true;

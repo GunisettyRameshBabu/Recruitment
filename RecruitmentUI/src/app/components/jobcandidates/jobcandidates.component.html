@@ -1,5 +1,5 @@
 <ejs-grid #grid [dataSource]='candidates' [toolbar]='toolbar' [editSettings]='editSettings'
-[allowExcelExport]='true' (toolbarClick)='toolbarClick($event)'>
+[allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [allowSorting]='true'>
     <e-columns>
         <e-column width="60">
             <ng-template #template  let-data>

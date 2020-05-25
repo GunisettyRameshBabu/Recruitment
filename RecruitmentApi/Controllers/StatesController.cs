@@ -27,12 +27,31 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/States
         [HttpGet]
-        public async Task<ServiceResponse<IEnumerable<State>>> GetState()
+        public async Task<ServiceResponse<IEnumerable<StateView>>> GetState()
         {
-            var response = new ServiceResponse<IEnumerable<State>>();
+            var response = new ServiceResponse<IEnumerable<StateView>>();
             try
             {
-                response.Data = await _context.State.ToListAsync();
+                response.Data = await (from x in _context.State
+                                       join y in _context.Countries on x.Country equals y.Id
+                                       join c in _context.Users on x.createdBy equals c.id
+                                       join m in _context.Users on x.modifiedBy equals m.id into modifies
+                                       from m in modifies.DefaultIfEmpty()
+                                       select new StateView()
+                                       {
+                                           modifiedBy = x.modifiedBy,
+                                           Code = x.Code,
+                                           Country = x.Country,
+                                           createdBy = x.createdBy,
+                                           createdByName = Common.GetFullName(c),
+                                           createdDate = x.createdDate,
+                                           Id = x.Id,
+                                           modifiedByName = Common.GetFullName(m),
+                                           modifiedDate = x.modifiedDate,
+                                           Name = x.Name,
+                                           countryName = y.Name
+                                       }).AsQueryable().ToListAsync();
+
                 response.Success = true;
                 response.Message = "Data Retrived";
             }
@@ -111,6 +130,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "state not found";
                     return response;
                 }
+                state.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(state);
                 await _context.SaveChangesAsync();
                 response.Success = true;
@@ -148,6 +168,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
+                state.createdDate = DateTime.Now;
                 _context.State.Add(state);
                 await _context.SaveChangesAsync();
                 response.Data = state.Id;

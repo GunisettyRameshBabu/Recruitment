@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using RecruitmentApi.Data;
 using RecruitmentApi.Models;
@@ -27,19 +28,35 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public async Task<ServiceResponse<IEnumerable<Country>>> GetCountries()
+        public async Task<ServiceResponse<IEnumerable<CountryView>>> GetCountries()
         {
-            var response = new ServiceResponse<IEnumerable<Country>>();
+            var response = new ServiceResponse<IEnumerable<CountryView>>();
             try
             {
-                response.Data = await _context.Countries.OrderBy(x => x.Name).ToListAsync();
+                response.Data = await (from x in _context.Countries
+                                       join y in _context.Users on x.createdBy equals y.id
+                                       join z in _context.Users on x.modifiedBy equals z.id into modifies
+                                       from z in modifies.DefaultIfEmpty()
+                                       select new CountryView()
+                                       {
+                                           Code = x.Code,
+                                           modifiedBy = x.modifiedBy,
+                                           createdBy = x.createdBy,
+                                           createdByName = Common.GetFullName(y),
+                                           createdDate = x.createdDate,
+                                           Id = x.Id,
+                                           modifiedByName = Common.GetFullName(z),
+                                           modifiedDate = x.modifiedDate,
+                                           Name = x.Name
+
+                                       }).AsQueryable().ToListAsync();
                 response.Success = true;
                 response.Message = "Data Retrived";
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -64,7 +81,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -77,7 +94,7 @@ namespace RecruitmentApi.Controllers
             try
             {
                 var user = _context.Users.FirstOrDefault(x => x.id == id);
-                response.Data = user.roleId == (int)Roles.SuperAdmin ? _context.Countries.ToList() : _context.Countries.Where(x =>  x.Id == user.country).ToList();
+                response.Data = user.roleId == (int)Roles.SuperAdmin ? _context.Countries.ToList() : _context.Countries.Where(x => x.Id == user.country).ToList();
                 if (response.Data == null)
                 {
                     response.Success = false;
@@ -104,14 +121,14 @@ namespace RecruitmentApi.Controllers
             {
                 var item = await _context.Countries.FirstOrDefaultAsync(x => x.Id == id);
                 var newId = _context.Openings.Any() ? _context.Openings.Max(x => x.id) : 0;
-                response.Data = item.Code + "-" +  (newId + 1).ToString("00000");
+                response.Data = item.Code + "-" + (newId + 1).ToString("00000");
                 response.Success = true;
                 response.Message = "Success";
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
             return response;
         }
@@ -138,6 +155,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "Countries not found";
                     return response;
                 }
+                country.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(country);
                 await _context.SaveChangesAsync();
                 response.Success = true;
@@ -154,13 +172,13 @@ namespace RecruitmentApi.Controllers
                 else
                 {
                     response.Success = false;
-                     response.Message = await CustomLog.Log(ex, _context);
+                    response.Message = await CustomLog.Log(ex, _context);
                 }
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
             return response;
@@ -176,16 +194,33 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
-                _context.Countries.Add(country);
-                await _context.SaveChangesAsync();
-                response.Data = country.Id;
-                response.Success = true;
-                response.Message = "Country added successfully";
+                if (country == null || country.Id > 0)
+                {
+                    response.Success = false;
+                    response.Message = "Invalid country info";
+                } else
+                {
+                    country.createdDate = DateTime.Now;
+                    _context.Countries.Add(country);
+                    await _context.SaveChangesAsync();
+                    response.Data = country.Id;
+                    response.Success = true;
+                    response.Message = "Country added successfully";
+                }
+               
+            }
+            catch (DbUpdateException e)
+  when (e.InnerException?.InnerException is SqlException sqlEx &&
+    (sqlEx.Number == 2601 || sqlEx.Number == 2627))
+            {
+                response.Success = false;
+                await CustomLog.Log(e, _context);
+                response.Message = "Country already Exists";
             }
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
 
@@ -215,7 +250,7 @@ namespace RecruitmentApi.Controllers
             catch (Exception ex)
             {
                 response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
+                response.Message = await CustomLog.Log(ex, _context);
             }
 
 
