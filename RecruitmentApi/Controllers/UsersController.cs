@@ -111,9 +111,9 @@ namespace RecruitmentApi.Controllers
                                        select new UserList
                                        {
                                            id = x.id,
-                                           name = x.firstName + " " + (x.middleName ?? "") + " " + x.lastName,
+                                           name = Common.GetFullName(x),
                                            country = x.country
-                                       }).ToListAsync();
+                                       }).AsQueryable().ToListAsync();
                 response.Message = "Users List";
                 response.Success = true;
 

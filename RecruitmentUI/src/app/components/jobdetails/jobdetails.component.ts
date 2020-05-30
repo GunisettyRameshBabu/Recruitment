@@ -4,6 +4,8 @@ import { JobService } from '../../services/job.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { ToastrService } from 'ngx-toastr';
+import { UsersessionService } from 'src/app/services/usersession.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-jobdetails',
@@ -15,16 +17,18 @@ export class JobdetailsComponent implements OnInit {
     private router: ActivatedRoute,
     private service: JobService,
     public dialog: MatDialog,
-    private alertService: ToastrService
+    private alertService: ToastrService,
+    private sessionService: UsersessionService
   ) {}
   job;
   jobid;
   ngOnInit(): void {
     this.dialog.closeAll();
+    let user = this.sessionService.getLoggedInUser() as User;
     this.router.params.subscribe((res: any) => {
       this.jobid = res.jobid;
       this.service
-        .getJobDetails(this.jobid)
+        .getJobDetails(this.jobid, user.id)
         .subscribe((data: ServiceResponse) => {
           if (data.success) {
             this.job = data.data;

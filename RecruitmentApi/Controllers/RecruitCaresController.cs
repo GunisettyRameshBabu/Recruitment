@@ -51,13 +51,13 @@ namespace RecruitmentApi.Controllers
                                            jobName = y.jobid,
                                            comments = x.comments,
                                            createdBy = x.createdBy,
-                                           createdByName = c.firstName + " " + (c.middleName ?? "") + c.lastName,
+                                           createdByName = Common.GetFullName(c),
                                            email = x.email,
                                            id = x.id,
                                            modifiedBy = x.modifiedBy,
-                                           modifiedName = (m != null ? (m.firstName + " " + (m.middleName ?? "") + m.lastName) : ""),
+                                           modifiedName = Common.GetFullName(m),
                                            modifiedDate = x.modifiedDate,
-                                           name = (x != null ? (x.firstName + " " + (x.middleName ?? "") + x.lastName) : ""),
+                                           name = Common.GetFullName(x),
                                            createdDate = x.createdDate.Value,
                                            firstName = x.firstName,
                                            lastName = x.lastName,
@@ -68,7 +68,7 @@ namespace RecruitmentApi.Controllers
                                            fileName = x.fileName,
                                            noticePeriod = x.noticePeriod,
                                            notice = n.name
-                                       }).ToListAsync();
+                                       }).AsQueryable().ToListAsync();
 
                 response.Success = true;
                 response.Message = "Success";
@@ -105,13 +105,13 @@ namespace RecruitmentApi.Controllers
                                            jobName = y.jobid,
                                            comments = x.comments,
                                            createdBy = x.createdBy,
-                                           createdByName = c.firstName + " " + (c.middleName ?? "") + c.lastName,
+                                           createdByName = Common.GetFullName(c),
                                            email = x.email,
                                            id = x.id,
                                            modifiedBy = x.modifiedBy,
-                                           modifiedName = (m != null ? (m.firstName + " " + (m.middleName ?? "") + m.lastName) : ""),
+                                           modifiedName = Common.GetFullName(m),
                                            modifiedDate = x.modifiedDate,
-                                           name = (x != null ? (x.firstName + " " + (x.middleName ?? "") + x.lastName) : ""),
+                                           name = Common.GetFullName(x),
                                            createdDate = x.createdDate.Value,
                                            firstName = x.firstName,
                                            lastName = x.lastName,
@@ -122,7 +122,7 @@ namespace RecruitmentApi.Controllers
                                            fileName = x.fileName,
                                            noticePeriod = x.noticePeriod,
                                            notice = n.name
-                                       }).ToListAsync();
+                                       }).AsQueryable().ToListAsync();
 
                 response.Success = true;
                 response.Message = "Success";

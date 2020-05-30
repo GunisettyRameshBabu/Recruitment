@@ -26,8 +26,8 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/Openings/
-        [HttpGet("GetOpeningsByCountry/{userId}")]
-        public async Task<ActionResult<ServiceResponse<OpeningsList>>> GetOpeningsByCountry(int userId)
+        [HttpGet("GetOpeningsByCountry/{userId}/{type}")]
+        public async Task<ActionResult<ServiceResponse<OpeningsList>>> GetOpeningsByCountry(int userId, string type)
         {
             var response = new ServiceResponse<OpeningsList>();
             try
@@ -45,26 +45,27 @@ namespace RecruitmentApi.Controllers
                                             join am in _context.Users on o.accountManager equals am.id into accounts
                                             from am in accounts.DefaultIfEmpty()
                                             join s in _context.MasterData on o.status equals s.id
-                                            where (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.country == user.country && (o.createdBy == userId || o.modifiedBy == userId || o.assaignedTo == userId))
+                                            where (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.country == user.country )
                                             select new OpeningsListView()
                                             {
                                                 id = o.id,
-                                                accountManager = (am == null ? "" : am.firstName + " " + (am.middleName ?? "") + am.lastName),
-                                                assaignedTo = (a == null ? "" : a.firstName + " " + (a.middleName ?? "") + a.lastName),
+                                                accountManager = Common.GetFullName(am),
+                                                assaignedTo = Common.GetFullName(a),
                                                 city = c.Name,
                                                 client = cl.Name,
-                                                contactName = (co == null ? "" : co.firstName + " " + (co.middleName ?? "") + co.lastName),
+                                                contactName = Common.GetFullName(co),
                                                 jobid = o.id,
                                                 jobName = o.jobid,
                                                 jobtitle = o.jobtitle,
                                                 status = s.name,
-                                                targetdate = o.targetdate
-                                            }).ToListAsync();
+                                                targetdate = o.targetdate,
+                                                canEdit = (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.createdBy == userId || o.modifiedBy == userId)
+                                            }).AsQueryable().ToListAsync();
 
                 response.Data.Candidates = await (from x in _context.JobCandidates
                                                   join j in _context.Openings on x.jobid equals j.id
                                                   join s in _context.MasterData on x.status equals s.id
-                                                  where response.Data.Jobs.Select(x => x.jobid).Contains(x.jobid)
+                                                  where response.Data.Jobs.Select(x => x.jobid).Contains(x.jobid) && (user != null && user.roleId == (int)Roles.SuperAdmin) || (x.createdBy == userId || x.modifiedBy == userId)
                                                   select new JobCandidatesView()
                                                   {
                                                       jobid = x.jobid,
@@ -94,12 +95,13 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/Openings/5
-        [HttpGet("{id}")]
-        public async Task<ServiceResponse<OpeningsView>> GetOpenings(int id)
+        [HttpGet("{id}/{userId}")]
+        public async Task<ServiceResponse<OpeningsView>> GetOpenings(int id, int userId)
         {
             var response = new ServiceResponse<OpeningsView>();
             try
             {
+                var user = _context.Users.FirstOrDefault(x => x.id == userId);
                 var openings = await (from x in _context.Openings
                                       join cr in _context.Users on x.createdBy equals cr.id
                                       join st in _context.MasterData on x.status equals st.id
@@ -116,19 +118,17 @@ namespace RecruitmentApi.Controllers
                                       join exp in _context.MasterData on x.experience equals exp.id
                                       join indus in _context.MasterData on x.industry equals indus.id
                                       join types in _context.MasterData on x.jobtype equals types.id
-
-
-                                      where x.id == id
+                                      where x.id == id 
                                       select new OpeningsView()
                                       {
                                           jobid = x.jobid,
-                                          accountManager = (acc == null ? "" : acc.firstName + " " + (acc.middleName ?? "") + acc.lastName),
+                                          accountManager = Common.GetFullName(acc),
                                           state = sta.Name,
                                           country = cou.Name,
-                                          assaigned = (ass == null ? "" : ass.firstName + " " + (ass.middleName ?? "") + ass.lastName),
+                                          assaigned = Common.GetFullName(ass),
                                           city = ci.Name,
                                           client = cl.Name,
-                                          contactName = (con == null ? "" : con.firstName + " " + (con.middleName ?? "") + con.lastName),
+                                          contactName = Common.GetFullName(con),
                                           description = x.description,
                                           experience = exp.name,
                                           jobtitle = x.jobtitle,
@@ -136,12 +136,12 @@ namespace RecruitmentApi.Controllers
                                           zip = x.zip,
                                           targetDate = x.targetdate,
                                           salary = x.salary,
-                                          createdBy = (cr == null ? "" : cr.firstName + " " + (cr.middleName ?? "") + cr.lastName),
+                                          createdBy = Common.GetFullName(cr),
                                           industry = indus.name,
                                           jobtype = types.name,
                                           company_url = cl.url
 
-                                      }).FirstOrDefaultAsync();
+                                      }).AsQueryable().FirstOrDefaultAsync();
 
                 if (openings == null)
                 {
@@ -153,7 +153,7 @@ namespace RecruitmentApi.Controllers
                 openings.Candidates = (from x in _context.JobCandidates
                                        join j in _context.Openings on x.jobid equals j.id
                                        join s in _context.MasterData on x.status equals s.id
-                                       where j.id == id
+                                       where j.id == id && (user != null && user.roleId == (int)Roles.SuperAdmin) || (x.createdBy == userId || x.modifiedBy == userId)
                                        select new JobCandidatesView()
                                        {
                                            jobid = x.jobid,
@@ -245,7 +245,7 @@ namespace RecruitmentApi.Controllers
             try
             {
                 response.Data = await (from x in _context.Openings
-                                       where x.country == id && (x.createdBy == userid || x.modifiedBy == userid || x.assaignedTo == userid)
+                                       where x.country == id
                                        select new DropdownModel()
                                        {
                                            id = x.id,

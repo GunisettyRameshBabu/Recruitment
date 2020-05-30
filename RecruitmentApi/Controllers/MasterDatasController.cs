@@ -41,13 +41,13 @@ namespace RecruitmentApi.Controllers
                                             modifiedBy = x.modifiedBy,
                                             createdBy = x.createdBy,
                                             createdDate = x.createdDate,
-                                            createdName = c.firstName + " " + (c.middleName ?? "")  +  " " + c.lastName,
-                                            modifiedName = (m != null ? m.firstName + " " + (m.middleName ?? "") + " " + m.lastName : ""),
+                                            createdName = Common.GetFullName(c),
+                                            modifiedName = Common.GetFullName(m),
                                             modifiedDate = x.modifiedDate,
                                             name = x.name,
                                             type = x.type,
                                             typeName = y.name
-                                       }).ToListAsync();
+                                       }).AsQueryable().ToListAsync();
                         ;
                 response.Success = true;
                 response.Message = "Data Retrived";

@@ -7,7 +7,7 @@ namespace RecruitmentApi.Models
 {
     public class Common
     {
-        public static string GetFullName(Users x)
+        public static string GetFullName(dynamic x)
         {
             return x != null ? (x != null ? x.firstName + " " + (x.middleName + " " ?? "") + x.lastName : "") : "";
         }

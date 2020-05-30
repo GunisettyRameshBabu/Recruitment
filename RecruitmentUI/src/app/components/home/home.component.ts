@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
       case 'in':
       case 'gl':
       case 'all':
-        this.router.navigate(['jobopenings']);
+        this.router.navigate(['jobopenings'], { queryParams : { type: type }});
         break;
       case 'new':
         this.router.navigate(['addjob']);

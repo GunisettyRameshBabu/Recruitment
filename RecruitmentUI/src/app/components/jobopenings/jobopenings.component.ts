@@ -57,7 +57,8 @@ export class JobopeningsComponent implements OnInit {
     private router: Router,
     private alertService: ToastrService,
     private sessionService: UsersessionService,
-    private modal: MatDialog
+    private modal: MatDialog,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -66,9 +67,11 @@ export class JobopeningsComponent implements OnInit {
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.editSettings = { allowAdding: true };
     let user = this.sessionService.getLoggedInUser() as User;
-    this.type = user.type;
+    this.activatedRoute.queryParams.subscribe((params: any) => {
+      this.type = params.type;
+    });
     this.jobService
-      .getJobOpenings(user.id)
+      .getJobOpenings(user.id, this.type)
       .subscribe((res: any) => {
         if (res.success) {
           this.openings = res.data;

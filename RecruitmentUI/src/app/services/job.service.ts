@@ -9,9 +9,9 @@ import { Opening } from '../components/add-openings/opening';
 export class JobService {
   constructor(private http: HttpClient) {}
 
-  getJobOpenings(userId) {
+  getJobOpenings(userId, type) {
     return this.http.get(
-      environment.apiUrl + 'Openings/GetOpeningsByCountry/' + userId
+      environment.apiUrl + 'Openings/GetOpeningsByCountry/' + userId + '/'+ type
     );
   }
 
@@ -19,8 +19,8 @@ export class JobService {
     return this.http.get(environment.apiUrl + 'Openings/GetJobs/' + id + '/'+ userid);
   }
 
-  getJobDetails(id) {
-    return this.http.get(environment.apiUrl + 'Openings/' + id);
+  getJobDetails(id,userid) {
+    return this.http.get(environment.apiUrl + 'Openings/' + id+ '/'+ userid);
   }
 
   getJobForEdit(id: number) {

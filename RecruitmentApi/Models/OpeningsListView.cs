@@ -33,5 +33,7 @@ namespace RecruitmentApi.Models
         public string status { get; set; }
 
         public DateTime targetdate { get; set; }
+
+        public bool canEdit { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+<nav class="navbar navbar-expand-md bg-light fixed-top">
     <a  href="#"><img style="height: 50px;" src="../../../../assets/tecqubepngfinal.png"></a>
-    <h3 class="navbar-brand">QubeSmart</h3>
+    <h5 >QubeSmart</h5>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -17,7 +17,7 @@
         </li>
 
         <li class="nav-item" *ngIf="isUserLoggedIn()">
-          <a class="nav-link" routerLink="/jobopenings" routerLinkActive="active">Job Openings</a>
+          <a class="nav-link" routerLink="/jobopenings"  [queryParams]="{type:'all'}"  routerLinkActive="active">Job Openings</a>
         </li>
 
         <li class="nav-item dropdown" *ngIf="isUserLoggedIn() && getLoginType() == 'Super Admin' ">
@@ -43,11 +43,11 @@
        
   
       </ul>
-      <div class="float-right text-white" *ngIf="isUserLoggedIn()">
-        <b>Welcome {{ getFullName() }} <button class="btn btn-link text-white" (click)="logout()"> (signout)</button></b>  
+      <div class="float-right" *ngIf="isUserLoggedIn()">
+        <b>Welcome {{ getFullName() }} <button class="btn btn-link" (click)="logout()"> (signout)</button></b>  
       </div>
-      <div class="float-right text-white" *ngIf="!isUserLoggedIn()">
-        <button class="btn btn-link text-white" (click)="login('all')"> Login</button>  
+      <div class="float-right" *ngIf="!isUserLoggedIn()">
+        <button class="btn btn-link" (click)="login('all')"> Login</button>  
       </div>
     </div>
     
