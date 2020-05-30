@@ -82,6 +82,32 @@ namespace RecruitmentApi.Controllers
             return Ok(response);
         }
 
+        [Route("GetStatesByJobId/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<IList<DropdownModel>>>> GetStatesByJobId(int id)
+        {
+            var response = new ServiceResponse<IList<DropdownModel>>();
+            try
+            {
+                response.Data = await (from x in _context.State
+                                      join j in _context.Openings on x.Country equals j.country
+                                      where j.id == id
+                                      select new DropdownModel()
+                                      {
+                                          id = x.Id,
+                                          name = x.Name
+                                      }).AsQueryable().ToListAsync();
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
+            }
+            return Ok(response);
+        }
+
         // GET: api/States/5
         [HttpGet("{id}")]
         public async Task<ServiceResponse<State>> GetState(int id)

@@ -13,3 +13,8 @@ mat-form-field {
     max-height: calc(100% - 120px);
     overflow-y: scroll;
 }
+
+.myInput {
+  height: 50px !important;
+  padding: 10px !important;
+}

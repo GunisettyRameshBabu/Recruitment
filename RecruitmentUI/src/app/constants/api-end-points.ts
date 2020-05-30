@@ -17,5 +17,8 @@ export enum MasterDataTypes {
   JobStatus,
   JobTypes,
   Roles,
-  NoticePerid
+  NoticePeriod,
+  VisaType,
+  WaysToReach
+
 }

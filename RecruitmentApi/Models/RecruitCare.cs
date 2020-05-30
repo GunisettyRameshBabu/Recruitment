@@ -30,5 +30,31 @@ namespace RecruitmentApi.Models
         public string fileName { get; set; }
 
         public int noticePeriod { get; set; }
+
+        public int state { get; set; }
+
+        public int city { get; set; }
+
+        public int totalExp { get; set; }
+
+        public bool rtr { get; set; }
+
+        public int bestWayToReach { get; set; }
+
+        public string bestTimeToReach { get; set; }
+
+        public string educationDetails { get; set; }
+
+        public bool anyOfferExist { get; set; }
+
+        public string expectedRatePerHour { get; set; }
+
+        public int visaType { get; set; }
+
+        public string skypeid { get; set; }
+
+        public int highestQualification { get; set; }
+
+        public int relavantExp { get; set; }
     }
 }

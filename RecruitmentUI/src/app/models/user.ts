@@ -5,7 +5,7 @@ export class User {
     lastName: string;
     userid: string;
     email: string;
-    roleId: Int16Array;
+    roleId: number;
     password: string;
     type: string;
     countryName: any;
@@ -27,4 +27,11 @@ export enum LoginTypes
         India,
         Admin, 
         New
+    }
+
+    export enum Roles
+    {
+        TeamLeader =  35,
+        SuperAdmin = 40,
+        Recruiter = 36
     }

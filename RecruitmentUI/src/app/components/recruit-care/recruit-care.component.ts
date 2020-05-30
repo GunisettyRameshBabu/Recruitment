@@ -63,7 +63,7 @@ export class RecruitCareComponent implements OnInit {
   }
 
   add() {
-    this.showPopup({ id: 0 });
+    this.showPopup({ id: 0 , anyOfferExist: false , rtr: false });
   }
 
   edit(data) {
@@ -75,6 +75,10 @@ export class RecruitCareComponent implements OnInit {
       data,
       hasBackdrop: true,
       disableClose: true,
+      maxHeight: '80vh',
+      position: {
+        top: '5%'
+      }
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.getData();
@@ -124,7 +128,7 @@ export class RecruitCareComponent implements OnInit {
       data:{
         message: 'Are you sure want to move?',
         buttonText: {
-          ok: 'Save',
+          ok: 'Yes',
           cancel: 'No'
         }
       },

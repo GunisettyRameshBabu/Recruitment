@@ -13,6 +13,8 @@ namespace RecruitmentApi.Models
         JobStatus,
         JobTypes,
         Roles,
-        NoticePeriod
+        NoticePeriod,
+        VISA,
+        WaysToContact
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecruitmentApi.Data;
 using RecruitmentApi.Models;
+using SQLitePCL;
 
 namespace RecruitmentApi.Controllers
 {
@@ -244,13 +246,15 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<IList<DropdownModel>>();
             try
             {
+                var user = _context.Users.Find(userid);
                 response.Data = await (from x in _context.Openings
-                                       where x.country == id
+                                       where user.roleId == (int) Roles.SuperAdmin ||  x.country == id
                                        select new DropdownModel()
                                        {
                                            id = x.id,
-                                           name = x.jobid + " - " + x.jobtitle
-                                       }).ToListAsync();
+                                           name = x.jobid + " - " + x.jobtitle,
+                                           key = x.country
+                                       }).AsQueryable().ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
             }

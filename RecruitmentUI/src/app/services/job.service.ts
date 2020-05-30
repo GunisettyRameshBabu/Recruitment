@@ -128,4 +128,10 @@ export class JobService {
       environment.apiUrl + 'RecruitCares/SendEmail', data
     );
   }
+
+  getStatesByJobId(id: number) {
+    return this.http.get(
+      environment.apiUrl + 'States/GetStatesByJobId/' + id
+    );
+  }
 }

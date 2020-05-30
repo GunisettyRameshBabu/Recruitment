@@ -9,7 +9,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { JobService } from 'src/app/services/job.service';
 import { UsersessionService } from 'src/app/services/usersession.service';
-import { User } from 'src/app/models/user';
+import { User, Roles } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { CommonService } from 'src/app/services/common.service';
 import { MasterDataTypes } from 'src/app/constants/api-end-points';
@@ -29,6 +29,17 @@ export class RecruitCareEditComponent implements OnInit {
   statusList = [];
   resume: any;
   noticeList = [];
+  stateList = [];
+  stateListMain = [];
+  cityList = [];
+  cityListMain = [];
+  totalExpList = [];
+  totalExpListMain = [];
+  relavantExpList = [];
+  visaList = [];
+  visaListMain = [];
+  bestWayToReachList = [];
+  bestWayToReachListMain = [];
   constructor(
     public dialogRef: MatDialogRef<RecruitCareEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -63,6 +74,18 @@ export class RecruitCareEditComponent implements OnInit {
       modifiedDate: new FormControl(''),
       fileName: new FormControl('', Validators.required),
       noticePeriod: new FormControl('',Validators.required),
+      city: new FormControl('', Validators.required),
+      state: new FormControl('', Validators.required),
+      relavantExp: new FormControl('', Validators.required),
+      totalExp: new FormControl('', Validators.required),
+      skypeid: new FormControl(''),
+      visaType: new FormControl(''),
+      expectedRatePerHour: new FormControl(''),
+      anyOfferExist: new FormControl(false),
+      educationDetails: new FormControl(''),
+      bestTimeToReach: new FormControl(''),
+      bestWayToReach: new FormControl(),
+      rtr: new FormControl(false)
     });
     this.recruitGroup.reset(this.recruit);
     this.jobService
@@ -86,7 +109,7 @@ export class RecruitCareEditComponent implements OnInit {
       });
 
     this.masterDataService
-      .getMasterDataByType(MasterDataTypes.NoticePerid)
+      .getMasterDataByType(MasterDataTypes.NoticePeriod)
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.noticeList = res.data;
@@ -94,6 +117,41 @@ export class RecruitCareEditComponent implements OnInit {
           this.alertService.error(res.message);
         }
       });
+     
+      this.masterDataService
+      .getMasterDataByType(MasterDataTypes.Experience)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.totalExpList = res.data;
+          this.totalExpListMain = res.data;
+          this.relavantExpList = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
+      });
+
+      this.masterDataService
+      .getMasterDataByType(MasterDataTypes.VisaType)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.visaList = res.data;
+          this.visaListMain = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
+      });
+
+      this.masterDataService
+      .getMasterDataByType(MasterDataTypes.WaysToReach)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.bestWayToReachList = res.data;
+          this.bestWayToReachListMain = res.data;
+        } else {
+          this.alertService.error(res.message);
+        }
+      });
+     
   }
 
   onSubmit() {
@@ -138,9 +196,55 @@ export class RecruitCareEditComponent implements OnInit {
     return this.recruitGroup.controls[controlName].hasError(errorName);
   }
 
+  public hasGlobalError(controlName: string, errorName: string) {
+    return this.recruitGroup.controls[controlName].hasError(errorName);
+  }
+
+  
+
   public uploadFile = (files) => {
     console.log(files);
     this.resume = files;
     this.recruitGroup.controls.fileName.setValue(files[0].name);
   };
+
+  jobChanged(event) {
+    this.recruitGroup.controls.state.setValue('');
+    this.recruitGroup.controls.city.setValue('');
+    this.jobService.getStatesByJobId(event.value).subscribe((res: ServiceResponse) => {
+      if (res.success) {
+        this.stateList = res.data;
+        this.stateListMain = res.data;
+      } else {
+        this.alertService.error(res.message);
+      }
+    })
+  }
+
+  stateChanged() {
+    this.recruitGroup.controls.city.setValue('');
+    this.commonService.getCitiesByState(this.recruitGroup.controls.state.value).subscribe((res: ServiceResponse) => {
+      if (res.success) {
+        this.cityList = res.data;
+        this.cityListMain = res.data;
+      } else {
+        this.alertService.error(res.message);
+      }
+    })
+  }
+
+  search(query: string, list: any[], listName){
+    let result = this.select(query,list)
+    this[listName] = result;
+  }
+
+  select(query: string, list: any[]):any[]{
+    let result: string[] = [];
+    for(let a of list){
+      if(a.name.toLowerCase().indexOf(query) > -1){
+        result.push(a)
+      }
+    }
+    return result
+  }
 }
