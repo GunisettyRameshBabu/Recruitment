@@ -12,7 +12,10 @@
 @import '../node_modules/@syncfusion/ej2-angular-inputs/styles/material.css';
 
 * {
-  font-family: Biome;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.jumbotron {
+  margin-top: 3%;
 }
 .e-custom-card {
   position: relative;
@@ -24,6 +27,31 @@
   padding: 1px;
   background-color: lightgoldenrodyellow;
   color: black;
+}
+.bg-1 {
+  background-image: url(assets/background1.jpeg);
+  background-size: cover;
+  color: white;
+}
+.bg-2 {
+  background-image: url(assets/background2.jpeg);
+  background-size: cover;
+  color: white;
+}
+.bg-10 {
+  background-image: url(assets/10.png);
+  background-size: cover;
+  color: white;
+}
+.bg-11 {
+  background-image: url(assets/11.png);
+  background-size: cover;
+  color: white;
+}
+.bg-41 {
+  background-image: url(assets/41.png);
+  background-size: cover;
+  color: white;
 }
 body {
   font-family: Roboto, Arial, sans-serif;

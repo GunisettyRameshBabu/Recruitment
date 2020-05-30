@@ -44,5 +44,10 @@
   nav a.active {
     color: #039be5;
   }
+
+  .container-fluid {
+    background-image: url(../assets/41.png);
+    background-size: cover;
+  }
   
   

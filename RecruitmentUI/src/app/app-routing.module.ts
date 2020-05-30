@@ -6,7 +6,7 @@ import { JobdetailsComponent } from './components/jobdetails/jobdetails.componen
 import { AuthGuard } from './Guards/auth.guard';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
 import { AddOpeningsComponent } from './components/add-openings/add-openings.component';
-import { UsersComponent } from './components/users/users.component';
+import { UsersComponent } from './components/Admin/users/users.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MasterDataComponent } from './components/Admin/master-data/master-data.component';

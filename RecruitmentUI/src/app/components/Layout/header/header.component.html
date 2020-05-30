@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-md bg-light fixed-top">
-    <a  href="#"><img style="height: 50px;" src="../../../../assets/tecqubepngfinal.png"></a>
-    <h5 >QubeSmart</h5>
+<nav class="navbar navbar-expand-md header-bg fixed-top">
+    <a  href="#"><img style="height: 75px;width: 250px;" src="../../../../assets/AppLogo.jpeg"></a>
+   
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
       aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -9,19 +9,19 @@
       <ul class="navbar-nav mr-auto">
   
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+          <a class="nav-link text-white" routerLink="/home" routerLinkActive="active">Home</a>
         </li>
 
         <li class="nav-item" *ngIf="isUserLoggedIn() ">
-          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+          <a class="nav-link text-white" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
         </li>
 
         <li class="nav-item" *ngIf="isUserLoggedIn()">
-          <a class="nav-link" routerLink="/jobopenings"  [queryParams]="{type:'all'}"  routerLinkActive="active">Job Openings</a>
+          <a class="nav-link text-white" routerLink="/jobopenings"  [queryParams]="{type:'all'}"  routerLinkActive="active">Job Openings</a>
         </li>
 
         <li class="nav-item dropdown" *ngIf="isUserLoggedIn() && getLoginType() == 'Super Admin' ">
-          <a class="nav-link menu-item dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>      
+          <a class="nav-link text-white menu-item dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>      
           <div class=" dropdown dropdown-menu">
             <a class="dropdown-item menu-item" routerLink="/users" routerLinkActive="active">Users</a>
             
@@ -44,10 +44,10 @@
   
       </ul>
       <div class="float-right" *ngIf="isUserLoggedIn()">
-        <b>Welcome {{ getFullName() }} <button class="btn btn-link" (click)="logout()"> (signout)</button></b>  
+        <b class="text-white">Welcome {{ getFullName() }} <button class="btn btn-link text-white" (click)="logout()"> (signout)</button></b>  
       </div>
       <div class="float-right" *ngIf="!isUserLoggedIn()">
-        <button class="btn btn-link" (click)="login('all')"> Login</button>  
+        <button class="btn btn-link text-white" (click)="login('all')"> Login</button>  
       </div>
     </div>
     

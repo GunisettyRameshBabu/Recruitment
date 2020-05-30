@@ -3,17 +3,13 @@
 }
 
 .bg {
-    background-image: url(../../../assets/two-woman-chatting-1311518.jpg) !important;
+    background-image: url(../../../assets/background1.jpeg) !important;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 30px;
 }
 
-.jumbotron{
-    background-image: url('../../../assets/two-woman-chatting-1311518.jpg');
-    background-size: cover;
-    padding-top: 2%;
-  }
+
 
   .jumbotron-fluid {
     
@@ -31,5 +27,9 @@
 
 mat-card-content {
     vertical-align: middle;
+}
+
+#home {
+    margin-top: 3%;
 }
 

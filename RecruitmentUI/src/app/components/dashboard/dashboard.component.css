@@ -1,7 +1,7 @@
-.jumbotron {
-    padding-top: 2%;
+#dashboard {
     height: 97%;
     max-height: 97%;
+    margin-top: 5%;
 }
 
 .e-card {

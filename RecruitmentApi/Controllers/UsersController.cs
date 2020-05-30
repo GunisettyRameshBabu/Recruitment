@@ -221,6 +221,7 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/Users/Logout
+        [AllowAnonymous]
         [HttpGet("Logout/{id}")]
         public async Task<ServiceResponse<bool>> Logout(string id)
         {

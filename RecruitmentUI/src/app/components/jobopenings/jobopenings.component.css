@@ -18,6 +18,10 @@ mat-card-title {
 .jumbotron {
     background-image: url('../../../assets/graphs-job-laptop-papers-590016.jpg');
     background-size: cover;
-    padding-top: 10px;
+    padding-top: 5%;
+}
+
+.e-card {
+    margin-top: 3%;
 }
 

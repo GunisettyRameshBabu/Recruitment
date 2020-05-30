@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsersessionService } from 'src/app/services/usersession.service';
 
 @Component({
   selector: 'app-un-authorized',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UnAuthorizedComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userSession: UsersessionService) { }
 
   ngOnInit(): void {
+    this.userSession.signOutSession();
   }
 
 }

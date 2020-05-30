@@ -11,3 +11,12 @@
 .float-right {
     float: right;
 }
+
+.header-bg {
+    background-image: url(../../../../assets/41.png);
+    background-size: cover;
+}
+
+.nav-link {
+    font-weight: bold;
+}

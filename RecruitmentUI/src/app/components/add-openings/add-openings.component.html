@@ -1,6 +1,6 @@
-<div class="jumbotron">
-    <form [formGroup]="jobGroup" (ngSubmit)="onSubmit()" autocomplete="off" novalidate  >
-      <div class = "e-card e-custom-card">                   
+
+    <form [formGroup]="jobGroup" (ngSubmit)="onSubmit()" autocomplete="off" novalidate style="margin-top: 3%;"  >
+      <div class = "e-card e-custom-card bg-1">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
                 <div class="e-card-header-title">
@@ -107,7 +107,7 @@
       </div>
     
       <br/>
-      <div class = "e-card e-custom-card">                   
+      <div class = "e-card e-custom-card bg-2">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
                 <div class="e-card-header-title">
@@ -204,7 +204,7 @@
       </div>
       
       <br/>
-      <div class = "e-card e-custom-card">                   
+      <div class = "e-card e-custom-card bg-10">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
                 <div class="e-card-header-title">
@@ -222,11 +222,10 @@
       </div>
 
       <br/>
-      <div class = "e-card e-custom-card" *ngIf="id != undefined && job != undefined">                   
+      <div class = "e-card e-custom-card bg-11" *ngIf="id != undefined && job != undefined">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
                 <div class="e-card-header-title">
-                 <h5> About the postition </h5>
                 </div>   
                 <div class="e-card-content">
                   <app-jobcandidates [candidates]='candidates' [jobid]="job.id"></app-jobcandidates>
@@ -251,4 +250,3 @@
         </div>
       </div>
     </form>
-</div>

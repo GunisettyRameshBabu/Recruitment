@@ -1,45 +1,42 @@
-<div class="jumbotron" style="height: calc(95vh);">
-  <div class = "e-card e-custom-card">
-    <div class="e-card-header">
-        <div class="e-card-header-caption">
-            <div class="e-card-header-title">
-              Openings
-            </div>
-        </div>
-        <div class="e-card-content">
-          <ejs-grid #grid [dataSource]='openings.jobs' [childGrid]='childGrid' [toolbar]='toolbarOptions'
-          [allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [editSettings]='editSettings'
-          [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true'>
-            <e-columns>
-              <e-column width="60">
+<div class = "e-card e-custom-card bg-1">
+  <div class="e-card-header">
+      <div class="e-card-header-caption">
+          <div class="e-card-header-title text-white">
+            Openings
+          </div>
+      </div>
+      <div class="e-card-content">
+        <ejs-grid #grid [dataSource]='openings.jobs' [childGrid]='childGrid' [toolbar]='toolbarOptions'
+        [allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [editSettings]='editSettings'
+        [allowPaging]='true'  [pageSettings]='pageSettings' [allowSorting]='true'>
+          <e-columns>
+            <e-column width="60">
+              <ng-template #template  let-data>
+                <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)" *ngIf="data.canEdit"
+                >
+            </ng-template>
+            </e-column>
+              <e-column field='jobName' headerText='Job Opening ID' width="150" >
+               
+              </e-column>
+              <e-column field='jobtitle' headerText='Job Title' width="150" >
                 <ng-template #template  let-data>
-                  <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)" *ngIf="data.canEdit"
-                  >
+                  <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
               </ng-template>
               </e-column>
-                <e-column field='jobName' headerText='Job Opening ID' width="150" >
-                 
-                </e-column>
-                <e-column field='jobtitle' headerText='Job Title' width="150" >
-                  <ng-template #template  let-data>
-                    <a (click)="showDetails(data)" [routerLink]="">{{ data.jobtitle }}</a>
-                </ng-template>
-                </e-column>
-                <e-column field='assaignedTo' headerText='Assaigned Recruiter(s)' width="150" ></e-column>
-                <e-column field='targetdate' headerText='Target Date' width="150" >
-                  <ng-template #template  let-data>
-                    {{ data.targetdate | date }}
-                </ng-template>
-                </e-column>
-                <e-column field='status' headerText='Job Opening Status' width="150" ></e-column>
-                <e-column field='city' headerText='City' width="150" ></e-column>
-                <e-column field='client' headerText='Client Name' width="150" ></e-column>
-                <e-column field='contactName' headerText='Contact Name' width="150" ></e-column>
-                <e-column field='accountManager' headerText='Account Manager' width="150" ></e-column>
-            </e-columns>
-          </ejs-grid>
-        </div>
-    </div>
-</div>
-
+              <e-column field='assaignedTo' headerText='Assaigned Recruiter(s)' width="150" ></e-column>
+              <e-column field='targetdate' headerText='Target Date' width="150" >
+                <ng-template #template  let-data>
+                  {{ data.targetdate | date }}
+              </ng-template>
+              </e-column>
+              <e-column field='status' headerText='Job Opening Status' width="150" ></e-column>
+              <e-column field='city' headerText='City' width="150" ></e-column>
+              <e-column field='client' headerText='Client Name' width="150" ></e-column>
+              <e-column field='contactName' headerText='Contact Name' width="150" ></e-column>
+              <e-column field='accountManager' headerText='Account Manager' width="150" ></e-column>
+          </e-columns>
+        </ejs-grid>
+      </div>
+  </div>
 </div>

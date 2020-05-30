@@ -23,7 +23,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { UnAuthorizedComponent } from './components/un-authorized/un-authorized.component';
-import { UsersComponent } from './components/users/users.component';
+import { UsersComponent } from './components/Admin/users/users.component';
 import {
   GridModule,
   DetailRowService,
@@ -47,7 +47,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { UsereditComponent } from './components/users/useredit/useredit.component';
+import { UsereditComponent } from './components/Admin/users/useredit/useredit.component';
 import { JobcandidatesComponent } from './components/jobcandidates/jobcandidates.component';
 import { AddcandidateComponent } from './components/jobcandidates/addcandidate/addcandidate.component';
 import { DialogModule } from '@syncfusion/ej2-angular-popups';
