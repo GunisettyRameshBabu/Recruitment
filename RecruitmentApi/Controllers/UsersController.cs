@@ -395,7 +395,7 @@ namespace RecruitmentApi.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.userid)
+                    new Claim(ClaimTypes.Name, user.id.ToString(),ClaimValueTypes.Integer32)
                 }),
                 Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

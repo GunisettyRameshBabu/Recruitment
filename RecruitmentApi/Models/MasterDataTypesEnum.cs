@@ -15,6 +15,7 @@ namespace RecruitmentApi.Models
         Roles,
         NoticePeriod,
         VISA,
-        WaysToContact
+        WaysToContact,
+        Qualifications
     }
 }

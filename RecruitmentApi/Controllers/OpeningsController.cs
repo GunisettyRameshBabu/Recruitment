@@ -47,6 +47,7 @@ namespace RecruitmentApi.Controllers
                                             join am in _context.Users on o.accountManager equals am.id into accounts
                                             from am in accounts.DefaultIfEmpty()
                                             join s in _context.MasterData on o.status equals s.id
+                                            join cou in _context.Countries on o.country equals cou.Id
                                             where (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.country == user.country )
                                             select new OpeningsListView()
                                             {
@@ -61,12 +62,28 @@ namespace RecruitmentApi.Controllers
                                                 jobtitle = o.jobtitle,
                                                 status = s.name,
                                                 targetdate = o.targetdate,
-                                                canEdit = (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.createdBy == userId || o.modifiedBy == userId)
+                                                canEdit = (user != null && user.roleId == (int)Roles.SuperAdmin) || (o.createdBy == userId || o.modifiedBy == userId),
+                                                countryCode = cou.Code
                                             }).AsQueryable().ToListAsync();
 
                 response.Data.Candidates = await (from x in _context.JobCandidates
                                                   join j in _context.Openings on x.jobid equals j.id
                                                   join s in _context.MasterData on x.status equals s.id
+                                                  join t in _context.MasterData on x.totalExp equals t.id into totalExps
+                                                  from t in totalExps.DefaultIfEmpty()
+                                                  join r in _context.MasterData on x.relavantExp equals r.id into relavantExps
+                                                  from r in relavantExps.DefaultIfEmpty()
+                                                  join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                                  from b in bestways.DefaultIfEmpty()
+                                                  join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                                  from v in visaTypes.DefaultIfEmpty()
+                                                  join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                                  from h in qualifications.DefaultIfEmpty()
+                                                  join st in _context.State on x.state equals st.Id into states
+                                                  from st in states.DefaultIfEmpty()
+                                                  join ci in _context.Citys on x.city equals ci.Id into cities
+                                                  from ci in cities.DefaultIfEmpty()
+                                                  join cu in _context.Countries on j.country equals cu.Id
                                                   where response.Data.Jobs.Select(x => x.jobid).Contains(x.jobid) && (user != null && user.roleId == (int)Roles.SuperAdmin) || (x.createdBy == userId || x.modifiedBy == userId)
                                                   select new JobCandidatesView()
                                                   {
@@ -81,7 +98,28 @@ namespace RecruitmentApi.Controllers
                                                       statusName = s.name,
                                                       email = x.email,
                                                       fileName = x.fileName,
-                                                      jobName = j.jobid
+                                                      jobName = j.jobid,
+                                                      anyOfferExist = x.anyOfferExist,
+                                                      bestTimeToReach = x.bestTimeToReach,
+                                                      bestWayToReach = x.bestWayToReach,
+                                                      city = x.city,
+                                                      educationDetails = x.educationDetails,
+                                                      expectedRatePerHour = x.expectedRatePerHour,
+                                                      highestQualification = x.highestQualification,
+                                                      relavantExp = x.relavantExp,
+                                                      rtr = x.rtr,
+                                                      skypeid = x.skypeid,
+                                                      state = x.state,
+                                                      totalExp = x.totalExp,
+                                                      visaType = x.visaType,
+                                                      totalExpName = t.name,
+                                                      relavantExpName = r.name,
+                                                      bestWayToReachName = b.name,
+                                                      highestQualificationName = h.name,
+                                                      visaTypeName = v.name,
+                                                      cityName = ci.Name,
+                                                      stateName = st.Name,
+                                                      countryCode = cu.Code
                                                   }).ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
@@ -142,7 +180,6 @@ namespace RecruitmentApi.Controllers
                                           industry = indus.name,
                                           jobtype = types.name,
                                           company_url = cl.url
-
                                       }).AsQueryable().FirstOrDefaultAsync();
 
                 if (openings == null)
@@ -155,6 +192,20 @@ namespace RecruitmentApi.Controllers
                 openings.Candidates = (from x in _context.JobCandidates
                                        join j in _context.Openings on x.jobid equals j.id
                                        join s in _context.MasterData on x.status equals s.id
+                                       join t in _context.MasterData on x.totalExp equals t.id into totalExps
+                                       from t in totalExps.DefaultIfEmpty()
+                                       join r in _context.MasterData on x.relavantExp equals r.id into relavantExps
+                                       from r in relavantExps.DefaultIfEmpty()
+                                       join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                       from b in bestways.DefaultIfEmpty()
+                                       join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                       from v in visaTypes.DefaultIfEmpty()
+                                       join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                       from h in qualifications.DefaultIfEmpty()
+                                       join st in _context.State on x.state equals st.Id into states
+                                       from st in states.DefaultIfEmpty()
+                                       join ci in _context.Citys on x.city equals ci.Id into cities
+                                       from ci in cities.DefaultIfEmpty()
                                        where j.id == id && (user != null && user.roleId == (int)Roles.SuperAdmin) || (x.createdBy == userId || x.modifiedBy == userId)
                                        select new JobCandidatesView()
                                        {
@@ -169,7 +220,27 @@ namespace RecruitmentApi.Controllers
                                            status = s.id,
                                            statusName = s.name,
                                            email = x.email,
-                                           fileName = x.fileName
+                                           fileName = x.fileName,
+                                           anyOfferExist = x.anyOfferExist,
+                                           bestTimeToReach = x.bestTimeToReach,
+                                           bestWayToReach = x.bestWayToReach,
+                                           city = x.city,
+                                           educationDetails = x.educationDetails,
+                                           expectedRatePerHour = x.expectedRatePerHour,
+                                           highestQualification = x.highestQualification,
+                                           relavantExp = x.relavantExp,
+                                           rtr = x.rtr,
+                                           skypeid = x.skypeid,
+                                           state = x.state,
+                                           totalExp = x.totalExp,
+                                           visaType = x.visaType,
+                                           totalExpName = t.name,
+                                           relavantExpName = r.name,
+                                           bestWayToReachName = b.name,
+                                           highestQualificationName = h.name,
+                                           visaTypeName = v.name,
+                                           cityName = ci.Name,
+                                           stateName = st.Name
                                        }).ToList();
                 response.Data = openings;
                 response.Message = "Success";
@@ -248,12 +319,13 @@ namespace RecruitmentApi.Controllers
             {
                 var user = _context.Users.Find(userid);
                 response.Data = await (from x in _context.Openings
+                                       join c in _context.Countries on x.country equals c.Id
                                        where user.roleId == (int) Roles.SuperAdmin ||  x.country == id
                                        select new DropdownModel()
                                        {
                                            id = x.id,
                                            name = x.jobid + " - " + x.jobtitle,
-                                           key = x.country
+                                           key = c.Code
                                        }).AsQueryable().ToListAsync();
                 response.Success = true;
                 response.Message = "Success";
@@ -363,5 +435,34 @@ namespace RecruitmentApi.Controllers
         {
             return _context.Openings.Any(e => e.id == id);
         }
+
+        [HttpGet("GetCountryCodeByJobId/{jobid}")]
+        public async Task<ActionResult<ServiceResponse<string>>> GetCountryCodeByJobId(int jobid)
+        {
+            var response = new ServiceResponse<string>();
+
+            try
+            {
+                response.Data = await (from x in _context.Openings 
+                                      join c in _context.Countries on x.country equals c.Id
+                                      where x.id == jobid
+                                      select c.Code).FirstOrDefaultAsync();
+
+                response.Success = true;
+                response.Message = "Success";
+                
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
+            }
+
+            return Ok(response);
+
+        }
+
+
+
     }
 }

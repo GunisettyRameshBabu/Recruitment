@@ -28,13 +28,15 @@ import { CommonService } from 'src/app/services/common.service';
 })
 export class JobcandidatesComponent implements OnInit {
   @ViewChild('grid') public grid: GridComponent;
-  @Input() candidates: Candidates[] = [];
+  @Input() candidates: any[] = [];
   @Input() jobid: any;
+  @Input() canEditOrAdd: boolean = false;
   editSettings: EditSettingsModel;
   public toolbar;
   candidate: Candidates;
   dropEle: HTMLElement;
   editparams: any;
+  countryCode;
   constructor(
     public dialog: MatDialog,
     private jobService: JobService,
@@ -49,11 +51,16 @@ export class JobcandidatesComponent implements OnInit {
       allowEditing: false,
       allowAdding: false,
     };
-    this.toolbar = ['Candidates', 'Add Candidate', 'ExcelExport'];
+    this.toolbar = (this.canEditOrAdd == true ? ['Candidates', 'Add Candidate', 'ExcelExport'] : ['Candidates', 'ExcelExport']);
+    this.commonService.getCountryCodeByJobId(this.jobid).subscribe((res: ServiceResponse) => {
+      if (res.success) {
+        this.countryCode = res.data;
+      } 
+    })
   }
 
   addCandidate() {
-    let data = { jobid: this.jobid, id: 0 };
+    let data = { jobid: this.jobid, id: 0 , countryCode : this.countryCode };
     const dialogRef = this.dialog.open(AddcandidateComponent, {
       data: data,
       hasBackdrop: true,

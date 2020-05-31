@@ -11,6 +11,6 @@ namespace RecruitmentApi.Models
 
         public string name { get; set; }
 
-        public int key { get; set; }
+        public dynamic key { get; set; }
     }
 }

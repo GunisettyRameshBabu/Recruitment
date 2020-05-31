@@ -28,5 +28,19 @@ namespace RecruitmentApi.Models
        
 
         public string notice { get; set; }
+
+        public string cityName { get; set; }
+
+        public string stateName { get; set; }
+
+        public string totalExpName { get; set; }
+
+        public string bestWayToReachName { get; set; }
+
+        public string visaTypeName { get; set; }
+
+        public string highestQualificationName { get; set; }
+
+        public string relavantExpName { get; set; }
     }
 }

@@ -1,4 +1,3 @@
-<div>
   <form class="example-form" [formGroup]="recruitGroup" (ngSubmit)="onSubmit()" autocomplete="off" novalidate
     fxLayout="column wrap" fxLayoutAlign="center center" fxLayoutGap="10px">
     <div class="e-card e-custom-card bg-1">
@@ -17,14 +16,14 @@
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
                 <mat-form-field>
                   <mat-label>First Name *</mat-label>
-                  <input matInput placeholder="First name" formControlName="firstName" />
+                  <input matInput placeholder="First name" formControlName="firstName" [disabled]="recruit.id > 0"/>
                   <mat-error *ngIf="hasError('firstName', 'required')">First name is required</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
                 <mat-form-field>
                   <mat-label>Middle Name </mat-label>
-                  <input matInput placeholder="Middle name" formControlName="middleName" />
+                  <input matInput placeholder="Middle name" formControlName="middleName" [disabled]="recruit.id > 0"/>
                 </mat-form-field>
               </div>
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
@@ -37,7 +36,7 @@
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
                 <mat-form-field>
                   <mat-label>Email *</mat-label>
-                  <input matInput placeholder="Email" formControlName="email" />
+                  <input matInput placeholder="Email" formControlName="email" [disabled]="recruit.id > 0"/>
                   <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
                   <mat-error *ngIf="hasError('email', 'email')">Please enter valid email</mat-error>
                 </mat-form-field>
@@ -48,7 +47,7 @@
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
                 <mat-form-field>
                   <mat-label>Job Id *</mat-label>
-                  <mat-select formControlName="jobid" (selectionChange)="jobChanged($event)">
+                  <mat-select formControlName="jobid" (selectionChange)="jobChanged($event)" [disabled]="recruit.id > 0">
                     <mat-option [value]=""> </mat-option>
                     <mat-option *ngFor="let i of jobs" [value]="i.id">
                       {{ i.name }}
@@ -97,7 +96,7 @@
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
                 <mat-form-field>
                   <mat-label>State *</mat-label>
-                  <mat-select formControlName="state" (selectionChange)="stateChanged()">
+                  <mat-select formControlName="state" (selectionChange)="stateChanged()" [disabled]="recruit.id > 0">
                     <input class="myInput" matInput (keyup)="search($event.target.value, stateListMain, 'stateList')" autocomplete="off" placeholder="search">
                     
                     <mat-option [value]=""> </mat-option>
@@ -111,7 +110,7 @@
               <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
                 <mat-form-field>
                   <mat-label>City *</mat-label>
-                  <mat-select formControlName="city">
+                  <mat-select formControlName="city" [disabled]="recruit.id > 0">
                     <input class="myInput" matInput (keyup)="search($event.target.value,cityListMain, 'cityList')" autocomplete="off" placeholder="search">
                     
                     <mat-option [value]=""> </mat-option>
@@ -157,12 +156,19 @@
             <div class="row">
               <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
                 <mat-form-field>
-                  <mat-label>Comments *</mat-label>
-                  <textarea matInput placeholder="Ex. ......." formControlName="comments"
-                    style="min-height: 75px;"></textarea>
-                  <mat-error *ngIf="hasError('comments', 'required')">Comment is required</mat-error>
+                  <mat-label>Heighest Qualification *</mat-label>
+                  <mat-select formControlName="highestQualification" required>
+                    <input class="myInput" matInput (keyup)="search($event.target.value,qualificationListMain, 'qualificationList')" autocomplete="off" placeholder="search">
+                    
+                    <mat-option [value]=""> </mat-option>
+                    <mat-option *ngFor="let i of qualificationList" [value]="i.id">
+                      {{ i.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="hasError('highestQualification', 'required')">Total Experience is required</mat-error>
                 </mat-form-field>
               </div>
+             
               <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
                 <div class="e-float-input upload-area">
                   <div class="row">
@@ -187,12 +193,23 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-xlg-12">
+                <mat-form-field>
+                  <mat-label>Comments *</mat-label>
+                  <textarea matInput placeholder="Ex. ......." formControlName="comments"
+                    style="min-height: 75px;"></textarea>
+                  <mat-error *ngIf="hasError('comments', 'required')">Comment is required</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
-    <br/>
-    <div class="e-card e-custom-card bg-1">
+    <br *ngIf="countryCode && countryCode != 'IN'"/>
+    <div class="e-card e-custom-card bg-1" *ngIf="countryCode && countryCode != 'IN'">
       <div class="e-card-header">
       <div class="e-card-header-caption">
         <div class="e-card-header-title">
@@ -204,16 +221,16 @@
         <div class="row"> 
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
             <mat-form-field>
-              <mat-label>Skype Id *</mat-label>
-              <input placeholder="Skype id"  formControlName="skypeid" matInput />
+              <mat-label>Skype Id</mat-label>
+              <input placeholder="Skype id"  formControlName="skypeid" matInput required />
 
-              <mat-error *ngIf="hasError('skypeid', 'required')">Skype is required</mat-error>
+              <mat-error *ngIf="hasGlobalError('skypeid', 'required')">Skype is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
             <mat-form-field>
-              <mat-label>VISA Type *</mat-label>
-              <mat-select formControlName="visaType" >
+              <mat-label>VISA Type </mat-label>
+              <mat-select formControlName="visaType" required>
                 <input class="myInput" matInput (keyup)="search($event.target.value, visaListMain, 'visaList')" autocomplete="off" placeholder="search">
                 
                 <mat-option [value]=""> </mat-option>
@@ -228,7 +245,7 @@
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
             <mat-form-field>
               <mat-label>Expected Rate Per Hour *</mat-label>
-              <input matInput placeholder="Expected rate per hour" formControlName="expectedRatePerHour" />
+              <input matInput placeholder="Expected rate per hour" formControlName="expectedRatePerHour" required/>
               <mat-error *ngIf="hasGlobalError('expectedRatePerHour', 'required')">VISA Type is required</mat-error>
             </mat-form-field>
           </div>
@@ -244,16 +261,15 @@
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
             <mat-form-field>
               <mat-label>Education Details *</mat-label>
-              <input placeholder="Education Details"  formControlName="educationDetails" matInput />
               <textarea matInput placeholder="Education details. ......." formControlName="educationDetails"
-              style="min-height: 75px;"></textarea>
-              <mat-error *ngIf="hasGlobalError('educationDetails', 'required')">Skype is required</mat-error>
+              style="min-height: 75px;" required></textarea>
+              <mat-error *ngIf="hasGlobalError('educationDetails', 'required')">Education Details is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
             <mat-form-field>
               <mat-label>Best time to reach *</mat-label>
-              <input matInput placeholder="Best Time to reach" formControlName="bestTimeToReach" />
+              <input matInput placeholder="Best Time to reach" formControlName="bestTimeToReach" required/>
               <mat-error *ngIf="hasGlobalError('bestTimeToReach', 'required')">Best Time to reach is required</mat-error>
             </mat-form-field>
           </div>
@@ -261,7 +277,7 @@
           <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
             <mat-form-field>
               <mat-label>Best way to reach *</mat-label>
-              <mat-select formControlName="bestWayToReach" >
+              <mat-select formControlName="bestWayToReach" required>
                 <input class="myInput" matInput (keyup)="search($event.target.value, bestWayToReachListMain, 'bestWayToReachList')" autocomplete="off" placeholder="search">
                 
                 <mat-option [value]=""> </mat-option>
@@ -298,4 +314,3 @@
       </div>
     </div>
   </form>
-</div>

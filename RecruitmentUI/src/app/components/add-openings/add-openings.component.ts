@@ -66,6 +66,8 @@ export class AddOpeningsComponent implements OnInit {
             this.alertService.error(res.message);
           }
         });
+
+     
     }
     this.jobGroup = new FormGroup({
       id: new FormControl(0),

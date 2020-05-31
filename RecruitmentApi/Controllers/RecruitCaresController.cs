@@ -45,6 +45,16 @@ namespace RecruitmentApi.Controllers
                                        from m in modifiedUsers.DefaultIfEmpty()
                                        join n in _context.MasterData on x.noticePeriod equals n.id into notices
                                        from n in notices.DefaultIfEmpty()
+                                       join t in _context.MasterData on x.totalExp equals t.id
+                                       join r in _context.MasterData on x.relavantExp equals r.id
+                                       join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                       from b in bestways.DefaultIfEmpty()
+                                       join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                       from v in visaTypes.DefaultIfEmpty()
+                                       join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                       from h in qualifications.DefaultIfEmpty()
+                                       join st in _context.State on x.state equals st.Id
+                                       join ci in _context.Citys on x.city equals ci.Id
                                        select new RecruitCareView()
                                        {
                                            jobid = y.id,
@@ -67,7 +77,27 @@ namespace RecruitmentApi.Controllers
                                            statusName = s.name,
                                            fileName = x.fileName,
                                            noticePeriod = x.noticePeriod,
-                                           notice = n.name
+                                           notice = n.name,
+                                           anyOfferExist = x.anyOfferExist,
+                                           bestTimeToReach = x.bestTimeToReach,
+                                           bestWayToReach = x.bestWayToReach,
+                                           city = x.city,
+                                           educationDetails = x.educationDetails,
+                                           expectedRatePerHour = x.expectedRatePerHour,
+                                           highestQualification = x.highestQualification,
+                                           relavantExp = x.relavantExp,
+                                           rtr = x.rtr,
+                                           skypeid = x.skypeid,
+                                           state = x.state,
+                                           totalExp = x.totalExp,
+                                           visaType = x.visaType,
+                                           totalExpName = t.name,
+                                           relavantExpName = r.name,
+                                           bestWayToReachName = b.name,
+                                           highestQualificationName = h.name,
+                                           visaTypeName = v.name,
+                                           cityName = ci.Name,
+                                           stateName = st.Name
                                        }).AsQueryable().ToListAsync();
 
                 response.Success = true;
@@ -98,6 +128,16 @@ namespace RecruitmentApi.Controllers
                                        from m in modifiedUsers.DefaultIfEmpty()
                                        join n in _context.MasterData on x.noticePeriod equals n.id into notices
                                        from n in notices.DefaultIfEmpty()
+                                       join t in _context.MasterData on x.totalExp equals t.id 
+                                       join r in _context.MasterData on x.relavantExp equals r.id
+                                       join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                       from b in bestways.DefaultIfEmpty()
+                                       join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                       from v in visaTypes.DefaultIfEmpty()
+                                       join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                       from h in qualifications.DefaultIfEmpty()
+                                       join st in _context.State on x.state equals st.Id
+                                       join ci in _context.Citys on x.city equals ci.Id
                                        where ( user != null && user.roleId == (int)Roles.SuperAdmin ) || ( x.createdBy == id || x.modifiedBy == id)
                                        select new RecruitCareView()
                                        {
@@ -121,7 +161,27 @@ namespace RecruitmentApi.Controllers
                                            statusName = s.name,
                                            fileName = x.fileName,
                                            noticePeriod = x.noticePeriod,
-                                           notice = n.name
+                                           notice = n.name,
+                                           anyOfferExist= x.anyOfferExist,
+                                           bestTimeToReach = x.bestTimeToReach,
+                                           bestWayToReach = x.bestWayToReach,
+                                           city= x.city,
+                                           educationDetails = x.educationDetails,
+                                           expectedRatePerHour = x.expectedRatePerHour,
+                                           highestQualification = x.highestQualification,
+                                           relavantExp = x.relavantExp,
+                                           rtr = x.rtr,
+                                           skypeid = x.skypeid,
+                                           state = x.state,
+                                           totalExp = x.totalExp,
+                                           visaType = x.visaType,
+                                           totalExpName = t.name,
+                                           relavantExpName = r.name,
+                                           bestWayToReachName = b.name,
+                                           highestQualificationName = h.name,
+                                           visaTypeName = v.name,
+                                           cityName = ci.Name,
+                                           stateName = st.Name
                                        }).AsQueryable().ToListAsync();
 
                 response.Success = true;

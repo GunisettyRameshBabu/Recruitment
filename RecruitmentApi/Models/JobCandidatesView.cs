@@ -5,30 +5,32 @@ using System.Threading.Tasks;
 
 namespace RecruitmentApi.Models
 {
-    public class JobCandidatesView : BaseEntity
+    public class JobCandidatesView : JobCandidates
     {
-        public int id { get; set; }
-
-        public int jobid { get; set; }
+       
 
         public string jobName { get; set; }
 
-        public string firstName { get; set; }
-
-        public string middleName { get; set; }
-
-        public string lastName { get; set; }
-
-        public long phone { get; set; }
-
-        public byte[] resume { get; set; }
-
-        public int status { get; set; }
-
+       
         public string statusName { get; set; }
 
-        public string fileName { get; set; }
+        
+        public string cityName { get; set; }
 
-        public string email { get; set; }
+        public string stateName { get; set; }
+
+        public string totalExpName { get; set; }
+
+        public string bestWayToReachName { get; set; }
+
+        public string visaTypeName { get; set; }
+
+        public string highestQualificationName { get; set; }
+
+        public string relavantExpName { get; set; }
+
+        public string countryCode { get; set; }
+
+
     }
 }

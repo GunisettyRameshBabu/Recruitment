@@ -19,6 +19,7 @@ export enum MasterDataTypes {
   Roles,
   NoticePeriod,
   VisaType,
-  WaysToReach
+  WaysToReach,
+  Qualifications
 
 }

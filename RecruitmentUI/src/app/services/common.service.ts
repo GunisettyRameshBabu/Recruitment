@@ -40,5 +40,14 @@ export class CommonService {
     return this.http.get(environment.apiUrl + 'JobCandidates/Download/'+ id, {responseType: 'blob'});
   }
 
+  getCountryById(id) {
+    return this.http.get(environment.apiUrl + 'Countries/'+ id);
+  }
+
+  
+  getCountryCodeByJobId(id) {
+    return this.http.get(environment.apiUrl + 'Openings/GetCountryCodeByJobId/'+ id);
+  }
+
 
 }

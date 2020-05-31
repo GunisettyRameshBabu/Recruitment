@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -108,26 +109,59 @@ namespace RecruitmentApi.Controllers
             {
                 response.Data = await (from x in _context.JobCandidates
                                        join j in _context.Openings on x.jobid equals j.id
-                                           join s in _context.MasterData on x.status equals s.id
-                                           where j.id == id
-                                           select new JobCandidatesView()
-                                           {
-                                               jobid = x.jobid,
-                                               firstName = x.firstName,
-                                               id = x.id,
-                                               lastName = x.lastName,
-                                               middleName = x.middleName,
-                                               phone = x.phone,
-                                               resume = x.resume,
-                                               status = s.id,
-                                               statusName = s.name,
-                                               email = x.email,
-                                               fileName = x.fileName,
-                                               createdBy = x.createdBy,
-                                               createdDate = x.createdDate,
-                                               modifiedBy = x.modifiedBy,
-                                               modifiedDate = x.modifiedDate
-                                           }).ToListAsync();
+                                       join s in _context.MasterData on x.status equals s.id
+                                       join t in _context.MasterData on x.totalExp equals t.id into totalExps
+                                       from t in totalExps.DefaultIfEmpty()
+                                       join r in _context.MasterData on x.relavantExp equals r.id into relavantExps
+                                       from r in relavantExps.DefaultIfEmpty()
+                                       join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                       from b in bestways.DefaultIfEmpty()
+                                       join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                       from v in visaTypes.DefaultIfEmpty()
+                                       join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                       from h in qualifications.DefaultIfEmpty()
+                                       join st in _context.State on x.state equals st.Id into states
+                                       from st in states.DefaultIfEmpty()
+                                       join ci in _context.Citys on x.city equals ci.Id into cities
+                                       from ci in cities.DefaultIfEmpty()
+                                       join cu in _context.Countries on j.country equals cu.Id
+                                       where x.jobid == id
+                                       select new JobCandidatesView()
+                                       {
+                                           jobid = x.jobid,
+                                           firstName = x.firstName,
+                                           id = x.id,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           phone = x.phone,
+                                           resume = x.resume,
+                                           status = s.id,
+                                           statusName = s.name,
+                                           email = x.email,
+                                           fileName = x.fileName,
+                                           jobName = j.jobid,
+                                           anyOfferExist = x.anyOfferExist,
+                                           bestTimeToReach = x.bestTimeToReach,
+                                           bestWayToReach = x.bestWayToReach,
+                                           city = x.city,
+                                           educationDetails = x.educationDetails,
+                                           expectedRatePerHour = x.expectedRatePerHour,
+                                           highestQualification = x.highestQualification,
+                                           relavantExp = x.relavantExp,
+                                           rtr = x.rtr,
+                                           skypeid = x.skypeid,
+                                           state = x.state,
+                                           totalExp = x.totalExp,
+                                           visaType = x.visaType,
+                                           totalExpName = t.name,
+                                           relavantExpName = r.name,
+                                           bestWayToReachName = b.name,
+                                           highestQualificationName = h.name,
+                                           visaTypeName = v.name,
+                                           cityName = ci.Name,
+                                           stateName = st.Name,
+                                           countryCode = cu.Code
+                                       }).ToListAsync();
 
                 response.Success = true;
                 response.Message = "Success";
@@ -143,47 +177,7 @@ namespace RecruitmentApi.Controllers
             return response;
         }
 
-        [HttpGet("GetCandidatesByJobId/{id}")]
-        public async Task<ServiceResponse<List<JobCandidatesView>>> GetCandidatesByJobId(int id)
-        {
-            var response = new ServiceResponse<List<JobCandidatesView>>();
-            try
-            {
-                response.Data = await (from x in _context.JobCandidates
-                                       join s in _context.MasterData on x.status equals s.id
-                                       where x.id == id
-                                       select new JobCandidatesView()
-                                       {
-                                           jobid = x.jobid,
-                                           firstName = x.firstName,
-                                           id = x.id,
-                                           lastName = x.lastName,
-                                           middleName = x.middleName,
-                                           phone = x.phone,
-                                           resume = x.resume,
-                                           status = s.id,
-                                           statusName = s.name,
-                                           email = x.email,
-                                           fileName = x.fileName,
-                                           createdBy = x.createdBy,
-                                           createdDate = x.createdDate,
-                                           modifiedBy = x.modifiedBy,
-                                           modifiedDate = x.modifiedDate
-                                       }).ToListAsync();
-
-                response.Success = true;
-                response.Message = "Success";
-            }
-            catch (Exception ex)
-            {
-                response.Success = false;
-                 response.Message = await CustomLog.Log(ex, _context);
-            }
-
-
-
-            return response;
-        }
+       
 
         // PUT: api/JobCandidates/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -210,10 +204,17 @@ namespace RecruitmentApi.Controllers
                     return response;
                 }
 
-                job.status = jobCandidates.status;
-                job.modifiedBy = jobCandidates.modifiedBy;
-                job.modifiedDate = DateTime.Now;
-                _context.Entry(job).CurrentValues.SetValues(job);
+                if (User.Identity.IsAuthenticated)
+                {
+                    var identity = User.Identity as ClaimsIdentity;
+                    if (identity != null)
+                    {
+                        IEnumerable<Claim> claims = identity.Claims;
+                    }
+                }
+
+                    jobCandidates.modifiedDate = DateTime.Now;
+                _context.Entry(job).CurrentValues.SetValues(jobCandidates);
                 await _context.SaveChangesAsync();
                 response.Success = true;
                 response.Message = "Update success";

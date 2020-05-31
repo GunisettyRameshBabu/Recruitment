@@ -1,5 +1,5 @@
-<div class="jumbotron">
-  <div class="e-card e-custom-card bg-1" *ngIf="job">
+
+  <div class="e-card e-custom-card bg-1 padding-top" *ngIf="job">
     <div class="e-card-header">
       <div class="e-card-header-caption">
         <div class="e-card-header-title">
@@ -113,7 +113,7 @@
       </div>
     </div>
   </div>
-  <br />
+  <div style="min-height: 10px;"></div>
   <div class="e-card e-custom-card bg-1" *ngIf="job">
     <div class="e-card-header">
       <div class="e-card-header-caption">
@@ -126,15 +126,15 @@
       <div [innerHTML]="job.description" class="card-text"></div>
     </div>
   </div>
-  <br />
-  <div class="e-card e-custom-card bg-11" *ngIf="job">
+  <div style="min-height: 10px;"></div>
+  <div class="e-card e-custom-card bg-1 padding-bottom" *ngIf="job">
     
     <div class="e-card-content">
       <app-jobcandidates
       [candidates]="job.candidates"
       [jobid]="job.jobid"
+      [canEditOrAdd]="false"
     ></app-jobcandidates>
     </div>
   </div>
 
-</div>

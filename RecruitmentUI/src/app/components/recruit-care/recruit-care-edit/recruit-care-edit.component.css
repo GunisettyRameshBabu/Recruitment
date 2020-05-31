@@ -14,7 +14,3 @@ mat-form-field {
     overflow-y: scroll;
 }
 
-.myInput {
-  height: 50px !important;
-  padding: 10px !important;
-}

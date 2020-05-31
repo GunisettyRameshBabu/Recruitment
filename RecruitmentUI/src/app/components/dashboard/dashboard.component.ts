@@ -33,26 +33,26 @@ export class DashboardComponent implements OnInit {
     let color = 'e-card e-custom-card bg-secondary';
     switch (type) {
       case 'Bench':
-        color = 'e-card e-custom-card bg-danger';
+        color = 'e-card e-custom-card bg-1';
         break;
       case 'Hold':
-        color = 'e-card e-custom-card bg-info';
+        color = 'e-card e-custom-card bg-2';
         break;
       case 'InProgress':
-        color = 'e-card e-custom-card bg-primary';
+        color = 'e-card e-custom-card bg-10';
         break;
       case 'Interview On Going':
-        color = 'e-card e-custom-card bg-primary';
+        color = 'e-card e-custom-card bg-11';
         break;
       case 'Not Reachable':
         case 'Rejected':
-        color = 'e-card e-custom-card bg-danger';
+        color = 'e-card e-custom-card bg-1';
         break;
       case 'Offered':
-        color = 'e-card e-custom-card bg-success';
+        color = 'e-card e-custom-card bg-10';
         break;
       case 'Submitted':
-        color = 'e-card e-custom-card bg-primary';
+        color = 'e-card e-custom-card bg-41';
         break;
 
       default:

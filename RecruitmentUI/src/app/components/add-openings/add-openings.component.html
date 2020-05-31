@@ -105,9 +105,8 @@
             </div>
         </div>
       </div>
-    
-      <br/>
-      <div class = "e-card e-custom-card bg-2">                   
+      <div style="min-height: 10px;"></div>
+      <div class = "e-card e-custom-card bg-1">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
                 <div class="e-card-header-title">
@@ -202,8 +201,7 @@
             </div>
         </div>
       </div>
-      
-      <br/>
+      <div style="min-height: 10px;"></div>
       <div class = "e-card e-custom-card bg-10">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
@@ -220,21 +218,20 @@
             </div>
         </div>
       </div>
-
-      <br/>
-      <div class = "e-card e-custom-card bg-11" *ngIf="id != undefined && job != undefined">                   
+      <div style="min-height: 10px;"></div>
+      <div class = "e-card e-custom-card bg-1" *ngIf="id != undefined && job != undefined">                   
         <div class="e-card-header">          
             <div class="e-card-header-caption">    
                 <div class="e-card-header-title">
                 </div>   
                 <div class="e-card-content">
-                  <app-jobcandidates [candidates]='candidates' [jobid]="job.id"></app-jobcandidates>
+                  <app-jobcandidates [candidates]='candidates' [jobid]="job.id" [canEditOrAdd]="true"></app-jobcandidates>
                 </div>
             </div>
         </div>
       </div>
-      <br/>
-      <div class="row">
+      <div style="min-height: 10px;"></div>
+      <div class="row padding-bottom">
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-xlg-12">
           <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group mr-2" role="group" aria-label="First group">

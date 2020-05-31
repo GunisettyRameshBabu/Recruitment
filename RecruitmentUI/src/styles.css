@@ -15,7 +15,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .jumbotron {
-  margin-top: 3%;
+  margin-top: 5%;
 }
 .e-custom-card {
   position: relative;
@@ -27,6 +27,11 @@
   padding: 1px;
   background-color: lightgoldenrodyellow;
   color: black;
+}
+md-dialog-container{
+  
+  overflow: scroll;
+  padding: 0 !important;
 }
 .bg-1 {
   background-image: url(assets/background1.jpeg);
@@ -56,6 +61,11 @@
 body {
   font-family: Roboto, Arial, sans-serif;
   margin: 0;
+}
+
+.myInput {
+  height: 50px !important;
+  padding: 10px !important;
 }
 
 html, body{
@@ -110,6 +120,13 @@ html, body{
   color: black;
 }
 
+.padding-top {
+  margin-top: 3%;
+}
+
+.padding-bottom {
+  margin-bottom: 3%;
+}
 img {
   cursor: pointer;
 }
