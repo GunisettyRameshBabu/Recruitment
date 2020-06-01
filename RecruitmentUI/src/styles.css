@@ -120,8 +120,16 @@ html, body{
   color: black;
 }
 
+.min-height {
+min-height: 10px;
+}
+
 .padding-top {
-  margin-top: 3%;
+  margin-top: 90px;
+}
+
+i{
+  cursor: pointer;
 }
 
 .padding-bottom {

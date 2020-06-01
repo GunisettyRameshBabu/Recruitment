@@ -88,7 +88,7 @@ export class AddcandidateComponent implements OnInit {
       lastName: new FormControl('', Validators.required),
       status: new FormControl('', Validators.required),
       phone: new FormControl('', Validators.required),
-      createdBy: new FormControl('', Validators.required),
+      createdBy: new FormControl(null),
       modifiedBy: new FormControl(''),
       fileName: new FormControl(''),
       createdDate: new FormControl(new Date()),
@@ -110,8 +110,6 @@ export class AddcandidateComponent implements OnInit {
     this.jobGroup.reset(this.job);
     
     this.countryCode = this.job.countryCode;
-    this.user = this.userSession.getLoggedInUser() as User;
-    this.jobGroup.controls.createdBy.setValue(this.user.id);
     if (this.jobGroup.controls.id.value != "0") {
       this.jobGroup.controls.modifiedBy.setValue(this.user.id);
       this.getStates(this.job.jobid);

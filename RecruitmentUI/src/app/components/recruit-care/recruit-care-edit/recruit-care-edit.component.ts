@@ -26,7 +26,6 @@ export class RecruitCareEditComponent implements OnInit {
   recruitGroup: FormGroup;
   recruit: any = {};
   jobs = [];
-  user: User;
   statusList = [];
   resume: any;
   noticeList = [];
@@ -60,7 +59,6 @@ export class RecruitCareEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user = this.userSession.getLoggedInUser() as User;
     this.recruitGroup = this.formBuilder.group({
       id: new FormControl(0),
       firstName: new FormControl('', Validators.required),
@@ -74,10 +72,10 @@ export class RecruitCareEditComponent implements OnInit {
         Validators.pattern(new RegExp("[0-9 ]{10}")),
       ]),
       status: new FormControl('', Validators.required),
-      createdBy: new FormControl(''),
-      modifiedBy: new FormControl(''),
-      createdDate: new FormControl(''),
-      modifiedDate: new FormControl(''),
+      createdBy: new FormControl(null),
+      modifiedBy: new FormControl(null),
+      createdDate: new FormControl(null),
+      modifiedDate: new FormControl(null),
       fileName: new FormControl('', Validators.required),
       noticePeriod: new FormControl('',Validators.required),
       city: new FormControl('', Validators.required),
@@ -97,7 +95,7 @@ export class RecruitCareEditComponent implements OnInit {
     this.recruitGroup.reset(this.recruit);
     
     this.jobService
-      .getJobs(this.user.countryId, this.user.id)
+      .getJobs()
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.jobs = res.data;
@@ -181,12 +179,6 @@ export class RecruitCareEditComponent implements OnInit {
 
   onSubmit() {
     if (this.recruitGroup.valid) {
-      if (this.recruitGroup.controls.id.value > 0) {
-        this.recruitGroup.controls.modifiedBy.setValue(this.user.id);
-      } else {
-        this.recruitGroup.controls.createdBy.setValue(this.user.id);
-      }
-
       this.jobService
         .addOrUpdateRecruitCare(this.recruitGroup.value)
         .subscribe((res: ServiceResponse) => {

@@ -16,7 +16,7 @@ namespace RecruitmentApi.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class StatesController : ControllerBase
+    public class StatesController : Base
     {
         private readonly DataContext _context;
 
@@ -156,6 +156,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "state not found";
                     return response;
                 }
+                state.modifiedBy = LoggedInUser;
                 state.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(state);
                 await _context.SaveChangesAsync();
@@ -194,6 +195,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
+                state.createdBy = LoggedInUser;
                 state.createdDate = DateTime.Now;
                 _context.State.Add(state);
                 await _context.SaveChangesAsync();

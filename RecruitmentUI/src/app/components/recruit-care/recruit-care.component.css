@@ -3,7 +3,12 @@
     background-size: cover;
   }
 
-  .e-card-header-title {
+  .e-card-header {
     background-image: url(../../../assets/recruitcare.jpg);
     background-size: cover;
+  }
+
+  #img {
+    border-radius: 15;
+    max-height: 80px;
   }

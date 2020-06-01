@@ -9,18 +9,18 @@ import { Opening } from '../components/add-openings/opening';
 export class JobService {
   constructor(private http: HttpClient) {}
 
-  getJobOpenings(userId, type) {
+  getJobOpenings(type) {
     return this.http.get(
-      environment.apiUrl + 'Openings/GetOpeningsByCountry/' + userId + '/'+ type
+      environment.apiUrl + 'Openings/GetOpeningsByCountry/' + type
     );
   }
 
-  getJobs(id, userid) {
-    return this.http.get(environment.apiUrl + 'Openings/GetJobs/' + id + '/'+ userid);
+  getJobs() {
+    return this.http.get(environment.apiUrl + 'Openings/GetJobs');
   }
 
   getJobDetails(id,userid) {
-    return this.http.get(environment.apiUrl + 'Openings/' + id+ '/'+ userid);
+    return this.http.get(environment.apiUrl + 'Openings/' + id);
   }
 
   getJobForEdit(id: number) {
@@ -101,9 +101,9 @@ export class JobService {
     );
   };
 
-  public GetRecruitCare(userid) {
+  public GetRecruitCare() {
     return this.http.get(
-      environment.apiUrl + 'RecruitCares/GetRecruitCareByMe/' + userid
+      environment.apiUrl + 'RecruitCares/GetRecruitCareByMe'
     );
   }
 

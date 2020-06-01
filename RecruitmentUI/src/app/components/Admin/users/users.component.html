@@ -1,5 +1,5 @@
 
-  <div class = "e-card e-custom-card bg-1">
+  <div class = "e-card e-custom-card bg-1 padding-top">
     <div class="e-card-header">
         <div class="e-card-header-caption">
             <div class="e-card-header-title">
@@ -16,14 +16,14 @@
                     <img src="../../../assets/edit-black-18dp.svg" (click)="edit(data)">
                 </ng-template>
                 </e-column>
-                  <e-column field='firstName' headerText='First Name' width="150"></e-column>
-                  <e-column field='middleName' headerText='Middle Name' width="150"></e-column>
-                  <e-column field='lastName' headerText='Last Name' width="150"></e-column>
-                  <e-column field='userid' headerText='User Id' width="150"></e-column>
-                  <e-column field='email' headerText='Email' width="150"></e-column>
-                  <e-column field='role' headerText='Role' width="150"></e-column>
-                  <e-column field='countryName' headerText='Country' width="150"></e-column>
-                  <e-column field='active' headerText='Active'>
+                  <e-column field='firstName' headerText='First Name' width="200"></e-column>
+                  <e-column field='middleName' headerText='Middle Name' width="200"></e-column>
+                  <e-column field='lastName' headerText='Last Name' width="200"></e-column>
+                  <e-column field='userid' headerText='User Id' width="250"></e-column>
+                  <e-column field='email' headerText='Email' width="200"></e-column>
+                  <e-column field='role' headerText='Role' width="200"></e-column>
+                  <e-column field='countryName' headerText='Country' width="200"></e-column>
+                  <e-column field='active' headerText='Active' width="100">
                     <ng-template #template  let-data>
                      <input type="checkbox" disabled checked *ngIf="data.active">
                      <input type="checkbox"  disabled *ngIf="!data.active">

@@ -27,11 +27,11 @@ export class AddOpeningsComponent implements OnInit {
   statuses = [];
   jobGroup: FormGroup;
   id: number;
-  user: User;
   candidates = [];
   users = [];
   usersList = [];
   job;
+  minDate;
 
   constructor(
     private commonService: CommonService,
@@ -44,7 +44,6 @@ export class AddOpeningsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.user = this.userSession.getLoggedInUser() as User;
     this.activated.params.subscribe((res: any) => {
       this.id = +res.id;
     });
@@ -53,6 +52,7 @@ export class AddOpeningsComponent implements OnInit {
         .getJobForEdit(this.id)
         .subscribe((res: ServiceResponse) => {
           if (res.success) {
+            this.minDate = res.data.targetdate;
             this.job = res.data;
             this.jobGroup.reset(res.data);
             this.jobService
@@ -68,6 +68,8 @@ export class AddOpeningsComponent implements OnInit {
         });
 
      
+    } else {
+      this.minDate = new Date();
     }
     this.jobGroup = new FormGroup({
       id: new FormControl(0),
@@ -78,14 +80,14 @@ export class AddOpeningsComponent implements OnInit {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
-      zip: new FormControl('', [Validators.required, Validators.pattern(new RegExp('[0-9 ]{6}')) ]),
+      zip: new FormControl(''),
       description: new FormControl('', Validators.required),
       jobtype: new FormControl('', Validators.required),
       client: new FormControl('', Validators.required),
       isclientConfidencial: new FormControl(false),
       experience: new FormControl('', Validators.required),
-      targetdate: new FormControl('', Validators.required),
-      createdBy: new FormControl(''),
+      targetdate: new FormControl(new Date(), Validators.required),
+      createdBy: new FormControl(null),
       createdDate: new FormControl(null),
       modifiedBy: new FormControl(null),
       modifiedDate: new FormControl(null),
@@ -112,7 +114,7 @@ export class AddOpeningsComponent implements OnInit {
     // });
 
     this.commonService
-      .getCountriesByUserId(this.user.id)
+      .getCountriesByUserId()
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.countries = res.data;
@@ -182,15 +184,6 @@ export class AddOpeningsComponent implements OnInit {
 
   onSubmit() {
     if (this.jobGroup.valid) {
-      this.user = this.userSession.getLoggedInUser() as User;
-      if (
-        this.jobGroup.controls.value != undefined &&
-        +this.jobGroup.controls.id.value > 0
-      ) {
-        this.jobGroup.controls.modifiedBy.setValue(this.user.id);
-      } else {
-        this.jobGroup.controls.createdBy.setValue(this.user.id);
-      }
       this.jobService
         .addOrUpdateOpening(this.jobGroup.value)
         .subscribe((res: ServiceResponse) => {

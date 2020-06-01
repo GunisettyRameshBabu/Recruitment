@@ -16,7 +16,7 @@ namespace RecruitmentApi.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class JobCandidatesController : ControllerBase
+    public class JobCandidatesController : Base
     {
         private readonly DataContext _context;
 
@@ -125,6 +125,9 @@ namespace RecruitmentApi.Controllers
                                        join ci in _context.Citys on x.city equals ci.Id into cities
                                        from ci in cities.DefaultIfEmpty()
                                        join cu in _context.Countries on j.country equals cu.Id
+                                       join cr in _context.Users on x.createdBy equals cr.id
+                                       join md in _context.Users on x.modifiedBy equals md.id into modifies
+                                       from md in modifies.DefaultIfEmpty()
                                        where x.jobid == id
                                        select new JobCandidatesView()
                                        {
@@ -160,8 +163,14 @@ namespace RecruitmentApi.Controllers
                                            visaTypeName = v.name,
                                            cityName = ci.Name,
                                            stateName = st.Name,
-                                           countryCode = cu.Code
-                                       }).ToListAsync();
+                                           countryCode = cu.Code,
+                                           modifiedDate = x.modifiedDate,
+                                           createdDate = x.createdDate,
+                                           createdBy = x.createdBy,
+                                           modifiedBy = x.modifiedBy,
+                                           createdByName = Common.GetFullName(cr),
+                                           modifiedByName = Common.GetFullName(md)
+                                       }).AsQueryable().ToListAsync();
 
                 response.Success = true;
                 response.Message = "Success";
@@ -213,6 +222,7 @@ namespace RecruitmentApi.Controllers
                     }
                 }
 
+                jobCandidates.modifiedBy = LoggedInUser;
                     jobCandidates.modifiedDate = DateTime.Now;
                 _context.Entry(job).CurrentValues.SetValues(jobCandidates);
                 await _context.SaveChangesAsync();
@@ -334,6 +344,7 @@ namespace RecruitmentApi.Controllers
                     response.Success = false;
                     return response;
                 }
+                jobCandidates.createdBy = LoggedInUser;
                 jobCandidates.createdDate = DateTime.Now;
                 _context.JobCandidates.Add(jobCandidates);
                 await _context.SaveChangesAsync();

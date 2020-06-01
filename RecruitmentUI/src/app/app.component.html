@@ -1,17 +1,13 @@
 
 <ng-http-loader 
-    [backdrop]="false"
-    [backgroundColor]="'#ff0000'"
-    [debounceDelay]="100"
-    [extraDuration]="300"
-    [minDuration]="300"
-    [opacity]=".6"
-    [spinner]="spinkit.skCubeGrid">
+    
+    [entryComponent]="spinnerComponent">
 </ng-http-loader>
 
 <div class="container-fluid">
     <div class="header">
         <app-header></app-header>
+        
     </div>
     <div class="content">
       <router-outlet></router-outlet>

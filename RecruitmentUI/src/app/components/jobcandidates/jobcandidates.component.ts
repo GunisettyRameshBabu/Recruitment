@@ -41,7 +41,7 @@ export class JobcandidatesComponent implements OnInit {
     public dialog: MatDialog,
     private jobService: JobService,
     private commonService: CommonService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.dialog.closeAll();
@@ -52,15 +52,17 @@ export class JobcandidatesComponent implements OnInit {
       allowAdding: false,
     };
     this.toolbar = (this.canEditOrAdd == true ? ['Candidates', 'Add Candidate', 'ExcelExport'] : ['Candidates', 'ExcelExport']);
-    this.commonService.getCountryCodeByJobId(this.jobid).subscribe((res: ServiceResponse) => {
-      if (res.success) {
-        this.countryCode = res.data;
-      } 
-    })
+    if (this.canEditOrAdd) {
+      this.commonService.getCountryCodeByJobId(this.jobid).subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.countryCode = res.data;
+        }
+      })
+    }
   }
 
   addCandidate() {
-    let data = { jobid: this.jobid, id: 0 , countryCode : this.countryCode };
+    let data = { jobid: this.jobid, id: 0, countryCode: this.countryCode };
     const dialogRef = this.dialog.open(AddcandidateComponent, {
       data: data,
       hasBackdrop: true,
@@ -78,7 +80,7 @@ export class JobcandidatesComponent implements OnInit {
     });
   }
 
- 
+
   toolbarClick(args: ClickEventArgs): void {
     console.log(args);
     if (args.item.id.indexOf('excelexport') > 0) {

@@ -16,6 +16,7 @@ import {
 
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { MatDialog } from '@angular/material/dialog';
+import { AddcandidateComponent } from '../jobcandidates/addcandidate/addcandidate.component';
 
 @Component({
   selector: 'app-jobopenings',
@@ -31,13 +32,24 @@ export class JobopeningsComponent implements OnInit {
     queryString: 'jobid',
     dataSource: this.openings.candidates,
     columns: [
-      { field: 'jobid', headerText: 'Job Id', width: 120, visible: false },
-      { field: 'firstName', headerText: 'First Name', width: 120 },
-      { field: 'middleName', headerText: 'Middle Name', width: 150 },
-      { field: 'lastName', headerText: 'Last Name', width: 150 },
-      { field: 'phone', headerText: 'Phone', width: 150 },
-      { field: 'statusName', headerText: 'Status', width: 150 },
-      { field: 'email', headerText: 'Email', width: 150 },
+      { field: 'jobid', headerText: 'Job Id', width: 200, visible: false },
+      { field: 'firstName', headerText: 'First Name', width: 200 },
+      { field: 'middleName', headerText: 'Middle Name', width: 200 },
+      { field: 'lastName', headerText: 'Last Name', width: 200 },
+      { field: 'phone', headerText: 'Phone', width: 200 },
+      { field: 'statusName', headerText: 'Status', width: 200 },
+      { field: 'email', headerText: 'Email', width: 200 },
+      { field: 'createdByName', headerText: 'Created By', width: 200, visible: false },
+      { field: 'createdDate', headerText: 'Created Date', width: 200 },
+      { field: 'modifiedName', headerText: 'Modified By', width: 200 },
+      { field: 'modifedDate', headerText: 'Modified Date', width: 200 },
+      { field: 'stateName', headerText: 'State Name', width: 200 },
+      { field: 'cityName', headerText: 'City Name', width: 200 },
+      { field: 'totalExpName', headerText: 'Total Exp.', width: 200 },
+      { field: 'relavantExpName', headerText: 'Relavant Exp.', width: 200 },
+      { field: 'bestWayToReachName', headerText: 'Best Way to reach', width: 200 },
+      { field: 'visaTypeName', headerText: 'VISA Type', width: 200 },
+      { field: 'highestQualificationName', headerText: 'Highest Qualification', width: 200 },
     ],
     load() {
       //   // this.dataSource = [
@@ -66,20 +78,40 @@ export class JobopeningsComponent implements OnInit {
     this.toolbarOptions = ['Openings', 'ExcelExport', 'Add'];
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.editSettings = { allowAdding: true };
-    let user = this.sessionService.getLoggedInUser() as User;
     this.activatedRoute.queryParams.subscribe((params: any) => {
       this.type = params.type;
     });
+    this.getData();
+  }
+
+  private getData() {
     this.jobService
-      .getJobOpenings(user.id, this.type)
+      .getJobOpenings(this.type)
       .subscribe((res: any) => {
         if (res.success) {
           this.openings = res.data;
           this.childGrid.dataSource = res.data.candidates;
-        } else {
+        }
+        else {
           this.alertService.error(res.message);
         }
       });
+  }
+
+  AddCandidate(rec){
+    let data = { jobid: rec.id, id: 0, countryCode: rec.countryCode };
+    const dialogRef = this.modal.open(AddcandidateComponent, {
+      data: data,
+      hasBackdrop: true,
+      disableClose: false,
+      position: {
+        top: '90px'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getData();
+    });
   }
 
   showDetails(item) {

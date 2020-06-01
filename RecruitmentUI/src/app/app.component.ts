@@ -5,6 +5,8 @@ import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
 import { Router } from '@angular/router';
 import { UsersessionService } from './services/usersession.service';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
+
 
 @Component({
   selector: 'app-root',
@@ -12,7 +14,8 @@ import { UsersessionService } from './services/usersession.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'QubeSmart';
+  public spinnerComponent: SpinnerComponent;
+  title = 'Qube Connect';
   idleState = 'Not started.';
   timedOut = false;
   lastPing?: Date = null;

@@ -28,7 +28,6 @@ export class EditOrAddMasterDataComponent implements OnInit {
   masterData;
   masterGroup: FormGroup;
   dataTypes = [];
-  user: User;
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<EditOrAddMasterDataComponent>,
@@ -46,12 +45,11 @@ export class EditOrAddMasterDataComponent implements OnInit {
       id: new FormControl(0),
       name: new FormControl('', Validators.required),
       type: new FormControl('', Validators.required),
-      createdBy: new FormControl(''),
-      createdDate: new FormControl(''),
-      modifiedBy: new FormControl(''),
-      modifiedDate: new FormControl(''),
+      createdBy: new FormControl(null),
+      createdDate: new FormControl(null),
+      modifiedBy: new FormControl(null),
+      modifiedDate: new FormControl(null),
     });
-    this.user = this.userSession.getLoggedInUser() as User;
     this.masterGroup.reset(this.masterData);
   }
 
@@ -65,12 +63,6 @@ export class EditOrAddMasterDataComponent implements OnInit {
 
   onSubmit() {
     if (this.masterGroup.valid) {
-      if (this.masterData.id > 0) {
-        this.masterGroup.controls.modifiedBy.setValue(this.user.id);
-      } else {
-        this.masterGroup.controls.createdBy.setValue(this.user.id);
-      }
-
       this.masterDataService.addOrUpdateMasterData(this.masterGroup.value).subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.alertService.success(res.message);

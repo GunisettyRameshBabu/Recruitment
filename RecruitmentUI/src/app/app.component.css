@@ -3,14 +3,16 @@
   .header{
     flex-shrink: 0;
     flex-grow: 0;
-    background: #039be5;
+    background-image: url(../assets/41.png);
+    background-size: cover;
     padding: 3px 5px;
   }
+
+  
   .content{
     flex-shrink: 1;
     flex-grow: 1;
     padding: 3px 5px;
-    padding-top: 60px;
     position: relative;
     overflow-y: auto;
   }

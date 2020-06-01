@@ -17,7 +17,6 @@ export class AddOrEditCountryComponent implements OnInit {
   masterData;
   countryGroup: FormGroup;
   dataTypes = [];
-  user: User;
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<AddOrEditCountryComponent>,
@@ -34,12 +33,11 @@ export class AddOrEditCountryComponent implements OnInit {
       id: new FormControl(0),
       name: new FormControl('', Validators.required),
       code: new FormControl('', Validators.required),
-      createdBy: new FormControl(''),
-      createdDate: new FormControl(''),
-      modifiedBy: new FormControl(''),
-      modifiedDate: new FormControl(''),
+      createdBy: new FormControl(null),
+      createdDate: new FormControl(null),
+      modifiedBy: new FormControl(null),
+      modifiedDate: new FormControl(null),
     });
-    this.user = this.userSession.getLoggedInUser() as User;
     this.countryGroup.reset(this.masterData);
   }
 
@@ -53,12 +51,6 @@ export class AddOrEditCountryComponent implements OnInit {
 
   onSubmit() {
     if (this.countryGroup.valid) {
-      if (this.masterData.id > 0) {
-        this.countryGroup.controls.modifiedBy.setValue(this.user.id);
-      } else {
-        this.countryGroup.controls.createdBy.setValue(this.user.id);
-      }
-
       this.masterDataService.addOrUpdateCountry(this.countryGroup.value).subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.alertService.success(res.message);

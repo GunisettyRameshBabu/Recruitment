@@ -24,6 +24,8 @@ export class HeaderComponent implements OnInit {
     return this.sessionService.checkUserLoggedIn();
   }
 
+ 
+
   getLoginType() {
     return this.sessionService.getLoginType();
   }

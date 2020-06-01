@@ -17,7 +17,6 @@ import { AddOrEditCityComponent } from './add-or-edit-city/add-or-edit-city.comp
 export class CityMasterComponent implements OnInit {
 
   @ViewChild('grid') public grid: GridComponent;
-  user: any;
   editSettings: { allowEditing: boolean; allowAdding: boolean; mode: string };
   toolbar: string[];
   masterdata = [];
@@ -35,7 +34,6 @@ export class CityMasterComponent implements OnInit {
   ngOnInit(): void {
     this.modal.closeAll();
     this.pageSettings = { pageSizes: true, pageSize: 10 };
-    this.user = this.userSession.getLoggedInUser();
     this.masterDataService.getMasterDataType().subscribe((res: ServiceResponse) => {
       if (res.success) {
         this.masterTypes = res.data;

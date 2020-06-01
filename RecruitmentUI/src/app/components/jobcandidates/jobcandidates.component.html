@@ -3,7 +3,9 @@
     <e-columns>
         <e-column width="60" *ngIf="canEditOrAdd">
             <ng-template #template  let-data>
-               <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)">
+               <!-- <img src="../../../assets/edit-black-18dp.svg" (click)="Edit(data)"> -->
+            
+                <span (click)="Edit(data)"><i class="fa fa-edit"></i></span>
             </ng-template>
         </e-column>
         <e-column field='firstName' headerText='First Name' width="150" >
@@ -22,6 +24,18 @@
              </e-column>
         <e-column field='email' headerText='Email' width="150">
 
+        </e-column>
+        <e-column field="createdByName" headerText="Created By" width="200"></e-column>
+        <e-column field="createdDate" headerText="Created Date" width="200">
+          <ng-template let-data>
+            {{ data.createdDate | date }}
+          </ng-template>
+        </e-column>
+        <e-column field="modifiedName" headerText="Modified By" width="200"></e-column>
+        <e-column field="modifedDate" headerText="Modified Date" width="200">
+          <ng-template let-data>
+            {{ data.modifedDate | date }}
+          </ng-template>
         </e-column>
         <e-column field='resume' headerText='Resume' width="200">
           <ng-template #template  let-data>
@@ -45,3 +59,4 @@
       
     </e-columns>
      </ejs-grid>
+     

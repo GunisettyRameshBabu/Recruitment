@@ -16,7 +16,7 @@ namespace RecruitmentApi.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CitiesController : ControllerBase
+    public class CitiesController : Base
     {
         private readonly DataContext _context;
 
@@ -133,6 +133,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "City not found";
                     return response;
                 }
+                city.modifiedBy = LoggedInUser;
                 city.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(city);
                 await _context.SaveChangesAsync();

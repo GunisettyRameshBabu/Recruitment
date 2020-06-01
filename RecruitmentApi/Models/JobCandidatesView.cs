@@ -31,6 +31,8 @@ namespace RecruitmentApi.Models
 
         public string countryCode { get; set; }
 
+        public string createdByName { get; set; }
 
+        public string modifiedByName { get; set; }
     }
 }

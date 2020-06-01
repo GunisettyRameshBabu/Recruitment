@@ -14,7 +14,7 @@ namespace RecruitmentApi.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class MasterDatasController : ControllerBase
+    public class MasterDatasController : Base
     {
         private readonly DataContext _context;
 
@@ -142,6 +142,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "Master Data not found";
                     return response;
                 }
+                masterData.modifiedBy = LoggedInUser;
                 masterData.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(masterData);
                 await _context.SaveChangesAsync();
@@ -180,6 +181,7 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
+                masterData.createdBy = LoggedInUser;
                 masterData.createdDate = DateTime.Now;
                 _context.MasterData.Add(masterData);
                 await _context.SaveChangesAsync();

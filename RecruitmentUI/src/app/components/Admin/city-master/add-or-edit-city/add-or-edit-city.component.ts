@@ -18,7 +18,6 @@ export class AddOrEditCityComponent implements OnInit {
   masterData;
   masterGroup: FormGroup;
   states = [];
-  user: User;
   constructor(
     private formBuilder: FormBuilder,
     public dialogRef: MatDialogRef<AddOrEditCityComponent>,
@@ -39,12 +38,11 @@ export class AddOrEditCityComponent implements OnInit {
       country: new FormControl('', Validators.required),
       state: new FormControl('', Validators.required),
       stateName: new FormControl('', Validators.required),
-      createdBy: new FormControl(''),
-      createdDate: new FormControl(''),
-      modifiedBy: new FormControl(''),
-      modifiedDate: new FormControl(''),
+      createdBy: new FormControl(null),
+      createdDate: new FormControl(null),
+      modifiedBy: new FormControl(null),
+      modifiedDate: new FormControl(null),
     });
-    this.user = this.userSession.getLoggedInUser() as User;
     this.masterGroup.reset(this.masterData);
     if (this.masterData.id > 0 ) {
       this.commonService
@@ -69,11 +67,6 @@ export class AddOrEditCityComponent implements OnInit {
 
   onSubmit() {
     if (this.masterGroup.valid) {
-      if (this.masterData.id > 0) {
-        this.masterGroup.controls.modifiedBy.setValue(this.user.id);
-      } else {
-        this.masterGroup.controls.createdBy.setValue(this.user.id);
-      }
 
       this.masterDataService.addOrUpdateCity(this.masterGroup.value).subscribe((res: ServiceResponse) => {
         if (res.success) {

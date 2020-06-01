@@ -66,10 +66,10 @@ export class UsereditComponent implements OnInit {
         roleId: new FormControl('', Validators.required),
         countryId: new FormControl('', Validators.required),
         active: new FormControl(true),
-        createdBy: new FormControl(),
-        modifiedBy: new FormControl(),
-        createdDate: new FormControl(),
-        modifiedDate: new FormControl(),
+        createdBy: new FormControl(null),
+        modifiedBy: new FormControl(null),
+        createdDate: new FormControl(null),
+        modifiedDate: new FormControl(null),
       });
     } else {
       this.userEditGroup = new FormGroup({
@@ -82,10 +82,10 @@ export class UsereditComponent implements OnInit {
         roleId: new FormControl('', Validators.required),
         countryId: new FormControl('', Validators.required),
         active: new FormControl(false),
-        createdBy: new FormControl(),
-        modifiedBy: new FormControl(),
-        createdDate: new FormControl(),
-        modifiedDate: new FormControl(),
+        createdBy: new FormControl(null),
+        modifiedBy: new FormControl(null),
+        createdDate: new FormControl(null),
+        modifiedDate: new FormControl(null),
       });
       this.userEditGroup.reset(this.user);
     }
@@ -98,7 +98,6 @@ export class UsereditComponent implements OnInit {
         this.userGroup.controls.userid.setValue(
           this.userGroup.controls.email.value
         );
-        this.userGroup.controls.createdBy.setValue(logginUser.id);
         this.userService.adduser(this.userGroup.value).subscribe((res: any) => {
           this.alertService.success('User added successfully');
           this.dialogRef.close();

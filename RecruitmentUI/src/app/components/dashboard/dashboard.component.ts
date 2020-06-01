@@ -12,6 +12,13 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   data = [];
+  backGrounds = ['e-card e-custom-card bg-1',
+  'e-card e-custom-card bg-2',
+  'e-card e-custom-card bg-10',
+  'e-card e-custom-card bg-11',
+  'e-card e-custom-card bg-41'
+
+];
   constructor(
     private modal: MatDialog,
     private jobService: JobService,
@@ -29,35 +36,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getColorCode(type) {
-    let color = 'e-card e-custom-card bg-secondary';
-    switch (type) {
-      case 'Bench':
-        color = 'e-card e-custom-card bg-1';
-        break;
-      case 'Hold':
-        color = 'e-card e-custom-card bg-2';
-        break;
-      case 'InProgress':
-        color = 'e-card e-custom-card bg-10';
-        break;
-      case 'Interview On Going':
-        color = 'e-card e-custom-card bg-11';
-        break;
-      case 'Not Reachable':
-        case 'Rejected':
-        color = 'e-card e-custom-card bg-1';
-        break;
-      case 'Offered':
-        color = 'e-card e-custom-card bg-10';
-        break;
-      case 'Submitted':
-        color = 'e-card e-custom-card bg-41';
-        break;
+ random(mn, mx) {  
+    return Math.random() * (mx - mn) + mn;  
+}  
+  
+getColorCode() { 
+    return this.backGrounds[Math.floor(this.random(1, 5))-1]; 
+}  
 
-      default:
-        break;
-    }
-    return color;
-  }
 }

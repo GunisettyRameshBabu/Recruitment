@@ -17,7 +17,7 @@ namespace RecruitmentApi.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class RecruitCaresController : ControllerBase
+    public class RecruitCaresController : Base
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
@@ -113,13 +113,13 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/RecruitCares
-        [HttpGet("GetRecruitCareByMe/{id}")]
-        public async Task<ServiceResponse<IEnumerable<RecruitCareView>>> GetRecruitCareByMe(int id)
+        [HttpGet("GetRecruitCareByMe")]
+        public async Task<ServiceResponse<IEnumerable<RecruitCareView>>> GetRecruitCareByMe()
         {
             var response = new ServiceResponse<IEnumerable<RecruitCareView>>();
             try
             {
-                var user = _context.Users.FirstOrDefault(x => x.id == id);
+                var user = _context.Users.FirstOrDefault(x => x.id == LoggedInUser);
                 response.Data = await (from x in _context.RecruitCare
                                        join y in _context.Openings on x.jobid equals y.id
                                        join s in _context.MasterData on x.status equals s.id
@@ -138,7 +138,7 @@ namespace RecruitmentApi.Controllers
                                        from h in qualifications.DefaultIfEmpty()
                                        join st in _context.State on x.state equals st.Id
                                        join ci in _context.Citys on x.city equals ci.Id
-                                       where ( user != null && user.roleId == (int)Roles.SuperAdmin ) || ( x.createdBy == id || x.modifiedBy == id)
+                                       where ( user != null && user.roleId == (int)Roles.SuperAdmin ) || ( x.createdBy == LoggedInUser || x.modifiedBy == LoggedInUser)
                                        select new RecruitCareView()
                                        {
                                            jobid = y.id,
@@ -322,6 +322,7 @@ namespace RecruitmentApi.Controllers
                     response.Success = false;
                     return response;
                 }
+                recruitCare.createdBy = LoggedInUser;
                 recruitCare.createdDate = DateTime.Now;
                 _context.RecruitCare.Add(recruitCare);
                 await _context.SaveChangesAsync();
@@ -412,6 +413,7 @@ namespace RecruitmentApi.Controllers
                 } else
                 {
                     var mappedItem = _mapper.Map<JobCandidates>(recruitCare);
+                    mappedItem.modifiedBy = LoggedInUser;
                     mappedItem.modifiedDate = DateTime.Now;
                     mappedItem.modifiedBy = mappedItem.modifiedBy ?? mappedItem.createdBy;
                     mappedItem.id = 0;

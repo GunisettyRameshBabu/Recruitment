@@ -7,7 +7,7 @@ namespace RecruitmentApi.Models
 {
     public class BaseEntity
     {
-        public int createdBy { get; set; }
+        public int? createdBy { get; set; }
 
         public DateTime? createdDate { get; set; }
 

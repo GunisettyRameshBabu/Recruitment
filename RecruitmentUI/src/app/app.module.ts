@@ -72,6 +72,7 @@ import { CityMasterComponent } from './components/Admin/city-master/city-master.
 import { AddOrEditCountryComponent } from './components/Admin/country-master/add-or-edit-country/add-or-edit-country.component';
 import { AddOrEditStateComponent } from './components/Admin/state-master/add-or-edit-state/add-or-edit-state.component';
 import { AddOrEditCityComponent } from './components/Admin/city-master/add-or-edit-city/add-or-edit-city.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ import { AddOrEditCityComponent } from './components/Admin/city-master/add-or-ed
     AddOrEditCountryComponent,
     AddOrEditStateComponent,
     AddOrEditCityComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -155,7 +157,8 @@ import { AddOrEditCityComponent } from './components/Admin/city-master/add-or-ed
     ResetPasswordComponent,
     AddOrEditCityComponent,
     AddOrEditCountryComponent,
-    AddOrEditStateComponent
+    AddOrEditStateComponent,
+    SpinnerComponent
   ],
 })
 export class AppModule {}

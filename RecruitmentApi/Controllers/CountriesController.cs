@@ -17,7 +17,7 @@ namespace RecruitmentApi.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CountriesController : ControllerBase
+    public class CountriesController : Base
     {
         private readonly DataContext _context;
 
@@ -87,13 +87,13 @@ namespace RecruitmentApi.Controllers
         }
 
         // GET: api/Countries/5
-        [HttpGet("GetCountriesByUserId/{id}")]
-        public async Task<ServiceResponse<List<Country>>> GetCountriesByUserId(int id)
+        [HttpGet("GetCountriesByUserId")]
+        public async Task<ServiceResponse<List<Country>>> GetCountriesByUserId()
         {
             var response = new ServiceResponse<List<Country>>();
             try
             {
-                var user = _context.Users.FirstOrDefault(x => x.id == id);
+                var user = _context.Users.FirstOrDefault(x => x.id == LoggedInUser);
                 response.Data = user.roleId == (int)Roles.SuperAdmin ? _context.Countries.ToList() : _context.Countries.Where(x => x.Id == user.country).ToList();
                 if (response.Data == null)
                 {
@@ -155,6 +155,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "Countries not found";
                     return response;
                 }
+                country.modifiedBy = LoggedInUser;
                 country.modifiedDate = DateTime.Now;
                 _context.Entry(item).CurrentValues.SetValues(country);
                 await _context.SaveChangesAsync();
@@ -200,6 +201,7 @@ namespace RecruitmentApi.Controllers
                     response.Message = "Invalid country info";
                 } else
                 {
+                    country.createdBy = LoggedInUser;
                     country.createdDate = DateTime.Now;
                     _context.Countries.Add(country);
                     await _context.SaveChangesAsync();

@@ -24,7 +24,7 @@ namespace RecruitmentApi.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : Base
     {
         private readonly DataContext _context;
         private byte[] _key;
@@ -145,6 +145,7 @@ namespace RecruitmentApi.Controllers
                 }
                 var user = await _context.Users.FindAsync(id);
                 users.password = user.password;
+                user.modifiedBy = LoggedInUser;
                 users.modifiedDate = DateTime.Now;
                 var usr = _mapper.Map<Users>(users);
                 _context.Entry(user).CurrentValues.SetValues(usr);
@@ -179,6 +180,7 @@ namespace RecruitmentApi.Controllers
 
             users.password = EncodePasswordToBase64(users.password);
             var user = _mapper.Map<Users>(users);
+            user.createdBy = LoggedInUser;
             user.createdDate = DateTime.Now;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

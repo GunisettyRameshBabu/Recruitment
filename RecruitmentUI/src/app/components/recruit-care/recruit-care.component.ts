@@ -24,7 +24,6 @@ export class RecruitCareComponent implements OnInit {
   candidates = [];
   editSettings: EditSettingsModel;
   toolbar: string[];
-  user: User;
   public selectOptions: Object;
   constructor(
     private userSession: UsersessionService,
@@ -35,7 +34,6 @@ export class RecruitCareComponent implements OnInit {
 
   ngOnInit(): void {
     this.dialog.closeAll();
-    this.user = this.userSession.getLoggedInUser();
     this.getData();
     this.editSettings = {
       allowEditing: false,
@@ -52,7 +50,7 @@ export class RecruitCareComponent implements OnInit {
 
   private getData() {
     this.jobService
-      .GetRecruitCare(this.user.id)
+      .GetRecruitCare()
       .subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.candidates = res.data;

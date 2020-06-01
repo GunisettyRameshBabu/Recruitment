@@ -37,5 +37,13 @@ namespace RecruitmentApi.Models
         public bool canEdit { get; set; }
 
         public string countryCode { get; set; }
+
+        public string createdByName { get; set; }
+
+        public DateTime? createdDate { get; set; }
+
+        public DateTime? modifiedDate { get; set; }
+
+        public string modifiedName { get; set; }
     }
 }
