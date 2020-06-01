@@ -77,6 +77,7 @@ import { ViewcandidateComponent } from './components/jobcandidates/viewcandidate
 import { RecruitCareViewComponent } from './components/recruit-care/recruit-care-view/recruit-care-view.component';
 import { ClientsComponent } from './components/Admin/clients/clients.component';
 import { ClientEditComponent } from './components/Admin/clients/client-edit/client-edit.component';
+import { UserLogsComponent } from './components/dashboard/user-logs/user-logs.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { ClientEditComponent } from './components/Admin/clients/client-edit/clie
     RecruitCareViewComponent,
     ClientsComponent,
     ClientEditComponent,
+    UserLogsComponent,
   ],
   imports: [
     BrowserModule,

@@ -118,7 +118,9 @@ html, body{
   min-width: auto;
 }
 
-
+.mat-form-field-label, mat-label {
+  font-weight: bold !important;
+}
 
 .float-right {
   float: right;

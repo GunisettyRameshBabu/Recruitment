@@ -179,6 +179,12 @@ export class RecruitCareEditComponent implements OnInit {
      
   }
 
+  getResume(data) {
+    return this.commonService.downloadResume(data.id,'r').subscribe((res: any) => {
+      saveAs(res, data.fileName);
+    });
+  }
+
   onSubmit() {
     if (this.recruitGroup.valid) {
       this.jobService

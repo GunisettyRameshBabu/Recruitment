@@ -187,7 +187,6 @@
       <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
         <mat-form-field>
           <mat-label>Relavant Work Experience *</mat-label>
-          <mat-label>Relavant Experience *</mat-label>
           <mat-select formControlName="relavantExp">
             <input
               class="myInput"
@@ -279,6 +278,7 @@
                 style="display: none;"
                 (change)="uploadFile(fileInput.files)"
               />
+              <mat-label>Upload Resume *</mat-label>
               <input
                 id="upload"
                 name="upload"
@@ -286,10 +286,20 @@
                 formControlName="fileName"
                 matInput
               />
-              <span class="e-float-line"></span>
-              <label class="e-float-text e-label-top" for="upload"
-                >Upload Resume</label
+              <div *ngIf="job && job.id > 0 && job.fileName != '' && job.fileName != job && job.fileName != null">
+                <mat-label> Download Resume *</mat-label>
+                <button
+                type="button"
+                class="btn btn-link"
+                (click)="getResume(job)"
+                
               >
+                {{ job.fileName }}
+              </button>
+              </div>
+              <!-- <label class="e-float-text e-label-top" for="upload"
+                >Upload Resume</label
+              > -->
             </div>
             <div class="col-md-6 col-sm-12 col-xs-12 col-lg-6 col-xlg-6">
               <button

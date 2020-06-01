@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-recruit-care-view',
@@ -11,7 +12,8 @@ export class RecruitCareViewComponent implements OnInit {
   candidate: any;
   constructor(
     public dialogRef: MatDialogRef<RecruitCareViewComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private commonService: CommonService
   ) {
     this.candidate = data;
   }
@@ -20,6 +22,12 @@ export class RecruitCareViewComponent implements OnInit {
 
   close() {
     this.dialogRef.close();
+  }
+
+  getResume(data) {
+    return this.commonService.downloadResume(data.id,'r').subscribe((res: any) => {
+      saveAs(res, data.fileName);
+    });
   }
 
 }

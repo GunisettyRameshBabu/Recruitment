@@ -251,4 +251,10 @@ export class AddcandidateComponent implements OnInit {
     });
   }
 
+  getResume(data) {
+    return this.commonService.downloadResume(data.id).subscribe((res: any) => {
+      saveAs(res, data.fileName);
+    });
+  }
+
 }

@@ -11,6 +11,7 @@
             placeholder="First name"
             [(ngModel)]="candidate.firstName"
           />
+
         
         </mat-form-field>
       </div>
@@ -157,6 +158,19 @@
                 [(ngModel)]="candidate.fileName"
                 matInput
               />
+
+              
+          <div *ngIf="candidate && candidate.id > 0 && candidate.fileName != '' && candidate.fileName != undefined && candidate.fileName != null">
+            <mat-label> Download Resume *</mat-label>
+            <button
+            type="button"
+            class="btn btn-link"
+            (click)="getResume(candidate)"
+            
+          >
+            {{ candidate.fileName }}
+          </button>
+          </div>
              
             </div>
             

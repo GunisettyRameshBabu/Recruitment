@@ -37,6 +37,9 @@ export class DashboardComponent implements OnInit , AfterViewInit {
     this.jobService.getDashboardData().subscribe((res: ServiceResponse) => {
       if (res.success) {
         this.data = res.data.result;
+        this.data.forEach(element => {
+          element.style = this.backGrounds[Math.floor(this.random(1, 5)) - 1];
+        });
       } else {
         this.router.navigate(['**']);
       }

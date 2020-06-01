@@ -78,4 +78,8 @@ export class MasterdataService {
   getClients() {
     return this.http.get(environment.apiUrl + 'ClientCodes');
   }
+
+  getUserLogs() {
+    return this.http.get(environment.apiUrl + 'UserSessions');
+  }
 }
