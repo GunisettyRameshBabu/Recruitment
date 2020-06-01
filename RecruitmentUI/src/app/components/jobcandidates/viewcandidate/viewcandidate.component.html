@@ -1,5 +1,5 @@
   <div class="e-custom-card bg-1 custom-padding">
-    <h5 style="width: 100%;">View Candidate  <i class="fa fa-close float-right" (click)="close()"></i></h5> 
+    <h5 >View Candidate  <i class="fa fa-close float-right" (click)="close()"></i></h5> 
     <div class="row">
       <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
         <mat-form-field>
@@ -152,8 +152,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-xlg-12">
                 <mat-label>Resume</mat-label>
               <input
-                id="upload"
-                name="upload"
+              
                 readonly
                 [(ngModel)]="candidate.fileName"
                 matInput
@@ -169,7 +168,7 @@
     </div>
   </div>
   <div class="custom-div-gap"></div>
-  <div ngIf="candidate.countryCode && candidate.countryCode != 'IN'" class="e-custom-card bg-1 custom-padding">
+  <div *ngIf="candidate && candidate.countryCode != 'IN'" class="e-custom-card bg-1 custom-padding">
     <h5>
       Additional Information
     </h5>
@@ -213,7 +212,7 @@
       </div>
 
       <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-        <mat-slide-toggle [(ngModel)]="candidate.anyOfferExist" readonly
+        <mat-slide-toggle [(ngModel)]="candidate.anyOfferExist"
           >Any Offer Exist</mat-slide-toggle
         >
       </div>
@@ -251,14 +250,13 @@
           <input
           readonly
             matInput
-            
             [(ngModel)]="candidate.bestWayToReachName"
           />
         </mat-form-field>
       </div>
 
       <div class="col-md-3 col-sm-12 col-xs-12 col-lg-3 col-xlg-3">
-        <mat-slide-toggle [(ngModel)]="candidate.rtr" readonly>RTR</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="candidate.rtr">RTR</mat-slide-toggle>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ServiceResponse } from 'src/app/models/service-response';

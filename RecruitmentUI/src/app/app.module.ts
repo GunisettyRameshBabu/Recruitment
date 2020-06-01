@@ -166,7 +166,9 @@ import { ClientEditComponent } from './components/Admin/clients/client-edit/clie
     AddOrEditCityComponent,
     AddOrEditCountryComponent,
     AddOrEditStateComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    RecruitCareViewComponent,
+    ViewcandidateComponent
   ],
 })
 export class AppModule {}
