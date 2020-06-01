@@ -3,7 +3,6 @@ import { JobService } from '../../services/job.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { UsersessionService } from 'src/app/services/usersession.service';
-import { User } from 'src/app/models/user';
 import {
   GridModel,
   GridComponent,
@@ -39,7 +38,12 @@ export class JobopeningsComponent implements OnInit {
       { field: 'phone', headerText: 'Phone', width: 200 },
       { field: 'statusName', headerText: 'Status', width: 200 },
       { field: 'email', headerText: 'Email', width: 200 },
-      { field: 'createdByName', headerText: 'Created By', width: 200, visible: false },
+      {
+        field: 'createdByName',
+        headerText: 'Created By',
+        width: 200,
+        visible: false,
+      },
       { field: 'createdDate', headerText: 'Created Date', width: 200 },
       { field: 'modifiedName', headerText: 'Modified By', width: 200 },
       { field: 'modifedDate', headerText: 'Modified Date', width: 200 },
@@ -47,9 +51,17 @@ export class JobopeningsComponent implements OnInit {
       { field: 'cityName', headerText: 'City Name', width: 200 },
       { field: 'totalExpName', headerText: 'Total Exp.', width: 200 },
       { field: 'relavantExpName', headerText: 'Relavant Exp.', width: 200 },
-      { field: 'bestWayToReachName', headerText: 'Best Way to reach', width: 200 },
+      {
+        field: 'bestWayToReachName',
+        headerText: 'Best Way to reach',
+        width: 200,
+      },
       { field: 'visaTypeName', headerText: 'VISA Type', width: 200 },
-      { field: 'highestQualificationName', headerText: 'Highest Qualification', width: 200 },
+      {
+        field: 'highestQualificationName',
+        headerText: 'Highest Qualification',
+        width: 200,
+      },
     ],
     load() {
       //   // this.dataSource = [
@@ -85,33 +97,31 @@ export class JobopeningsComponent implements OnInit {
   }
 
   private getData() {
-    this.jobService
-      .getJobOpenings(this.type)
-      .subscribe((res: any) => {
-        if (res.success) {
-          this.openings = res.data;
-          this.childGrid.dataSource = res.data.candidates;
-        }
-        else {
-          this.alertService.error(res.message);
-        }
-      });
+    this.jobService.getJobOpenings(this.type).subscribe((res: any) => {
+      if (res.success) {
+        this.openings = res.data;
+        this.childGrid.dataSource = res.data.candidates;
+      } else {
+        this.alertService.error(res.message);
+      }
+    });
   }
 
-  AddCandidate(rec){
+  AddCandidate(rec) {
     let data = { jobid: rec.id, id: 0, countryCode: rec.countryCode };
     const dialogRef = this.modal.open(AddcandidateComponent, {
       data: data,
       hasBackdrop: true,
-      disableClose: false,
-      position: {
-        top: '90px'
-      }
+      disableClose: false
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       this.getData();
     });
+  }
+
+  rowClick(event) {
+    this.router.navigate(['jobdetails', event.rowData.id]);
   }
 
   showDetails(item) {

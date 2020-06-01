@@ -93,7 +93,9 @@ export class RecruitCareEditComponent implements OnInit {
       highestQualification: new FormControl(null, Validators.required)
     });
     this.recruitGroup.reset(this.recruit);
-    
+    if(this.recruit.id > 0) {
+      this.countryCode = this.recruit.countryCode;
+    }
     this.jobService
       .getJobs()
       .subscribe((res: ServiceResponse) => {

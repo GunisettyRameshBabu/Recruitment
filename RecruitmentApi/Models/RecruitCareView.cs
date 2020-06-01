@@ -42,5 +42,7 @@ namespace RecruitmentApi.Models
         public string highestQualificationName { get; set; }
 
         public string relavantExpName { get; set; }
+
+        public string countryCode { get; set; }
     }
 }

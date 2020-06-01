@@ -73,6 +73,10 @@ import { AddOrEditCountryComponent } from './components/Admin/country-master/add
 import { AddOrEditStateComponent } from './components/Admin/state-master/add-or-edit-state/add-or-edit-state.component';
 import { AddOrEditCityComponent } from './components/Admin/city-master/add-or-edit-city/add-or-edit-city.component';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
+import { ViewcandidateComponent } from './components/jobcandidates/viewcandidate/viewcandidate.component';
+import { RecruitCareViewComponent } from './components/recruit-care/recruit-care-view/recruit-care-view.component';
+import { ClientsComponent } from './components/Admin/clients/clients.component';
+import { ClientEditComponent } from './components/Admin/clients/client-edit/client-edit.component';
 
 @NgModule({
   declarations: [
@@ -106,6 +110,10 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
     AddOrEditStateComponent,
     AddOrEditCityComponent,
     SpinnerComponent,
+    ViewcandidateComponent,
+    RecruitCareViewComponent,
+    ClientsComponent,
+    ClientEditComponent,
   ],
   imports: [
     BrowserModule,

@@ -16,7 +16,7 @@ namespace RecruitmentApi.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ClientCodesController : ControllerBase
+    public class ClientCodesController : Base
     {
         private readonly DataContext _context;
 
@@ -27,12 +27,28 @@ namespace RecruitmentApi.Controllers
 
         // GET: api/ClientCodes
         [HttpGet]
-        public async Task<ServiceResponse<IEnumerable<ClientCodes>>> GetClientCodes()
+        public async Task<ServiceResponse<IEnumerable<ClientCodesView>>> GetClientCodes()
         {
-            var response = new ServiceResponse<IEnumerable<ClientCodes>>();
+            var response = new ServiceResponse<IEnumerable<ClientCodesView>>();
             try
             {
-                response.Data = await _context.ClientCodes.ToListAsync();
+                response.Data = await (from x in _context.ClientCodes
+                                       join c in _context.Users on x.createdBy equals c.id
+                                       join m in _context.Users on x.modifiedBy equals m.id into modifies
+                                       from m in modifies.DefaultIfEmpty()
+                                       select new ClientCodesView()
+                                       {
+                                           Code = x.Code,
+                                           createdBy = x.createdBy,
+                                           createdByName = Common.GetFullName(c),
+                                           createdDate = x.createdDate,
+                                           Id = x.Id,
+                                           modifiedBy = x.modifiedBy,
+                                           ModifiedByName = Common.GetFullName(m),
+                                           modifiedDate = x.modifiedDate,
+                                           Name = x.Name,
+                                           url = x.url
+                                       }).ToListAsync();
                 response.Success = true;
                 response.Message = "Data Retrived";
             }
@@ -92,6 +108,8 @@ namespace RecruitmentApi.Controllers
                     response.Message = "Client not found";
                     return response;
                 }
+                clientCodes.modifiedDate = DateTime.Now;
+                clientCodes.modifiedBy = LoggedInUser;
                 _context.Entry(item).CurrentValues.SetValues(clientCodes);
                 await _context.SaveChangesAsync();
                 response.Success = true;
@@ -129,6 +147,8 @@ namespace RecruitmentApi.Controllers
             var response = new ServiceResponse<int>();
             try
             {
+                clientCodes.createdDate = DateTime.Now;
+                clientCodes.createdBy = LoggedInUser;
                 _context.ClientCodes.Add(clientCodes);
                 await _context.SaveChangesAsync();
                 response.Data = clientCodes.Id;

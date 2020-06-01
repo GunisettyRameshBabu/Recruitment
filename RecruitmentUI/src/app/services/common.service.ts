@@ -4,17 +4,14 @@ import { environment } from 'src/environments/environment';
 import { MasterDataTypes } from '../constants/api-end-points';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommonService {
-
   GetUsersByCountry() {
-    return this.http.get(environment.apiUrl +  'Users/GetUsersByCountry');
+    return this.http.get(environment.apiUrl + 'Users/GetUsersByCountry');
   }
 
-  constructor(private http: HttpClient) { }
-
-  
+  constructor(private http: HttpClient) {}
 
   getClientCodes() {
     return this.http.get(environment.apiUrl + 'ClientCodes');
@@ -29,25 +26,36 @@ export class CommonService {
   }
 
   getStatesByCountry(id: number) {
-    return this.http.get(environment.apiUrl + 'States/GetStatesByCountry/'+ id);
+    return this.http.get(
+      environment.apiUrl + 'States/GetStatesByCountry/' + id
+    );
   }
 
   getCitiesByState(id: number) {
-    return this.http.get(environment.apiUrl + 'Cities/GetCitiesByState/'+ id);
+    return this.http.get(environment.apiUrl + 'Cities/GetCitiesByState/' + id);
   }
 
-  downloadResume(id: number) {
-    return this.http.get(environment.apiUrl + 'JobCandidates/Download/'+ id, {responseType: 'blob'});
+  downloadResume(id: number, type = 'j') {
+    if (type == 'j') {
+      return this.http.get(
+        environment.apiUrl + 'JobCandidates/Download/' + id,
+        { responseType: 'blob' }
+      );
+    } else {
+      return this.http.get(
+        environment.apiUrl + 'RecruitCares/Download/' + id,
+        { responseType: 'blob' }
+      );
+    }
   }
 
   getCountryById(id) {
-    return this.http.get(environment.apiUrl + 'Countries/'+ id);
+    return this.http.get(environment.apiUrl + 'Countries/' + id);
   }
 
-  
   getCountryCodeByJobId(id) {
-    return this.http.get(environment.apiUrl + 'Openings/GetCountryCodeByJobId/'+ id);
+    return this.http.get(
+      environment.apiUrl + 'Openings/GetCountryCodeByJobId/' + id
+    );
   }
-
-
 }

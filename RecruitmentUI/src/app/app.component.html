@@ -1,44 +1,53 @@
-
-<ng-http-loader 
-    
-    [entryComponent]="spinnerComponent">
-</ng-http-loader>
+<ng-http-loader [entryComponent]="spinnerComponent"> </ng-http-loader>
 
 <div class="container-fluid">
-    <div class="header">
-        <app-header></app-header>
-        
-    </div>
-    <div class="content">
-      <router-outlet></router-outlet>
-    </div>
-    <div class="footer">
-        <app-footer></app-footer>
-    </div>
-  </div>
+  <header>
+    <app-header></app-header>
+  </header>
+  <router-outlet></router-outlet>
+  <footer>
+    <app-footer></app-footer>
+  </footer>
+</div>
 
-  <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1"
-     role="dialog" aria-labelledby="dialog-child-name">
+<div
+  bsModal
+  #childModal="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-child-name"
+>
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 id="dialog-child-name" class="modal-title pull-left">You Have Been Idle!</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="hideChildModal()">
+        <h4 id="dialog-child-name" class="modal-title pull-left">
+          You Have Been Idle!
+        </h4>
+        <button
+          type="button"
+          class="close pull-right"
+          aria-label="Close"
+          (click)="hideChildModal()"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-         {{idleState}}
+        {{ idleState }}
         <div class="row mrgbtm">
           <div class="col-md-6">
-              <button type="button" (click)="logout()" class="btn btn-danger">Logout</button>
+            <button type="button" (click)="logout()" class="btn btn-danger">
+              Logout
+            </button>
           </div>
           <div class="col-md-6">
-              <button type="button" (click)="stay()" class="btn btn-success">Stay</button>
+            <button type="button" (click)="stay()" class="btn btn-success">
+              Stay
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-

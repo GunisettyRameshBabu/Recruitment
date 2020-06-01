@@ -30,6 +30,19 @@ namespace RecruitmentApi.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("Download/{id}")]
+        public async Task<IActionResult> Download(int id)
+        {
+            var candidate = _context.RecruitCare.Find(id);
+            if (candidate == null)
+            {
+                return NotFound("Resume Not Found");
+            }
+
+
+            return File(candidate.resume, "application/octet-stream"); // returns a FileStreamResult
+        }
+
         // GET: api/RecruitCares
         [HttpGet]
         public async Task<ServiceResponse<IEnumerable<RecruitCareView>>> GetRecruitCare()
@@ -138,6 +151,7 @@ namespace RecruitmentApi.Controllers
                                        from h in qualifications.DefaultIfEmpty()
                                        join st in _context.State on x.state equals st.Id
                                        join ci in _context.Citys on x.city equals ci.Id
+                                       join co in _context.Countries on y.country equals co.Id
                                        where ( user != null && user.roleId == (int)Roles.SuperAdmin ) || ( x.createdBy == LoggedInUser || x.modifiedBy == LoggedInUser)
                                        select new RecruitCareView()
                                        {
@@ -181,7 +195,8 @@ namespace RecruitmentApi.Controllers
                                            highestQualificationName = h.name,
                                            visaTypeName = v.name,
                                            cityName = ci.Name,
-                                           stateName = st.Name
+                                           stateName = st.Name,
+                                           countryCode = co.Code
                                        }).AsQueryable().ToListAsync();
 
                 response.Success = true;

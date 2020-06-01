@@ -13,6 +13,8 @@ import { RecruitCareEditComponent } from './recruit-care-edit/recruit-care-edit.
 import { MatDialog } from '@angular/material/dialog';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
+import { CommonService } from 'src/app/services/common.service';
+import { RecruitCareViewComponent } from './recruit-care-view/recruit-care-view.component';
 
 @Component({
   selector: 'app-recruit-care',
@@ -26,7 +28,7 @@ export class RecruitCareComponent implements OnInit {
   toolbar: string[];
   public selectOptions: Object;
   constructor(
-    private userSession: UsersessionService,
+    private commonService: CommonService,
     private jobService: JobService,
     private alertService: ToastrService,
     private dialog: MatDialog
@@ -49,19 +51,17 @@ export class RecruitCareComponent implements OnInit {
   }
 
   private getData() {
-    this.jobService
-      .GetRecruitCare()
-      .subscribe((res: ServiceResponse) => {
-        if (res.success) {
-          this.candidates = res.data;
-        } else {
-          this.alertService.error(res.message);
-        }
-      });
+    this.jobService.GetRecruitCare().subscribe((res: ServiceResponse) => {
+      if (res.success) {
+        this.candidates = res.data;
+      } else {
+        this.alertService.error(res.message);
+      }
+    });
   }
 
   add() {
-    this.showPopup({ id: 0 , anyOfferExist: false , rtr: false });
+    this.showPopup({ id: 0, anyOfferExist: false, rtr: false });
   }
 
   edit(data) {
@@ -73,13 +73,20 @@ export class RecruitCareComponent implements OnInit {
       data,
       hasBackdrop: true,
       disableClose: true,
-      maxHeight: '80vh',
-      position: {
-        top: '5%'
-      }
+      maxHeight: '80vh'
     });
     dialogRef.afterClosed().subscribe((result) => {
       this.getData();
+    });
+  }
+
+  rowClick(event) {
+    const dialogRef = this.dialog.open(RecruitCareViewComponent, {
+      data: event.rowData,
+      hasBackdrop: true,
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe((result) => {
     });
   }
 
@@ -102,7 +109,7 @@ export class RecruitCareComponent implements OnInit {
     const selectedRecords = this.grid.getSelectedRecords();
     if (selectedRecords.length > 0) {
       const items = selectedRecords.map((x: any) => {
-        return { key: x.jobName , value: x.email };
+        return { key: x.jobName, value: x.email };
       });
       this.jobService.SendEmail(items).subscribe((res: ServiceResponse) => {
         if (res.success) {
@@ -122,32 +129,39 @@ export class RecruitCareComponent implements OnInit {
   }
 
   openDialog(data) {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent,{
-      data:{
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: {
         message: 'Are you sure want to move?',
         buttonText: {
           ok: 'Yes',
-          cancel: 'No'
-        }
+          cancel: 'No',
+        },
       },
-      
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-       this.move(data);
+        this.move(data);
       }
     });
   }
 
   move(data) {
-    this.jobService.MoveToJobCandidates(data.id).subscribe((res: ServiceResponse) => {
-      if (res.success) {
-        this.alertService.success(res.message);
-        this.getData();
-      } else {
-        this.alertService.error(res.message);
-      }
-    })
+    this.jobService
+      .MoveToJobCandidates(data.id)
+      .subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.alertService.success(res.message);
+          this.getData();
+        } else {
+          this.alertService.error(res.message);
+        }
+      });
+  }
+
+  getResume(data) {
+    return this.commonService.downloadResume(data.id,'r').subscribe((res: any) => {
+      saveAs(res, data.fileName);
+    });
   }
 }

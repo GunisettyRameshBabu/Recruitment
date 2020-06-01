@@ -13,6 +13,7 @@ import { MasterDataComponent } from './components/Admin/master-data/master-data.
 import { CountryMasterComponent } from './components/Admin/country-master/country-master.component';
 import { StateMasterComponent } from './components/Admin/state-master/state-master.component';
 import { CityMasterComponent } from './components/Admin/city-master/city-master.component';
+import { ClientsComponent } from './components/Admin/clients/clients.component';
 
 
 const routes: Routes = [
@@ -84,6 +85,11 @@ const routes: Routes = [
   {
     path : 'state',
     component : StateMasterComponent,
+    canActivate : [AuthGuard]
+  },
+  {
+    path : 'clients',
+    component : ClientsComponent,
     canActivate : [AuthGuard]
   },
   {

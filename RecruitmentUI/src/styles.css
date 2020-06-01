@@ -13,9 +13,23 @@
 
 * {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: black;
 }
 .jumbotron {
   margin-top: 5%;
+}
+
+::ng-deep.mat-dialog-container {
+  background-image: url(assets/41.png);
+  background-size: cover;
+  }
+
+.custom-padding {
+  padding: 10px !important;
+}
+
+.custom-div-gap {
+  min-height: 10px !important;
 }
 .e-custom-card {
   position: relative;
@@ -25,8 +39,11 @@
   transition: 0.2s;
   border-width: 1px;
   padding: 1px;
-  background-color: lightgoldenrodyellow;
   color: black;
+}
+
+div h5 {
+  color: black !important;
 }
 md-dialog-container{
   
@@ -56,7 +73,6 @@ md-dialog-container{
 .bg-41 {
   background-image: url(assets/41.png);
   background-size: cover;
-  color: white;
 }
 body {
   font-family: Roboto, Arial, sans-serif;
@@ -125,7 +141,7 @@ min-height: 10px;
 }
 
 .padding-top {
-  margin-top: 90px;
+  margin-top: 0%;
 }
 
 i{

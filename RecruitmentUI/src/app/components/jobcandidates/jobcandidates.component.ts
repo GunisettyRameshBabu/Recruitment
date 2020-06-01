@@ -19,6 +19,7 @@ import {
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { saveAs } from 'file-saver';
 import { CommonService } from 'src/app/services/common.service';
+import { ViewcandidateComponent } from './viewcandidate/viewcandidate.component';
 
 @Component({
   selector: 'app-jobcandidates',
@@ -41,7 +42,7 @@ export class JobcandidatesComponent implements OnInit {
     public dialog: MatDialog,
     private jobService: JobService,
     private commonService: CommonService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.dialog.closeAll();
@@ -51,13 +52,18 @@ export class JobcandidatesComponent implements OnInit {
       allowEditing: false,
       allowAdding: false,
     };
-    this.toolbar = (this.canEditOrAdd == true ? ['Candidates', 'Add Candidate', 'ExcelExport'] : ['Candidates', 'ExcelExport']);
+    this.toolbar =
+      this.canEditOrAdd == true
+        ? ['Candidates', 'Add Candidate', 'ExcelExport']
+        : ['Candidates', 'ExcelExport'];
     if (this.canEditOrAdd) {
-      this.commonService.getCountryCodeByJobId(this.jobid).subscribe((res: ServiceResponse) => {
-        if (res.success) {
-          this.countryCode = res.data;
-        }
-      })
+      this.commonService
+        .getCountryCodeByJobId(this.jobid)
+        .subscribe((res: ServiceResponse) => {
+          if (res.success) {
+            this.countryCode = res.data;
+          }
+        });
     }
   }
 
@@ -80,6 +86,14 @@ export class JobcandidatesComponent implements OnInit {
     });
   }
 
+  viewCandidate(rec) {
+    this.dialog.open(ViewcandidateComponent, {
+      data: rec,
+      hasBackdrop: true,
+      disableClose: true,
+     
+    });
+  }
 
   toolbarClick(args: ClickEventArgs): void {
     console.log(args);
@@ -114,5 +128,9 @@ export class JobcandidatesComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       this.reloadData(result);
     });
+  }
+
+  rowClick(event) {
+    this.viewCandidate(event.rowData);
   }
 }

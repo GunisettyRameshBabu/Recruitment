@@ -55,6 +55,14 @@ export class MasterdataService {
     }
   }
 
+  addOrUpdateClientCodes(data: any) {
+    if (data.id > 0) {
+      return this.http.put(environment.apiUrl + 'ClientCodes/' + data.id, data);
+    } else {
+      return this.http.post(environment.apiUrl + 'ClientCodes', data);
+    }
+  }
+
   getCountries() {
     return this.http.get(environment.apiUrl + 'Countries');
   }
@@ -65,5 +73,9 @@ export class MasterdataService {
 
   getCities() {
     return this.http.get(environment.apiUrl + 'Cities');
+  }
+
+  getClients() {
+    return this.http.get(environment.apiUrl + 'ClientCodes');
   }
 }

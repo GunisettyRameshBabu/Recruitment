@@ -1,5 +1,5 @@
 <ejs-grid #grid [dataSource]='candidates' [toolbar]='toolbar' [editSettings]='editSettings'
-[allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [allowSorting]='true'>
+[allowExcelExport]='true' (toolbarClick)='toolbarClick($event)' [allowSorting]='true' (recordDoubleClick)="rowClick($event)">
     <e-columns>
         <e-column width="60" *ngIf="canEditOrAdd">
             <ng-template #template  let-data>
@@ -32,7 +32,7 @@
           </ng-template>
         </e-column>
         <e-column field="modifiedName" headerText="Modified By" width="200"></e-column>
-        <e-column field="modifedDate" headerText="Modified Date" width="200">
+        <e-column field="modifiedDate" headerText="Modified Date" width="200">
           <ng-template let-data>
             {{ data.modifedDate | date }}
           </ng-template>

@@ -16,7 +16,6 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { JobService } from 'src/app/services/job.service';
-import { User } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { HttpEventType } from '@angular/common/http';
 import { CommonService } from 'src/app/services/common.service';
@@ -38,7 +37,6 @@ export class AddcandidateComponent implements OnInit {
   @ViewChild('fileInput', { static: false }) file: ElementRef;
   resume: any;
   percentage = 0;
-  user: User;
   public dropEle: HTMLElement ;
   countryCode;
   stateList = [];
@@ -80,7 +78,7 @@ export class AddcandidateComponent implements OnInit {
         }
       });
     this.jobGroup = this.formBuilder.group({
-      id: new FormControl(''),
+      id: new FormControl(0),
       jobid: new FormControl('', Validators.required),
       firstName: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -111,7 +109,6 @@ export class AddcandidateComponent implements OnInit {
     
     this.countryCode = this.job.countryCode;
     if (this.jobGroup.controls.id.value != "0") {
-      this.jobGroup.controls.modifiedBy.setValue(this.user.id);
       this.getStates(this.job.jobid);
       console.log(this.job);
     }
