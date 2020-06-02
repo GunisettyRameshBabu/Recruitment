@@ -8,6 +8,7 @@ import { MasterdataService } from 'src/app/services/masterdata.service';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { ClientEditComponent } from './client-edit/client-edit.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-clients',
@@ -26,10 +27,12 @@ export class ClientsComponent implements OnInit {
   constructor(
     private alertService: ToastrService,
     private modal: MatDialog,
-    private masterDataService: MasterdataService
+    private masterDataService: MasterdataService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Clients Master');
     this.modal.closeAll();
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.masterDataService.getMasterDataType().subscribe((res: ServiceResponse) => {

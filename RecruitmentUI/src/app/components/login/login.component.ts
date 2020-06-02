@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { LoginTypes } from 'src/app/models/user';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
+import { Title } from '@angular/platform-browser';
 
 export interface DialogData {
   type: any;
@@ -39,16 +40,19 @@ export class LoginComponent implements OnInit {
     private alertService: ToastrService,
     private sessionService: UsersessionService,
     private router: Router,
-    private modal: MatDialog
+    private modal: MatDialog,
+    private titleService: Title
   ) {
     // this.type = this.data;
   }
 
   onNoClick(): void {
+    
     this.modal.closeAll();
     // this.dialogRef.close();
   }
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Login');
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
       return false;
   };

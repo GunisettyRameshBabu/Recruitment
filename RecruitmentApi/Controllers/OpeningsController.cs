@@ -309,8 +309,7 @@ namespace RecruitmentApi.Controllers
 
         }
 
-        [AllowAnonymous]
-        // GET: api/Openings/
+
         [HttpGet("GetDashBoardData")]
         public async Task<ServiceResponse<dynamic>> GetDashBoardData()
         {
@@ -342,6 +341,65 @@ namespace RecruitmentApi.Controllers
                            join y in recruitcare on x.id equals y.status
                            group x by x.name into g
                            select new KeyValuePair<string, int>(g.Key, g.Count())).ToList();
+
+
+                List<KeyValuePair<string, KeyValuePair<int, int>>> result = new List<KeyValuePair<string, KeyValuePair<int, int>>>();
+                foreach (var item in candidateStatus)
+                {
+                    var count = 0;
+                    count = (count + res.FirstOrDefault(x => x.Key == item.name).Value);
+                    count = (count + resRec.FirstOrDefault(x => x.Key == item.name).Value);
+                    result.Add(new KeyValuePair<string, KeyValuePair<int, int>>(item.name, new KeyValuePair<int, int>(item.id, count)));
+                }
+                response.Data = result; ;
+                response.Message = "Data Retrived";
+                response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
+            }
+
+            return response;
+
+        }
+
+        [HttpPost("GetDashBoardData")]
+        public async Task<ServiceResponse<dynamic>> GetDashBoardData(DashboardInput dashboardInput)
+        {
+            var response = new ServiceResponse<dynamic>();
+            try
+            {
+                var user = _context.Users.Find(LoggedInUser);
+                var candidateStatus = await (from x in _context.MasterData
+                                             join y in _context.MasterDataType on x.type equals y.id
+                                             where y.name == "JobCandidateStatus"
+                                             select x).ToListAsync();
+
+                var candidates = await (from x in _context.JobCandidates
+                                        join j in _context.Openings on x.jobid equals j.id
+                                        where j.country == user.country && (dashboardInput.recruiter == 0 ? true : (dashboardInput.recruiter == x.createdBy || dashboardInput.recruiter == x.modifiedBy))
+                                        && (dashboardInput.dateFrom.HasValue ? x.createdDate.Value.Date >= dashboardInput.dateFrom.Value.Date : true) 
+                                        && (dashboardInput.dateTo.HasValue ? x.createdDate.Value.Date <= dashboardInput.dateTo.Value.Date : true)
+                                        select x).ToListAsync();
+
+                var res = (from x in candidateStatus
+                           join y in candidates on x.id equals y.status
+                           group x by x.name into g
+                           select new KeyValuePair<string, int>(g.Key, g.Count())).ToList();
+
+                var recruitcare = await (from x in _context.RecruitCare
+                                         join j in _context.Openings on x.jobid equals j.id
+                                         where j.country == user.country && (dashboardInput.recruiter == 0 ? true : (dashboardInput.recruiter == x.createdBy || dashboardInput.recruiter == x.modifiedBy))
+                                        && (dashboardInput.dateFrom.HasValue ? x.createdDate.Value.Date >= dashboardInput.dateFrom.Value.Date : true)
+                                        && (dashboardInput.dateTo.HasValue ? x.createdDate.Value.Date <= dashboardInput.dateTo.Value.Date : true)
+                                         select x).ToListAsync();
+
+                var resRec = (from x in candidateStatus
+                              join y in recruitcare on x.id equals y.status
+                              group x by x.name into g
+                              select new KeyValuePair<string, int>(g.Key, g.Count())).ToList();
 
 
                 List<KeyValuePair<string, KeyValuePair<int, int>>> result = new List<KeyValuePair<string, KeyValuePair<int, int>>>();

@@ -13,6 +13,7 @@ import { EditSettingsModel } from '@syncfusion/ej2-angular-grids';
 import { JobService } from 'src/app/services/job.service';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { ToastrService } from 'ngx-toastr';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -29,10 +30,12 @@ export class HomeComponent implements OnInit {
     private userSession: UsersessionService,
     private router: Router,
     private jobService: JobService,
-    private alertService: ToastrService
+    private alertService: ToastrService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Home');
    this.dialog.closeAll();
   }
   Login(type: any) {

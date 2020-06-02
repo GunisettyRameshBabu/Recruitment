@@ -16,6 +16,7 @@ import {
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { MatDialog } from '@angular/material/dialog';
 import { AddcandidateComponent } from '../jobcandidates/addcandidate/addcandidate.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-jobopenings',
@@ -82,16 +83,19 @@ export class JobopeningsComponent implements OnInit {
     private alertService: ToastrService,
     private sessionService: UsersessionService,
     private modal: MatDialog,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    
     this.modal.closeAll();
     this.toolbarOptions = ['Openings', 'ExcelExport', 'Add'];
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.editSettings = { allowAdding: true };
     this.activatedRoute.queryParams.subscribe((params: any) => {
       this.type = params.type;
+      this.titleService.setTitle(`Qube Connect - ${ this.type == 'in' ? 'India ' : this.type == 'gl' ? 'Global ' : 'All ' } Job Openings`);
     });
     this.getData();
   }

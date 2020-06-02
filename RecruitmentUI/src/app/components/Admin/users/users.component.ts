@@ -10,6 +10,7 @@ import {
   GridComponent,
 } from '@syncfusion/ej2-angular-grids';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-users',
@@ -25,10 +26,12 @@ export class UsersComponent implements OnInit {
   constructor(
     private userService: UsersService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Users');
     this.dialog.closeAll();
     this.editparams = { params: { popupHeight: '300px' } };
     this.toolbar = ['Users', 'Add Users', 'Excel Export' , 'Refresh'];

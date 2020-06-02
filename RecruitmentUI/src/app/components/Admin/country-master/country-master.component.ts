@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { CommonService } from 'src/app/services/common.service';
 import { MasterdataService } from 'src/app/services/masterdata.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-country-master',
@@ -28,10 +29,12 @@ export class CountryMasterComponent implements OnInit {
     private commonService: CommonService,
     private alertService: ToastrService,
     private modal: MatDialog,
-    private masterDataService: MasterdataService
+    private masterDataService: MasterdataService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Country Master');
     this.modal.closeAll();
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.masterDataService.getMasterDataType().subscribe((res: ServiceResponse) => {

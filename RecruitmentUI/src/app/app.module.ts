@@ -79,6 +79,7 @@ import { ClientsComponent } from './components/Admin/clients/clients.component';
 import { ClientEditComponent } from './components/Admin/clients/client-edit/client-edit.component';
 import { UserLogsComponent } from './components/dashboard/user-logs/user-logs.component';
 import { ViewCandidatesByStatusComponent } from './components/dashboard/view-candidates-by-status/view-candidates-by-status.component';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { ViewCandidatesByStatusComponent } from './components/dashboard/view-can
     ModalModule.forRoot(),
     DialogModule,
     DashboardLayoutModule,
-    MatButtonModule
+    MatButtonModule,
+    NgxDaterangepickerMd.forRoot()
   ],
   providers: [
     { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },

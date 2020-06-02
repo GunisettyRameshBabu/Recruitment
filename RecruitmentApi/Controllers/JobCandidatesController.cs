@@ -278,7 +278,7 @@ namespace RecruitmentApi.Controllers
                                       join st in _context.State on x.state equals st.Id
                                       join ci in _context.Citys on x.city equals ci.Id
                                       join co in _context.Countries on y.country equals co.Id
-                                      where (user != null && user.roleId == (int)Roles.SuperAdmin) || (x.createdBy == LoggedInUser || x.modifiedBy == LoggedInUser)
+                                      where x.status == id && y.country == user.country
                                       select new JobCandidatesView()
                                       {
                                           jobid = y.id,

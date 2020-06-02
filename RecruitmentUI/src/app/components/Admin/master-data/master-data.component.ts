@@ -11,6 +11,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { EditOrAddMasterDataComponent } from './edit-or-add-master-data/edit-or-add-master-data.component';
 import { MasterdataService } from 'src/app/services/masterdata.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-master-data',
@@ -30,10 +31,12 @@ export class MasterDataComponent implements OnInit {
     private commonService: CommonService,
     private alertService: ToastrService,
     private modal: MatDialog,
-    private masterDataService: MasterdataService
+    private masterDataService: MasterdataService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Master Data');
     this.modal.closeAll();
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.masterDataService.getMasterDataType().subscribe((res: ServiceResponse) => {

@@ -6,6 +6,7 @@ import { ServiceResponse } from 'src/app/models/service-response';
 import { ToastrService } from 'ngx-toastr';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { User } from 'src/app/models/user';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-jobdetails',
@@ -18,11 +19,13 @@ export class JobdetailsComponent implements OnInit {
     private service: JobService,
     public dialog: MatDialog,
     private alertService: ToastrService,
-    private sessionService: UsersessionService
+    private sessionService: UsersessionService,
+    private titleService: Title
   ) {}
   job;
   jobid;
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - Job Details');
     this.dialog.closeAll();
     let user = this.sessionService.getLoggedInUser() as User;
     this.router.params.subscribe((res: any) => {

@@ -8,6 +8,7 @@ import { MasterdataService } from 'src/app/services/masterdata.service';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { ClickEventArgs } from '@syncfusion/ej2-angular-navigations';
 import { AddOrEditCityComponent } from './add-or-edit-city/add-or-edit-city.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-city-master',
@@ -28,10 +29,12 @@ export class CityMasterComponent implements OnInit {
     private commonService: CommonService,
     private alertService: ToastrService,
     private modal: MatDialog,
-    private masterDataService: MasterdataService
+    private masterDataService: MasterdataService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+    this.titleService.setTitle('Qube Connect - City Master');
     this.modal.closeAll();
     this.pageSettings = { pageSizes: true, pageSize: 10 };
     this.masterDataService.getMasterDataType().subscribe((res: ServiceResponse) => {

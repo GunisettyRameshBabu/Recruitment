@@ -10,6 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { UsersessionService } from 'src/app/services/usersession.service';
 import { MasterdataService } from 'src/app/services/masterdata.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-add-openings',
@@ -40,12 +41,15 @@ export class AddOpeningsComponent implements OnInit {
     private router: Router,
     private activated: ActivatedRoute,
     private userSession: UsersessionService,
-    private masterDataService: MasterdataService
+    private masterDataService: MasterdataService,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
+   
     this.activated.params.subscribe((res: any) => {
       this.id = +res.id;
+      this.titleService.setTitle(`Qube Connect - ${this.id > 0 ? 'Edit Candidate' : 'Add Candidate'} `);
     });
     if (this.id != undefined && this.id > 0) {
       this.jobService

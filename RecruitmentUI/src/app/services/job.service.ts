@@ -66,6 +66,12 @@ export class JobService {
     );
   }
 
+  getDashboardFilteredData(filter) {
+    return this.http.post(
+      environment.apiUrl + 'Openings/GetDashBoardData', filter
+    );
+  }
+
   getJobCandidatesByStatus(id) {
     return this.http.get(
       environment.apiUrl + 'JobCandidates/GetJobCandidatesByStatus/'+ id
