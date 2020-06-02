@@ -58,7 +58,7 @@ export class EditOrAddMasterDataComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSubmit() {
@@ -66,7 +66,7 @@ export class EditOrAddMasterDataComponent implements OnInit {
       this.masterDataService.addOrUpdateMasterData(this.masterGroup.value).subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.alertService.success(res.message);
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         } else {
           this.alertService.success(res.message);
         }

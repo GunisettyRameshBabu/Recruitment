@@ -42,10 +42,6 @@ export class HomeComponent implements OnInit {
       disableClose: true,
     
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
-    });
   }
 
   checkUserLoggedIn() {

@@ -9,6 +9,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { JobService } from 'src/app/services/job.service';
 import { ServiceResponse } from 'src/app/models/service-response';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { ViewcandidateComponent } from '../jobcandidates/viewcandidate/viewcandidate.component';
+import { ViewCandidatesByStatusComponent } from './view-candidates-by-status/view-candidates-by-status.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,14 +32,15 @@ export class DashboardComponent implements OnInit , AfterViewInit {
     private modal: MatDialog,
     private jobService: JobService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private alertService: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.modal.closeAll();
     this.jobService.getDashboardData().subscribe((res: ServiceResponse) => {
       if (res.success) {
-        this.data = res.data.result;
+        this.data = res.data;
         this.data.forEach(element => {
           element.style = this.backGrounds[Math.floor(this.random(1, 5)) - 1];
         });
@@ -56,5 +60,25 @@ export class DashboardComponent implements OnInit , AfterViewInit {
 
   ngAfterViewInit() {
     this.cdr.detectChanges();
+  }
+
+  showDetails(i) {
+    if (i.Value.Value == 0) {
+      this.alertService.info('No records found');
+    } else {
+      this.jobService.getJobCandidatesByStatus(i.Value.Key).subscribe((res: ServiceResponse) => {
+        if (res.success) {
+          this.modal.open(ViewCandidatesByStatusComponent, {
+            data: res.data,
+            hasBackdrop: true,
+            disableClose: false
+          });
+          console.log(res.data);
+        } else {
+          this.alertService.info(res.message);
+        }
+      });
+    }
+  
   }
 }

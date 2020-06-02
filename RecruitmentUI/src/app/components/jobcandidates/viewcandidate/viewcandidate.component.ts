@@ -26,6 +26,6 @@ export class ViewcandidateComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }

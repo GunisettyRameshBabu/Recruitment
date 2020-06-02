@@ -116,7 +116,9 @@ export class JobopeningsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
       this.getData();
+      }
     });
   }
 

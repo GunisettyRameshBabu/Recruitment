@@ -186,7 +186,157 @@ namespace RecruitmentApi.Controllers
             return response;
         }
 
-       
+        // GET: api/JobCandidates/5
+        [HttpGet("GetJobCandidatesByStatus/{id}")]
+        public async Task<ServiceResponse<List<JobCandidatesView>>> GetJobCandidatesByStatus(int id)
+        {
+            var response = new ServiceResponse<List<JobCandidatesView>>();
+            try
+            {
+                var user = _context.Users.Find(LoggedInUser);
+                var candidates = await (from x in _context.JobCandidates
+                                       join j in _context.Openings on x.jobid equals j.id
+                                       join s in _context.MasterData on x.status equals s.id
+                                       join t in _context.MasterData on x.totalExp equals t.id into totalExps
+                                       from t in totalExps.DefaultIfEmpty()
+                                       join r in _context.MasterData on x.relavantExp equals r.id into relavantExps
+                                       from r in relavantExps.DefaultIfEmpty()
+                                       join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                       from b in bestways.DefaultIfEmpty()
+                                       join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                       from v in visaTypes.DefaultIfEmpty()
+                                       join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                       from h in qualifications.DefaultIfEmpty()
+                                       join st in _context.State on x.state equals st.Id into states
+                                       from st in states.DefaultIfEmpty()
+                                       join ci in _context.Citys on x.city equals ci.Id into cities
+                                       from ci in cities.DefaultIfEmpty()
+                                       join cu in _context.Countries on j.country equals cu.Id
+                                       join cr in _context.Users on x.createdBy equals cr.id
+                                       join md in _context.Users on x.modifiedBy equals md.id into modifies
+                                       from md in modifies.DefaultIfEmpty()
+                                       where x.status == id && j.country == user.country
+                                       select new JobCandidatesView()
+                                       {
+                                           jobid = x.jobid,
+                                           firstName = x.firstName,
+                                           id = x.id,
+                                           lastName = x.lastName,
+                                           middleName = x.middleName,
+                                           phone = x.phone,
+                                           resume = x.resume,
+                                           status = s.id,
+                                           statusName = s.name,
+                                           email = x.email,
+                                           fileName = x.fileName,
+                                           jobName = j.jobid,
+                                           anyOfferExist = x.anyOfferExist,
+                                           bestTimeToReach = x.bestTimeToReach,
+                                           bestWayToReach = x.bestWayToReach,
+                                           city = x.city,
+                                           educationDetails = x.educationDetails,
+                                           expectedRatePerHour = x.expectedRatePerHour,
+                                           highestQualification = x.highestQualification,
+                                           relavantExp = x.relavantExp,
+                                           rtr = x.rtr,
+                                           skypeid = x.skypeid,
+                                           state = x.state,
+                                           totalExp = x.totalExp,
+                                           visaType = x.visaType,
+                                           totalExpName = t.name,
+                                           relavantExpName = r.name,
+                                           bestWayToReachName = b.name,
+                                           highestQualificationName = h.name,
+                                           visaTypeName = v.name,
+                                           cityName = ci.Name,
+                                           stateName = st.Name,
+                                           countryCode = cu.Code,
+                                           modifiedDate = x.modifiedDate,
+                                           createdDate = x.createdDate,
+                                           createdBy = x.createdBy,
+                                           modifiedBy = x.modifiedBy,
+                                           createdByName = Common.GetFullName(cr),
+                                           modifiedByName = Common.GetFullName(md)
+                                       }).AsQueryable().ToListAsync();
+
+                var recruits = await (from x in _context.RecruitCare
+                                      join y in _context.Openings on x.jobid equals y.id
+                                      join s in _context.MasterData on x.status equals s.id
+                                      join c in _context.Users on x.createdBy equals c.id
+                                      join m in _context.Users on x.modifiedBy equals m.id into modifiedUsers
+                                      from m in modifiedUsers.DefaultIfEmpty()
+                                      join n in _context.MasterData on x.noticePeriod equals n.id into notices
+                                      from n in notices.DefaultIfEmpty()
+                                      join t in _context.MasterData on x.totalExp equals t.id
+                                      join r in _context.MasterData on x.relavantExp equals r.id
+                                      join b in _context.MasterData on x.bestWayToReach equals b.id into bestways
+                                      from b in bestways.DefaultIfEmpty()
+                                      join v in _context.MasterData on x.visaType equals v.id into visaTypes
+                                      from v in visaTypes.DefaultIfEmpty()
+                                      join h in _context.MasterData on x.highestQualification equals h.id into qualifications
+                                      from h in qualifications.DefaultIfEmpty()
+                                      join st in _context.State on x.state equals st.Id
+                                      join ci in _context.Citys on x.city equals ci.Id
+                                      join co in _context.Countries on y.country equals co.Id
+                                      where (user != null && user.roleId == (int)Roles.SuperAdmin) || (x.createdBy == LoggedInUser || x.modifiedBy == LoggedInUser)
+                                      select new JobCandidatesView()
+                                      {
+                                          jobid = y.id,
+                                          jobName = y.jobid,
+                                          createdBy = x.createdBy,
+                                          createdByName = Common.GetFullName(c),
+                                          email = x.email,
+                                          id = x.id,
+                                          modifiedBy = x.modifiedBy,
+                                          modifiedByName = Common.GetFullName(m),
+                                          modifiedDate = x.modifiedDate,
+                                          createdDate = x.createdDate.Value,
+                                          firstName = x.firstName,
+                                          lastName = x.lastName,
+                                          middleName = x.middleName,
+                                          phone = x.phone,
+                                          status = x.status,
+                                          statusName = s.name,
+                                          fileName = x.fileName,
+                                          anyOfferExist = x.anyOfferExist,
+                                          bestTimeToReach = x.bestTimeToReach,
+                                          bestWayToReach = x.bestWayToReach,
+                                          city = x.city,
+                                          educationDetails = x.educationDetails,
+                                          expectedRatePerHour = x.expectedRatePerHour,
+                                          highestQualification = x.highestQualification,
+                                          relavantExp = x.relavantExp,
+                                          rtr = x.rtr,
+                                          skypeid = x.skypeid,
+                                          state = x.state,
+                                          totalExp = x.totalExp,
+                                          visaType = x.visaType,
+                                          totalExpName = t.name,
+                                          relavantExpName = r.name,
+                                          bestWayToReachName = b.name,
+                                          highestQualificationName = h.name,
+                                          visaTypeName = v.name,
+                                          cityName = ci.Name,
+                                          stateName = st.Name,
+                                          countryCode = co.Code
+                                      }).AsQueryable().ToListAsync();
+
+                response.Data = candidates.Concat(recruits).ToList();
+                response.Success = true;
+                response.Message = "Success";
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = await CustomLog.Log(ex, _context);
+            }
+
+
+
+            return response;
+        }
+
+
 
         // PUT: api/JobCandidates/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for

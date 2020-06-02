@@ -100,8 +100,7 @@ export class UsereditComponent implements OnInit {
         );
         this.userService.adduser(this.userGroup.value).subscribe((res: any) => {
           this.alertService.success('User added successfully');
-          this.dialogRef.close();
-          this.router.navigate(['users']);
+          this.dialogRef.close(true);
         });
       }
     } else {
@@ -116,8 +115,7 @@ export class UsereditComponent implements OnInit {
           .subscribe((res: ServiceResponse) => {
             if (res.success) {
               this.alertService.success(res.message);
-              this.dialogRef.close();
-              this.router.navigate(['users']);
+              this.dialogRef.close(true);
             } else {
               this.alertService.error(res.message);
             }
@@ -133,7 +131,6 @@ export class UsereditComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
-    this.router.navigate(['users']);
+    this.dialogRef.close(false);
   }
 }

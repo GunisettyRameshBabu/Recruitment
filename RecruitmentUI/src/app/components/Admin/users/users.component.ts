@@ -64,7 +64,9 @@ export class UsersComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
       this.getUsers();
+      }
     });
   }
 
@@ -76,7 +78,9 @@ export class UsersComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
       this.getUsers();
+      }
     });
   }
 }

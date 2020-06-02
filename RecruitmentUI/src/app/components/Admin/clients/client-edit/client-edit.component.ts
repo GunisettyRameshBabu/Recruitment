@@ -44,7 +44,7 @@ export class ClientEditComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSubmit() {
@@ -52,7 +52,7 @@ export class ClientEditComponent implements OnInit {
       this.masterDataService.addOrUpdateClientCodes(this.clientGroup.value).subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.alertService.success(res.message);
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         } else {
           this.alertService.success(res.message);
         }

@@ -66,6 +66,12 @@ export class JobService {
     );
   }
 
+  getJobCandidatesByStatus(id) {
+    return this.http.get(
+      environment.apiUrl + 'JobCandidates/GetJobCandidatesByStatus/'+ id
+    );
+  }
+
   public addOrUpdateCandidate = (candidate) => {
     if (candidate.id != 0) {
       return this.http.put(

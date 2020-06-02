@@ -49,7 +49,7 @@ export class ResetPasswordComponent implements OnInit {
         .subscribe((res: ServiceResponse) => {
           if (res.success) {
             this.alertService.success(res.message);
-            this.dialogRef.close();
+            this.dialogRef.close(true);
             this.router.navigate(['login']);
           } else {
             this.alertService.error(res.message);
@@ -71,7 +71,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }
 

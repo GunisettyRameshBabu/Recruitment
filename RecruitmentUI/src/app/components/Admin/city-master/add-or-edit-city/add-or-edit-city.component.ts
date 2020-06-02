@@ -62,7 +62,7 @@ export class AddOrEditCityComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSubmit() {
@@ -71,7 +71,7 @@ export class AddOrEditCityComponent implements OnInit {
       this.masterDataService.addOrUpdateCity(this.masterGroup.value).subscribe((res: ServiceResponse) => {
         if (res.success) {
           this.alertService.success(res.message);
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         } else {
           this.alertService.success(res.message);
         }

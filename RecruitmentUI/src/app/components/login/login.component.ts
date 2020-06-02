@@ -116,8 +116,6 @@ export class LoginComponent implements OnInit {
       hasBackdrop: true,
       disableClose: true,
     });
-
-    dialogRef.afterClosed().subscribe((result) => {});
   }
 
   public hasError(controlName: string, errorName: string) {

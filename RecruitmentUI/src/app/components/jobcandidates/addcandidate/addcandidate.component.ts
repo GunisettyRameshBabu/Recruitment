@@ -108,10 +108,12 @@ export class AddcandidateComponent implements OnInit {
     this.jobGroup.reset(this.job);
     
     this.countryCode = this.job.countryCode;
-    if (this.jobGroup.controls.id.value != "0") {
-      this.getStates(this.job.jobid);
-      console.log(this.job);
-    }
+    // if (this.jobGroup.controls.id.value != "0") {
+    //   this.getStates(this.job.jobid);
+    //   console.log(this.job);
+    // }
+
+    this.getStates(this.job.jobid);
 
     this.masterDataService
     .getMasterDataByType(MasterDataTypes.Experience)
@@ -168,7 +170,7 @@ export class AddcandidateComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSubmit() {

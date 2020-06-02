@@ -78,6 +78,7 @@ import { RecruitCareViewComponent } from './components/recruit-care/recruit-care
 import { ClientsComponent } from './components/Admin/clients/clients.component';
 import { ClientEditComponent } from './components/Admin/clients/client-edit/client-edit.component';
 import { UserLogsComponent } from './components/dashboard/user-logs/user-logs.component';
+import { ViewCandidatesByStatusComponent } from './components/dashboard/view-candidates-by-status/view-candidates-by-status.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +117,7 @@ import { UserLogsComponent } from './components/dashboard/user-logs/user-logs.co
     ClientsComponent,
     ClientEditComponent,
     UserLogsComponent,
+    ViewCandidatesByStatusComponent,
   ],
   imports: [
     BrowserModule,
@@ -170,7 +172,8 @@ import { UserLogsComponent } from './components/dashboard/user-logs/user-logs.co
     AddOrEditStateComponent,
     SpinnerComponent,
     RecruitCareViewComponent,
-    ViewcandidateComponent
+    ViewcandidateComponent,
+    ViewCandidatesByStatusComponent
   ],
 })
 export class AppModule {}

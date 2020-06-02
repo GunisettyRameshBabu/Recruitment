@@ -76,7 +76,9 @@ export class RecruitCareComponent implements OnInit {
       maxHeight: '80vh'
     });
     dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
       this.getData();
+      }
     });
   }
 
@@ -85,8 +87,6 @@ export class RecruitCareComponent implements OnInit {
       data: event.rowData,
       hasBackdrop: true,
       disableClose: true
-    });
-    dialogRef.afterClosed().subscribe((result) => {
     });
   }
 

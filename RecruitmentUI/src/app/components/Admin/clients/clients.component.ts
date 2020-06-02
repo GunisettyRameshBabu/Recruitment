@@ -88,8 +88,10 @@ export class ClientsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.masterItem = undefined;
-      this.getData();
+      if(result){
+        this.masterItem = undefined;
+        this.getData();
+      }
     });
   }
 

@@ -197,14 +197,14 @@ export class RecruitCareEditComponent implements OnInit {
                 .subscribe((res1: ServiceResponse) => {
                   if (res1.success) {
                     this.alertService.success(res1.message);
-                    this.dialogRef.close();
+                    this.dialogRef.close(true);
                   } else {
                     this.alertService.error(res1.message);
                   }
                 });
             } else {
               this.alertService.success(res.message);
-              this.dialogRef.close();
+              this.dialogRef.close(true);
             }
           } else {
             this.alertService.error(res.message);
@@ -214,7 +214,7 @@ export class RecruitCareEditComponent implements OnInit {
   }
 
   cancel() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   public hasError(controlName: string, errorName: string) {

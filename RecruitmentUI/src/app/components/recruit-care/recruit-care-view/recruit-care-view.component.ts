@@ -21,7 +21,7 @@ export class RecruitCareViewComponent implements OnInit {
   ngOnInit(): void {}
 
   close() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   getResume(data) {

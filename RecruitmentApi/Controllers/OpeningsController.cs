@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using RecruitmentApi.Data;
 using RecruitmentApi.Models;
@@ -317,21 +318,41 @@ namespace RecruitmentApi.Controllers
             try
             {
                 var user = _context.Users.Find(LoggedInUser);
-                var result = from j in _context.MasterData
-                             join t in _context.MasterDataType on j.type equals t.id
-                             join y in _context.JobCandidates on j.id equals y.status into jobs
-                             from y in jobs.DefaultIfEmpty()
-                             join jbc in _context.Openings on y.jobid equals jbc.id into openings
-                             from jbc in openings.DefaultIfEmpty()
-                             join x in _context.RecruitCare on y.status equals x.status into recruits
-                             from x in recruits.DefaultIfEmpty()
-                             join rec in _context.Openings on x.jobid equals rec.id into openingsrec
-                             from rec in openingsrec.DefaultIfEmpty()
-                             where t.name == "JobCandidateStatus" && (jbc.jobid == null || jbc.country == user.country) && (rec.jobid == null ||rec.country == user.country)
-                             orderby y.jobid
-                             group j by j.name  into g
-                             select new KeyValuePair<string, int>(g.Key, (g.Count() - 1));
-                response.Data = new { Request.HttpContext.User.Identity, result };
+                var candidateStatus = await (from x in _context.MasterData
+                                  join y in _context.MasterDataType on x.type equals y.id
+                                  where y.name == "JobCandidateStatus"
+                                  select x).ToListAsync();
+
+                var candidates = await (from x in _context.JobCandidates
+                                        join j in _context.Openings on x.jobid equals j.id
+                                        where j.country == user.country
+                                        select x).ToListAsync();
+
+                var res = (from x in candidateStatus
+                           join y in candidates on x.id equals y.status 
+                           group x by x.name into g
+                           select new KeyValuePair<string,int>(g.Key , g.Count())).ToList();
+
+                var recruitcare = await (from x in _context.RecruitCare
+                                        join j in _context.Openings on x.jobid equals j.id
+                                        where j.country == user.country
+                                        select x).ToListAsync();
+
+                var resRec = (from x in candidateStatus
+                           join y in recruitcare on x.id equals y.status
+                           group x by x.name into g
+                           select new KeyValuePair<string, int>(g.Key, g.Count())).ToList();
+
+
+                List<KeyValuePair<string, KeyValuePair<int, int>>> result = new List<KeyValuePair<string, KeyValuePair<int, int>>>();
+                foreach (var item in candidateStatus)
+                {
+                    var count = 0;
+                    count = (count + res.FirstOrDefault(x => x.Key == item.name).Value);
+                    count = (count + resRec.FirstOrDefault(x => x.Key == item.name).Value);
+                    result.Add(new KeyValuePair<string, KeyValuePair<int, int>>(item.name, new KeyValuePair<int, int>(item.id, count)));
+                }
+                response.Data = result; ;
                 response.Message = "Data Retrived";
                 response.Success = true;
             }
